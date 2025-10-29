@@ -9,7 +9,7 @@ use Tests\utils\Repository;
 
 abstract class TestCase extends BaseTestCase
 {
-    public string $token;
+    public ?string $token;
     public string $url;
 
     protected function setUp(): void
