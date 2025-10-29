@@ -124,43 +124,17 @@ jobs:
           # Check if all containers are running
           sudo docker compose -f docker-compose-cd-integration-test.yaml ps
 
-      - name: Logs
+      - name: Install Composer
         run: |
           for containerName in student instructor public user forum; do
             sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-${containerName} composer install --optimize-autoloader --no-interaction
           done
 
-      # Step 4: Setup Laravel applications
+      # Step 5: Setup Laravel applications
       - name: Setup Laravel Applications
         run: |
           cd docker/prod
           sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-public php artisan migrate:fresh --seed
-
-      # Step 5: Debug and Test Services
-      - name: Debug Services Before Tests
-        run: |
-          cd docker/prod
-          echo "🔍 Debugging all services..."
-
-          # Check container status
-          echo "---- Container Status ----"
-          sudo docker compose -f docker-compose-cd-integration-test.yaml ps
-
-          echo "---- Network Information ----"
-          sudo docker network ls
-
-          # Test user route
-          echo "🔍 Testing user route..."
-          sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-user php artisan route:list || true
-
-          # Test login endpoint
-          echo "🔍 Test dari container student ke user..."
-          sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-student curl -v \
-            -X POST \
-            -H "Content-Type: application/json" \
-            -H "Accept: application/json" \
-            -d '{"username":"student","password":"password"}' \
-            http://backend-api-user/user-api/v1/auth/login || true
 
       # Step 6: Run Integration Tests
       - name: Run Integration Tests
@@ -172,16 +146,24 @@ jobs:
           # Test dalam urutan dependency
           echo "Testing backend-api-user (base service)..."
           sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-user php artisan test --debug --stop-on-failure
-
+          
+          sleep 10  
+          
           echo "Testing backend-api-student..."
           sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-student php artisan test --debug --stop-on-failure
-
+          
+          sleep 10  
+          
           echo "Testing backend-api-instructor..."
           sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-instructor php artisan test --debug --stop-on-failure
-
+          
+          sleep 10  
+          
           echo "Testing backend-api-forum..."
           sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-forum php artisan test --debug --stop-on-failure
-
+          
+          sleep 10  
+          
           echo "Testing backend-api-public..."
           sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-public php artisan test --debug --stop-on-failure
 
