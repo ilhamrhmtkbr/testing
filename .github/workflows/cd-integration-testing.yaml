@@ -136,32 +136,32 @@ jobs:
           cd docker/prod
           sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-public php artisan migrate:fresh --seed
 
-      # Step 6: Run Integration Tests
-      - name: Run Integration Tests
+      - name: Tests User
         run: |
-          cd docker/prod
-
-          echo "🧪 Running integration tests..."
-
-          # Test dalam urutan dependency
           echo "Testing backend-api-user (base service)..."
           sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-user php artisan test --debug --stop-on-failure
-          
+
+      - name: Tests Student
+        run: |
           echo "Testing backend-api-student..."
           sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-student php artisan test --debug --stop-on-failure
-          
+
+      - name: Tests Instructor
+        run: |
           echo "Testing backend-api-instructor..."
           sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-instructor php artisan test --debug --stop-on-failure
-          
+
+      - name: Tests Forum
+        run: |          
           echo "Testing backend-api-forum..."
           sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-forum php artisan test --debug --stop-on-failure
-          
+
+      - name: Tests Public
+        run: |
           echo "Testing backend-api-public..."
           sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-public php artisan test --debug --stop-on-failure
 
-          echo "✅ All integration tests passed!"
-
-      # Step 7: Cleanup
+      # Step 6: Cleanup
       - name: Cleanup Docker
         if: always()
         run: |
