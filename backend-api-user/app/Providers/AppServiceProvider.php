@@ -12,9 +12,13 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void
+    public function register()
     {
-        //
+        if ($this->app->environment('local')) {
+            if (class_exists(\App\Providers\HorizonServiceProvider::class)) {
+                $this->app->register(\App\Providers\HorizonServiceProvider::class);
+            }
+        }
     }
 
     /**
