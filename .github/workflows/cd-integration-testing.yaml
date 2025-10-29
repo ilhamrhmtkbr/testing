@@ -127,7 +127,7 @@ jobs:
       - name: Logs
         run: |
           for containerName in student instructor public user forum; do
-            sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-${containerName} ls
+            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-${containerName} ls
           done
 
       # Step 4: Setup Laravel applications
