@@ -1,0 +1,57 @@
+# Stage 1: Composer dependencies
+FROM composer:2 AS composer_stage
+WORKDIR /app
+COPY backend-api-user/composer.json backend-api-user/composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --no-scripts --ignore-platform-req=ext-pcntl
+
+# Stage 2: App
+FROM php:8.2-cli
+WORKDIR /app
+COPY --from=composer_stage /app/vendor /app/vendor
+COPY backend-api-user/ /app/
+
+RUN apt-get update && apt-get install -y \
+    gosu \
+    zip unzip \
+    libzip-dev \
+    && docker-php-ext-install pdo_mysql bcmath zip pcntl \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Create user (fix: check if user exists first)
+RUN if ! id -u ilhamrhmtkbr > /dev/null 2>&1; then \
+        groupadd -g 1000 ilhamrhmtkbr && \
+        useradd -u 1000 -g ilhamrhmtkbr -m ilhamrhmtkbr; \
+    fi
+
+# Copy full source code FIRST (sebelum vendor)
+COPY backend-api-user/ /app/
+
+# Salin vendor dari composer stage (setelah source code)
+COPY --from=composer_stage /app/vendor /app/vendor
+
+# Create all necessary directories with proper Laravel structure
+RUN mkdir -p \
+   /var/log \
+   /app/storage/app/public \
+   /app/storage/framework/views \
+   /app/storage/framework/cache \
+   /app/storage/framework/sessions \
+   /app/storage/logs \
+   /app/bootstrap/cache
+
+# IMPORTANT: Set permissions AFTER copying all files
+RUN chown -R ilhamrhmtkbr:ilhamrhmtkbr /app /var/log && \
+    chmod -R 755 /app && \
+    chmod -R 775 /app/storage /app/bootstrap/cache
+
+COPY docker/prod/backend-laravel/_shared/.env.shared /app/.env
+
+# Set final permissions for config files
+RUN chown ilhamrhmtkbr:ilhamrhmtkbr /app/.env && \
+    chmod 644 /app/.env
+
+RUN php /app/artisan route:cache || true
+
+ENTRYPOINT ["php", "artisan", "reverb:start"]

@@ -1,0 +1,72 @@
+# ---- Stage 1: Composer Dependencies ----
+FROM composer:2 AS composer_stage
+WORKDIR /app
+
+# Salin file composer agar bisa install dependensi
+COPY backend-api-student/composer.json backend-api-student/composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --no-scripts --ignore-platform-req=ext-pcntl --ignore-platform-req=ext-gd
+
+# ---- Stage 2: PHP Runtime ----
+FROM php:8.2-cli
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies & ekstensi PHP (GD, Imagick, Redis)
+RUN apt-get update && apt-get install -y \
+    git curl \
+    libpng-dev libjpeg-dev libfreetype6-dev \
+    libmagickwand-dev \
+    zip unzip \
+    libssl-dev libcurl4-openssl-dev \
+    libicu-dev \
+    libzip-dev \
+    libonig-dev \
+    libxml2-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_mysql mbstring bcmath gd zip opcache pcntl sockets \
+    && pecl install imagick redis \
+    && docker-php-ext-enable imagick redis \
+    && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Create user (fix: check if user exists first)
+RUN if ! id -u ilhamrhmtkbr > /dev/null 2>&1; then \
+        groupadd -g 1000 ilhamrhmtkbr && \
+        useradd -u 1000 -g ilhamrhmtkbr -m ilhamrhmtkbr; \
+    fi
+
+# Copy full source code FIRST (sebelum vendor)
+COPY backend-api-student/ /app/
+
+# Salin vendor dari composer stage (setelah source code)
+COPY --from=composer_stage /app/vendor /app/vendor
+
+# Create all necessary directories with proper Laravel structure
+RUN mkdir -p \
+   /var/log \
+   /app/storage/app/public \
+   /app/storage/framework/views \
+   /app/storage/framework/cache \
+   /app/storage/framework/sessions \
+   /app/storage/logs \
+   /app/bootstrap/cache
+
+# IMPORTANT: Set permissions AFTER copying all files
+RUN chown -R ilhamrhmtkbr:ilhamrhmtkbr /app /var/log && \
+    chmod -R 755 /app && \
+    chmod -R 775 /app/storage /app/bootstrap/cache
+
+# Copy konfigurasi custom PHP & Caddy
+COPY docker/prod/backend-laravel/_shared/php-custom-api-shared.ini /usr/local/etc/php/conf.d/99-custom.ini
+COPY docker/prod/backend-laravel/_shared/.env.shared /app/.env
+
+RUN php /app/artisan route:cache || true
+
+# Set final permissions for config files
+RUN chown ilhamrhmtkbr:ilhamrhmtkbr /app/.env && \
+    chmod 644 /app/.env
+
+# Ganti user non-root
+USER ilhamrhmtkbr
+
+CMD ["php", "artisan", "octane:start", "--server=roadrunner", "--host=0.0.0.0", "--port=8000"]
