@@ -29,8 +29,6 @@ services:
       context: ../../
       dockerfile: docker/prod/backend-laravel/user/Dockerfile.api-user
     container_name: backend-api-user
-#    volumes:
-#      - "../../backend-api-user:/app"
     depends_on:
       database-mysql:
         condition: service_healthy
@@ -49,8 +47,6 @@ services:
       context: ../../
       dockerfile: docker/prod/backend-laravel/student/Dockerfile.api-student
     container_name: backend-api-student
-#    volumes:
-#      - "../../backend-api-student:/app"
     depends_on:
       database-mysql:
         condition: service_healthy
@@ -68,8 +64,6 @@ services:
       context: ../../
       dockerfile: docker/prod/backend-laravel/instructor/Dockerfile.api-instructor
     container_name: backend-api-instructor
-#    volumes:
-#      - "../../backend-api-instructor:/app"
     depends_on:
       database-mysql:
         condition: service_healthy
@@ -87,8 +81,6 @@ services:
       context: ../../
       dockerfile: docker/prod/backend-laravel/forum/Dockerfile.api-forum
     container_name: backend-api-forum
-#    volumes:
-#      - "../../backend-api-forum:/app"
     depends_on:
       - backend-api-user
     env_file:
@@ -101,8 +93,6 @@ services:
       context: ../../
       dockerfile: docker/prod/backend-laravel/public/Dockerfile.api-public
     container_name: backend-api-public
-#    volumes:
-#      - "../../backend-api-public:/app"
     depends_on:
       database-mysql:
         condition: service_healthy

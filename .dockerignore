@@ -2,7 +2,6 @@
 **/backend-*/vendor
 
 # Environment & config lokal
-**/backend-*/.env
 **/backend-*/.env.*
 
 # Logs & cache
@@ -15,8 +14,6 @@
 
 # Test & dev files
 **/backend-*/.phpunit.result.cache
-**/backend-*/phpunit.xml
-**/backend-*/tests
 
 # VCS & editor
 **/backend-*/.git
