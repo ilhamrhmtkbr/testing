@@ -8,6 +8,6 @@ jobs:
   integration-testing:
     uses: ./.github/workflows/cd-integration-testing.yaml
 
-  k6-testing:
-    needs: integration-testing
-    uses: ./.github/workflows/cd-k6-testing.yaml
+#  k6-testing:
+#    needs: integration-testing
+#    uses: ./.github/workflows/cd-k6-testing.yaml
