@@ -140,34 +140,80 @@ jobs:
       - name: Run Integration Tests
         run: |
           cd docker/prod
-
+          
           echo "🧪 Running integration tests..."
-
+          
+          # Function untuk wait service ready
+          wait_for_service() {
+            local service=$1
+            local max_attempts=30
+            local attempt=0
+          
+            echo "⏳ Waiting for $service to be ready..."
+          
+            while [ $attempt -lt $max_attempts ]; do
+              if sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T $service php artisan --version > /dev/null 2>&1; then
+                echo "✅ $service is ready"
+                return 0
+              fi
+          
+              attempt=$((attempt + 1))
+              echo "   Attempt $attempt/$max_attempts..."
+              sleep 2
+            done
+          
+            echo "❌ $service failed to become ready"
+            return 1
+          }
+          
+          # Function untuk run test dengan error handling
+          run_test() {
+            local service=$1
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "🧪 Testing $service..."
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          
+            # Wait for service
+            wait_for_service $service || exit 1
+          
+            # Clear Laravel cache before test
+            echo "🧹 Clearing cache for $service..."
+            sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T $service php artisan config:clear
+            sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T $service php artisan cache:clear
+          
+            # Run tests
+            if sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T $service php artisan test --debug --stop-on-failure; then
+              echo "✅ $service tests passed!"
+            else
+              echo "❌ $service tests failed!"
+          
+              # Show logs untuk debugging
+              echo ""
+              echo "📋 Last 50 lines of $service logs:"
+              sudo docker compose -f docker-compose-cd-integration-test.yaml logs --tail=50 $service
+          
+              exit 1
+            fi
+          
+            # Brief pause untuk cleanup
+            sleep 3
+          }
+          
           # Test dalam urutan dependency
-          echo "Testing backend-api-user (base service)..."
-          sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-user php artisan test --debug --stop-on-failure
+          run_test "backend-api-user"
+          run_test "backend-api-student"
+          run_test "backend-api-instructor"
+          run_test "backend-api-forum"
+          run_test "backend-api-public"
           
-          sleep 10  
-          
-          echo "Testing backend-api-student..."
-          sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-student php artisan test --debug --stop-on-failure
-          
-          sleep 10  
-          
-          echo "Testing backend-api-instructor..."
-          sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-instructor php artisan test --debug --stop-on-failure
-          
-          sleep 10  
-          
-          echo "Testing backend-api-forum..."
-          sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-forum php artisan test --debug --stop-on-failure
-          
-          sleep 10  
-          
-          echo "Testing backend-api-public..."
-          sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-public php artisan test --debug --stop-on-failure
-
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "✅ All integration tests passed!"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+        timeout-minutes: 30
+        continue-on-error: false
 
       # Step 7: Cleanup
       - name: Cleanup Docker
