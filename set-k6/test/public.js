@@ -1,104 +1,96 @@
-import http from 'k6/http';
-import { check, sleep } from 'k6';
-import { Rate, Trend, Counter, Gauge } from 'k6/metrics';
+import { studentEnrollFlow, completeUserJourney, quickEnrollFlow } from '../scenarios/public_flow.js';
 
-// Custom metrics untuk Prometheus
-const errorRate = new Rate('http_req_error_rate');
-const responseTime = new Trend('http_req_duration_custom');
-const requestCount = new Counter('http_requests_total');
-const activeUsers = new Gauge('active_users');
-
-export let options = {
-    vus: 10,
-    duration: '30s',
-
+export const options = {
     thresholds: {
-        http_req_duration: ['p(95)<500'],
-        http_req_failed: ['rate<0.05'],
-        http_req_error_rate: ['rate<0.05'],
+        'http_req_duration': ['p(95)<1500', 'p(99)<3000'],
+        'http_req_failed': ['rate<0.03'],
+        'http_reqs': ['rate>8'],
+        'checks': ['rate>0.92'],
+
+        // Per-scenario
+        'http_req_duration{scenario:browse}': ['p(95)<1000'],
+        'http_req_duration{scenario:enroll}': ['p(95)<2000'],
+        'http_req_duration{scenario:journey}': ['p(95)<2500'],
+
+        'http_req_failed{scenario:browse}': ['rate<0.02'],
+        'http_req_failed{scenario:enroll}': ['rate<0.03'],
+        'http_req_failed{scenario:journey}': ['rate<0.05'],
     },
 
-    tags: {
-        testid: 'api-load-test',
-        environment: 'development',
+    scenarios: {
+        // Quick enroll - high frequency
+        quick_enroll: {
+            executor: 'constant-arrival-rate',
+            rate: 5, // 5 enrollments per second
+            timeUnit: '1s',
+            duration: '45s',
+            preAllocatedVUs: 15,
+            maxVUs: 25,
+            exec: 'quickEnrollFlow',
+            tags: { scenario: 'browse' },
+            startTime: '0s',
+        },
+
+        // Student enroll journey
+        student_enroll: {
+            executor: 'ramping-vus',
+            startVUs: 0,
+            stages: [
+                { duration: '20s', target: 8 },
+                { duration: '40s', target: 12 },
+                { duration: '20s', target: 3 },
+                { duration: '10s', target: 0 },
+            ],
+            exec: 'studentEnrollFlow',
+            tags: { scenario: 'enroll' },
+            startTime: '50s',
+        },
+
+        // Complete user journey - realistic behavior
+        user_journey: {
+            executor: 'constant-vus',
+            vus: 6,
+            duration: '2m',
+            exec: 'completeUserJourney',
+            tags: { scenario: 'journey' },
+            startTime: '140s',
+        },
     },
+
+    userAgent: 'K6-Public-API-Test/1.0',
+    insecureSkipTLSVerify: true,
+    noConnectionReuse: false,
+    rps: 80,
+
+    summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(90)', 'p(95)', 'p(99)', 'count'],
+    summaryTimeUnit: 'ms',
 };
 
-const BASE_URL = 'http://olcourse-nginx:80/api/v1/public';
+export { studentEnrollFlow, completeUserJourney, quickEnrollFlow };
 
 export default function () {
-    activeUsers.add(1);
-
-    let endpoints = [
-        { name: 'courses', path: '/courses' },
-        { name: 'courses_page2', path: '/courses?page=2' },
-        { name: 'courses_search', path: '/courses?search=programming' },
-    ];
-
-    let endpoint = endpoints[Math.floor(Math.random() * endpoints.length)];
-
-    let response = http.get(`${BASE_URL}${endpoint.path}`, {
-        headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': 'K6-Prometheus-Test',
-        },
-        tags: {
-            endpoint: endpoint.name,
-            method: 'GET',
-        },
-    });
-
-    let checkResult = check(response, {
-        'status is 200': (r) => r.status === 200,
-        'response time < 500ms': (r) => r.timings.duration < 500,
-        'response has data': (r) => {
-            try {
-                let body = JSON.parse(r.body);
-                return body.data !== undefined;
-            } catch (e) {
-                return false;
-            }
-        },
-    }, {
-        endpoint: endpoint.name,
-    });
-
-    errorRate.add(!checkResult, {
-        endpoint: endpoint.name,
-    });
-
-    responseTime.add(response.timings.duration, {
-        endpoint: endpoint.name,
-        status: response.status.toString(),
-    });
-
-    requestCount.add(1, {
-        endpoint: endpoint.name,
-        status: response.status.toString(),
-        method: 'GET',
-    });
-
-    if (response.status !== 200) {
-        console.log(`❌ ${endpoint.name}: Status ${response.status}`);
-    }
-
-    sleep(1);
+    quickEnrollFlow();
 }
 
 export function setup() {
-    console.log('🔥 Starting Prometheus-enabled K6 test...');
-    console.log(`Target: ${BASE_URL}`);
-
-    let warmup = http.get(`${BASE_URL}/courses`);
-    console.log(`Warmup status: ${warmup.status}`);
+    console.log('📚 Starting Public API Load Test');
+    console.log('📊 Testing:');
+    console.log('   - Get Courses');
+    console.log('   - Enroll to Courses');
+    console.log('   - View Course Content');
+    console.log('');
+    console.log('⏱️  Timeline:');
+    console.log('   0s - 45s    : Quick Enroll (5 req/s)');
+    console.log('   50s - 140s  : Student Enroll Journey');
+    console.log('   140s - 260s : Complete User Journey (6 VUs)');
+    console.log('');
 
     return { startTime: new Date().toISOString() };
 }
 
 export function teardown(data) {
-    console.log('✅ Test completed - Check Prometheus & Grafana!');
-    console.log(`Started: ${data.startTime}`);
-    console.log('📊 View metrics at:');
-    console.log('   - Prometheus: http://localhost:9090');
-    console.log('   - Grafana: http://localhost:4000');
+    console.log('');
+    console.log('✅ Public API Test Completed');
+    console.log(`   Started: ${data.startTime}`);
+    console.log(`   Ended: ${new Date().toISOString()}`);
 }

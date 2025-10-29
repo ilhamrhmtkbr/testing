@@ -25,7 +25,7 @@ services:
   backend-api-user:
     build:
       context: ../../
-      dockerfile: docker/dev/backend-laravel/user/Dockerfile.api-user
+      dockerfile: docker/prod/backend-laravel/user/Dockerfile.api-user
     container_name: backend-api-user
     volumes:
       - "../../backend-api-user:/app"
@@ -42,7 +42,7 @@ services:
   backend-api-public:
     build:
       context: ../../
-      dockerfile: docker/dev/backend-laravel/public/Dockerfile.api-public
+      dockerfile: docker/prod/backend-laravel/public/Dockerfile.api-public
     container_name: backend-api-public
     volumes:
       - "../../backend-api-public:/app"

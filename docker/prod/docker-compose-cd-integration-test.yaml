@@ -27,7 +27,7 @@ services:
   backend-api-user:
     build:
       context: ../../
-      dockerfile: docker/dev/backend-laravel/user/Dockerfile.api-user
+      dockerfile: docker/prod/backend-laravel/user/Dockerfile.api-user
     container_name: backend-api-user
     volumes:
       - "../../backend-api-user:/app"
@@ -47,7 +47,7 @@ services:
   backend-api-student:
     build:
       context: ../../
-      dockerfile: docker/dev/backend-laravel/student/Dockerfile.api-student
+      dockerfile: docker/prod/backend-laravel/student/Dockerfile.api-student
     container_name: backend-api-student
     volumes:
       - "../../backend-api-student:/app"
@@ -66,7 +66,7 @@ services:
   backend-api-instructor:
     build:
       context: ../../
-      dockerfile: docker/dev/backend-laravel/instructor/Dockerfile.api-instructor
+      dockerfile: docker/prod/backend-laravel/instructor/Dockerfile.api-instructor
     container_name: backend-api-instructor
     volumes:
       - "../../backend-api-instructor:/app"
@@ -85,7 +85,7 @@ services:
   backend-api-forum:
     build:
       context: ../../
-      dockerfile: docker/dev/backend-laravel/forum/Dockerfile.api-forum
+      dockerfile: docker/prod/backend-laravel/forum/Dockerfile.api-forum
     container_name: backend-api-forum
     volumes:
       - "../../backend-api-forum:/app"
@@ -99,7 +99,7 @@ services:
   backend-api-public:
     build:
       context: ../../
-      dockerfile: docker/dev/backend-laravel/public/Dockerfile.api-public
+      dockerfile: docker/prod/backend-laravel/public/Dockerfile.api-public
     container_name: backend-api-public
     volumes:
       - "../../backend-api-public:/app"

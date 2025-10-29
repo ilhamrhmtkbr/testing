@@ -1,8 +1,7 @@
 name: Deploy to AWS Free Tier EC2
 
 on:
-  pull_request:
-    branches: [ main ]
+  workflow_call:
 
 env:
   REGISTRY: docker.io

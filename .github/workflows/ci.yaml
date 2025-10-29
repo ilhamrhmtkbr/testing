@@ -7,7 +7,3 @@ on:
 jobs:
   integration-testing:
     uses: ./.github/workflows/ci-integration-testing.yaml
-
-  k6-testing:
-    needs: integration-testing
-    uses: ./.github/workflows/ci-k6-testing.yaml
