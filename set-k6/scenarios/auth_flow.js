@@ -68,7 +68,7 @@ export function completeAuthFlow() {
 
                 if (loginRes.status === 200) {
                     try {
-                        console.log(loginRes);
+
                     } catch (e) {
                         console.log('Failed to get token after registration');
                     }
