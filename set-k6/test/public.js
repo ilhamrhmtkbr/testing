@@ -1,4 +1,4 @@
-import { studentEnrollFlow, completeUserJourney, quickEnrollFlow } from '../scenarios/public_flow.js';
+import { browseCoursesFlow } from '../scenarios/public_flow.js';
 
 export const options = {
     thresholds: {
@@ -26,7 +26,7 @@ export const options = {
             duration: '45s',
             preAllocatedVUs: 15,
             maxVUs: 25,
-            exec: 'quickEnrollFlow',
+            exec: 'browseCoursesFlow',
             tags: { scenario: 'browse' },
             startTime: '0s',
         },
@@ -41,7 +41,7 @@ export const options = {
                 { duration: '20s', target: 3 },
                 { duration: '10s', target: 0 },
             ],
-            exec: 'studentEnrollFlow',
+            exec: 'browseCoursesFlow',
             tags: { scenario: 'enroll' },
             startTime: '50s',
         },
@@ -51,7 +51,7 @@ export const options = {
             executor: 'constant-vus',
             vus: 6,
             duration: '2m',
-            exec: 'completeUserJourney',
+            exec: 'browseCoursesFlow',
             tags: { scenario: 'journey' },
             startTime: '140s',
         },
@@ -66,10 +66,10 @@ export const options = {
     summaryTimeUnit: 'ms',
 };
 
-export { studentEnrollFlow, completeUserJourney, quickEnrollFlow };
+export { browseCoursesFlow };
 
 export default function () {
-    quickEnrollFlow();
+    browseCoursesFlow();
 }
 
 export function setup() {

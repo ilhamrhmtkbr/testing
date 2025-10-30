@@ -78,26 +78,3 @@ export function login(username, password) {
 
     return res;
 }
-
-export function logout(token) {
-    const url = `${BASE_URL}/logout`;
-    const params = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
-        cookies: {
-            'access_token': token
-        },
-        tags: { name: 'Logout API' },
-        timeout: '10s'
-    };
-
-    const res = http.post(url, null, params);
-
-    check(res, {
-        'logout success': (r) => r.status === 200 || r.status === 204,
-    });
-
-    return res;
-}

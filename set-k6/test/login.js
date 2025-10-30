@@ -1,4 +1,4 @@
-import { loginFlow, loginLogoutFlow } from "../scenarios/auth_flow.js";
+import { completeAuthFlow } from "../scenarios/auth_flow.js";
 
 export const options = {
     thresholds: {
@@ -23,7 +23,7 @@ export const options = {
             executor: 'constant-vus',
             vus: 5,
             duration: '30s',
-            exec: 'loginFlow',
+            exec: 'completeAuthFlow',
             tags: { scenario: 'normal' },
             startTime: '0s',
         },
@@ -38,22 +38,9 @@ export const options = {
                 { duration: '15s', target: 5 },
                 { duration: '10s', target: 0 },
             ],
-            exec: 'loginFlow',
+            exec: 'completeAuthFlow',
             tags: { scenario: 'peak' },
             startTime: '35s',
-        },
-
-        // Login with logout
-        login_logout_flow: {
-            executor: 'constant-arrival-rate',
-            rate: 3, // 3 complete flows per second
-            timeUnit: '1s',
-            duration: '1m',
-            preAllocatedVUs: 10,
-            maxVUs: 20,
-            exec: 'loginLogoutFlow',
-            tags: { scenario: 'stress' },
-            startTime: '105s',
         },
     },
 
@@ -66,10 +53,10 @@ export const options = {
     summaryTimeUnit: 'ms',
 };
 
-export { loginFlow, loginLogoutFlow };
+export { completeAuthFlow };
 
 export default function () {
-    loginFlow();
+    completeAuthFlow();
 }
 
 export function setup() {
