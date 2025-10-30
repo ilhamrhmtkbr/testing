@@ -14,6 +14,7 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Repository::clearData();
         Repository::initData();
         $this->url = config('api.version');
 
