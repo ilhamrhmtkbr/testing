@@ -10,7 +10,7 @@ class AnswersTest extends TestCase
     function test_instructor_berhasil_mendapatkan_data_answer()
     {
         Repository::insertAnswers();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/answers');
         $res->assertJsonFragment([
             'title' => 'kursus1',
@@ -35,7 +35,7 @@ class AnswersTest extends TestCase
     function test_instructor_berhasil_memasukan_data_answer()
     {
         Repository::insertQuestion();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/answers', [
                 'student_question_id' => Repository::CUSTOM_ID,
                 'answer' => 'kkkkkkkk'
@@ -51,7 +51,7 @@ class AnswersTest extends TestCase
     function test_instructor_gagal_memasukan_data_answer_karena_data_answer_duplikat()
     {
         Repository::insertAnswers();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/answers', [
                 'student_question_id' => Repository::CUSTOM_ID,
                 'answer' => 'aaaaaaaaaa'
@@ -62,7 +62,7 @@ class AnswersTest extends TestCase
 
     function test_instructor_gagal_memasukan_data_answer_karena_tidak_mengirimpkan_data_answer_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/answers');
         $res->assertStatus(422)
             ->assertJson([
@@ -78,7 +78,7 @@ class AnswersTest extends TestCase
     function test_instructor_berhasil_mengubah_data_answer()
     {
         Repository::insertAnswers();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/answers' , [
                 'id' => Repository::CUSTOM_ID,
                 'answer' => 'answer Update'
@@ -89,7 +89,7 @@ class AnswersTest extends TestCase
 
     function test_instructor_gagal_mengubah_data_answer_karena_tidak_mengirimpkan_data_answer_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/answers');
         $res->assertStatus(422)
             ->assertJson([

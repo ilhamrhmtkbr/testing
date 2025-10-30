@@ -10,7 +10,7 @@ class SocialsTest extends TestCase
     function test_instructor_berhasil_mendapatkan_data_socials()
     {
         Repository::insertSocials();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/socials');
         $res->assertStatus(200)
             ->assertJson([
@@ -37,7 +37,7 @@ class SocialsTest extends TestCase
 
     function test_instructor_berhasil_memasukan_data_socials()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/socials', [
                 'url_link' => 'https://www.instagram.com/ilhamrhmtkbr',
                 'display_name' => 'ilhamrhmtkbr'
@@ -53,7 +53,7 @@ class SocialsTest extends TestCase
     function test_instructor_gagal_memasukan_data_socials_karena_data_socials_duplikat()
     {
         Repository::insertSocials();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/socials', [
                 'url_link' => 'https://www.instagram.com/ilhamrhmtkbr',
                 'display_name' => 'ilhamrhmtkbr'
@@ -68,7 +68,7 @@ class SocialsTest extends TestCase
 
     function test_instructor_gagal_memasukan_data_socials_karena_tidak_mengirimpkan_data_socials_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/socials');
         $res->assertStatus(422)
             ->assertJson([
@@ -84,7 +84,7 @@ class SocialsTest extends TestCase
     function test_instructor_berhasil_mengubah_data_socials()
     {
         Repository::insertSocials();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/socials', [
                 'id' => Repository::CUSTOM_ID,
                 'url_link' => 'https://www.instagram.com/ilhamrhmtkbr',
@@ -100,7 +100,7 @@ class SocialsTest extends TestCase
 
     function test_instructor_gagal_mengubah_data_socials_karena_tidak_mengirimpkan_data_socials_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/socials');
         $res->assertStatus(422)
             ->assertJson([
@@ -116,7 +116,7 @@ class SocialsTest extends TestCase
     function test_instructor_berhasil_menghapus_data_socials()
     {
         Repository::insertSocials();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/socials?id=' . Repository::CUSTOM_ID);
         $res->assertStatus(200)
             ->assertJson([
@@ -127,7 +127,7 @@ class SocialsTest extends TestCase
 
     function test_instructor_gagal_menghapus_data_socials_karena_tidak_mengirimpkan_data_socials_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/socials');
         $res->assertStatus(422)
             ->assertJson([

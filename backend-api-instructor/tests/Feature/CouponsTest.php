@@ -10,7 +10,7 @@ class CouponsTest extends TestCase
     function test_instructor_berhasil_mendapatkan_data_coupon()
     {
         Repository::insertCourseCoupon();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/coupons');
         $res->assertJsonFragment([
             'id' => '120r8412-e29b-41d4-a716-346655441234',
@@ -33,7 +33,7 @@ class CouponsTest extends TestCase
     function test_instructor_berhasil_mendapatkan_data_coupon_detail()
     {
         Repository::insertCourseCoupon();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/coupons/show?id=' . Repository::CUSTOM_UUID);
         $res->assertJsonStructure([
             'data' => [
@@ -56,7 +56,7 @@ class CouponsTest extends TestCase
 
     function test_instructor_gagal_mendapatkan_data_coupon_detail_karena_tidak_mengirimkan_id()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
                 ->get($this->url . '/coupons/show');
         $res->assertStatus(422)
             ->assertJson([
@@ -68,7 +68,7 @@ class CouponsTest extends TestCase
     function test_instructor_berhasil_memasukan_data_coupon()
     {
         Repository::insertCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/coupons', [
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
                 'discount' => 99,
@@ -86,7 +86,7 @@ class CouponsTest extends TestCase
     function test_instructor_gagal_memasukan_data_coupon_karena_data_coupon_duplikat()
     {
         Repository::insertCourseCoupon();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/coupons', [
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
                 'discount' => 88,
@@ -103,7 +103,7 @@ class CouponsTest extends TestCase
 
     function test_instructor_gagal_memasukan_data_coupon_karena_tidak_mengirimpkan_data_coupon_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/coupons');
         $res->assertStatus(422)
             ->assertJson([
@@ -121,7 +121,7 @@ class CouponsTest extends TestCase
     function test_instructor_berhasil_mengubah_data_coupon()
     {
         Repository::insertCourseCoupon();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/coupons', [
                 'id' => Repository::CUSTOM_UUID,
                 'discount' => 88,
@@ -138,7 +138,7 @@ class CouponsTest extends TestCase
 
     function test_instructor_gagal_mengubah_data_coupon_karena_tidak_mengirimpkan_data_coupon_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/coupons');
         $res->assertStatus(422)
             ->assertJson([
@@ -155,7 +155,7 @@ class CouponsTest extends TestCase
     function test_instructor_berhasil_menghapus_data_coupon()
     {
         Repository::insertCourseCoupon();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/coupons?id=' . Repository::CUSTOM_UUID);
         $res->assertStatus(200)
             ->assertJson([
@@ -166,7 +166,7 @@ class CouponsTest extends TestCase
 
     function test_instructor_gagal_menghapus_data_coupon_karena_tidak_mengirimpkan_data_coupon_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/coupons');
         $res->assertStatus(422)
             ->assertJson([

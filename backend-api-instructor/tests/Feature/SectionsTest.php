@@ -10,7 +10,7 @@ class SectionsTest extends TestCase
     function test_instructor_berhasil_mendapatkan_data()
     {
         Repository::insertSections();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/sections?course_id=' . Repository::INSTRUCTOR_COURSE_ID);
         $res->assertJsonFragment([
             'success' => true,
@@ -45,7 +45,7 @@ class SectionsTest extends TestCase
     function test_instructor_berhasil_memasukan_data()
     {
         Repository::insertCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/sections', [
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
                 'title' => 'title section 1',
@@ -62,7 +62,7 @@ class SectionsTest extends TestCase
     function test_instructor_gagal_memasukan_data_sections_karena_data_sections_duplikat()
     {
         Repository::insertSections();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/sections', [
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
                 'title' => 'title section 1',
@@ -78,7 +78,7 @@ class SectionsTest extends TestCase
 
     function test_instructor_gagal_memasukan_data_sections_karena_tidak_mengirimpkan_data_sections_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/sections');
 
         $res->assertStatus(422)
@@ -96,7 +96,7 @@ class SectionsTest extends TestCase
     function test_instructor_berhasil_mengubah_data()
     {
         Repository::insertSections();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/sections', [
                 'id' => Repository::CUSTOM_ID,
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
@@ -114,7 +114,7 @@ class SectionsTest extends TestCase
     function test_instructor_gagal_mengubah_data_sections_karena_tidak_mengirimpkan_data_sections_apapun()
     {
         Repository::insertSections();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/sections');
         $res->assertStatus(422)
             ->assertJson([
@@ -132,7 +132,7 @@ class SectionsTest extends TestCase
     function test_instructor_berhasil_menghapus_data()
     {
         Repository::insertSections();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/sections?id=' . Repository::CUSTOM_ID);
         $res->assertStatus(200)
             ->assertJson([
@@ -143,7 +143,7 @@ class SectionsTest extends TestCase
 
     function test_instructor_gagal_menghapus_data_sections_karena_tidak_mengirimpkan_data_sections_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/sections');
         $res->assertStatus(422)
             ->assertJson([

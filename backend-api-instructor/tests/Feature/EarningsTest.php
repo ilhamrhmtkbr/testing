@@ -10,7 +10,7 @@ class EarningsTest extends TestCase
     function test_instructor_berhasil_mendapatkan_data_earnings()
     {
         Repository::insertEarnings();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/earnings');
 
         $res->assertJsonFragment([

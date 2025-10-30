@@ -10,7 +10,7 @@ class AccountsTest extends TestCase
     function test_instructor_berhasil_mendapatkan_data_account()
     {
         Repository::insertAccounts();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/account');
         $res->assertStatus(200)
             ->assertJson([
@@ -37,7 +37,7 @@ class AccountsTest extends TestCase
 
     function test_instructor_gagal_memasukan_data_account_karena_tidak_mengirimpkan_data_account_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/account');
         $res->assertStatus(422)
             ->assertJson([
@@ -53,7 +53,7 @@ class AccountsTest extends TestCase
 
     function test_instructor_gagal_mengubah_data_account_karena_tidak_mengirimpkan_data_account_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/account');
         $res->assertStatus(422)
             ->assertJson([

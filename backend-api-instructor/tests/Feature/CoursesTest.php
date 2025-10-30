@@ -10,7 +10,7 @@ class CoursesTest extends TestCase
     function test_instructor_berhasil_mendapatkan_semua_data_course()
     {
         Repository::insertCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/courses');
         $res->assertJsonFragment([
             'id' => '550e8400-e29b-41d4-a716-446655440000',
@@ -34,7 +34,7 @@ class CoursesTest extends TestCase
     function test_instructor_berhasil_mendapatkan_semua_data_course_detail()
     {
         Repository::insertCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/courses/show?id=' . Repository::INSTRUCTOR_COURSE_ID);
         $res->assertStatus(200)
             ->assertJson([
@@ -60,7 +60,7 @@ class CoursesTest extends TestCase
 
     function test_instructor_gagal_mendapatkan_semua_data_course_detail_karena_tidak_terautentikasi()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/courses/show');
         $res->assertStatus(422)
             ->assertJson([
@@ -71,7 +71,7 @@ class CoursesTest extends TestCase
     function test_instructor_gagal_memasukan_data_course_karena_data_course_duplikat()
     {
         Repository::insertCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/courses', [
                 'title' => 'kursus1',
                 'description' => 'description1',
@@ -94,7 +94,7 @@ class CoursesTest extends TestCase
 
     function test_instructor_gagal_memasukan_data_course_karena_tidak_mengirimkan_data_course_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/courses');
         $res->assertStatus(422)
             ->assertJson([
@@ -116,7 +116,7 @@ class CoursesTest extends TestCase
     function test_instructor_berhasil_mengubah_data_course()
     {
         Repository::insertCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/courses', [
                 'id' => Repository::INSTRUCTOR_COURSE_ID,
                 'title' => 'kursus1 update',
@@ -140,7 +140,7 @@ class CoursesTest extends TestCase
 
     function test_instructor_gagal_mengubah_data_course_karena_tidak_mengirimkan_data_course_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/courses');
         $res->assertStatus(422)
             ->assertJson([
@@ -162,7 +162,7 @@ class CoursesTest extends TestCase
     function test_instructor_berhasil_menghapus_data_course()
     {
         Repository::insertCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/courses?id='.Repository::INSTRUCTOR_COURSE_ID);
         $res->assertStatus(200)
             ->assertJson([
@@ -173,7 +173,7 @@ class CoursesTest extends TestCase
 
     function test_instructor_gagal_menghapus_data_course_karena_tidak_mengirimkan_data_course_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/courses');
         $res->assertStatus(422)
             ->assertJson([
@@ -185,7 +185,7 @@ class CoursesTest extends TestCase
     function test_instructor_berhasil_mendapatkan_data_course_yang_disukai()
     {
         Repository::insertCourseLikes();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/courses/likes');
 
         $res->assertJsonFragment([
@@ -208,7 +208,7 @@ class CoursesTest extends TestCase
     function test_instructor_berhasil_mendapatkan_data_course_review()
     {
         Repository::insertCourseReviews();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/courses/reviews');
 
         $res->assertJsonFragment([

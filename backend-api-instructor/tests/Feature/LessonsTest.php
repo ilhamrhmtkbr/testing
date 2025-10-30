@@ -10,7 +10,7 @@ class LessonsTest extends TestCase
     function test_instructor_berhasil_mendapatkan_data_lesson()
     {
         Repository::insertLessons();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/lessons?section_id=' . Repository::CUSTOM_ID);
         $res->assertJsonFragment([
             'id' => 999,
@@ -27,7 +27,7 @@ class LessonsTest extends TestCase
 
     function test_instructor_gagal_mendapatkan_data_lesson_karena_tidak_mengirimkan_section_id()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/lessons');
         $res->assertStatus(422)
             ->assertJson([
@@ -48,7 +48,7 @@ class LessonsTest extends TestCase
     function test_instructor_berhasil_memasukan_data()
     {
         Repository::insertSections();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/lessons', [
                 'instructor_section_id' => Repository::CUSTOM_ID,
                 'title' => 'title lesson 1',
@@ -71,7 +71,7 @@ class LessonsTest extends TestCase
     function test_instructor_gagal_memasukan_data_lesson_karena_data_lesson_duplikat()
     {
         Repository::insertLessons();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/lessons', [
                 'instructor_section_id' => Repository::CUSTOM_ID,
                 'title' => 'title lesson 1',
@@ -93,7 +93,7 @@ class LessonsTest extends TestCase
 
     function test_instructor_gagal_memasukan_data_lesson_karena_tidak_mengirimkan_data_lesson_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/lessons');
         $res->assertStatus(422)
             ->assertJson([
@@ -112,7 +112,7 @@ class LessonsTest extends TestCase
     function test_instructor_berhasil_mengubah_data()
     {
         Repository::insertLessons();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/lessons', [
                 'id' => Repository::CUSTOM_ID,
                 'instructor_section_id' => Repository::CUSTOM_ID,
@@ -135,7 +135,7 @@ class LessonsTest extends TestCase
 
     function test_instructor_gagal_mengubah_data_lesson_karena_tidak_mengirimkan_data_lesson_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/lessons');
         $res->assertStatus(422)
             ->assertJson([
@@ -155,7 +155,7 @@ class LessonsTest extends TestCase
     function test_instructor_berhasil_menghapus_data()
     {
         Repository::insertLessons();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/lessons?id=' . Repository::CUSTOM_ID . '&instructor_section_id=' . Repository::CUSTOM_ID);
         $res->assertStatus(200)
             ->assertJson([
@@ -166,7 +166,7 @@ class LessonsTest extends TestCase
 
     function test_instructor_gagal_menghapus_data_lesson_karena_tidak_mengirimkan_data_lesson_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/lessons');
         $res->assertStatus(422)
             ->assertJson([
