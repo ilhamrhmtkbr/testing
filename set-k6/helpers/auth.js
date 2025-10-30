@@ -1,8 +1,17 @@
 import http from 'k6/http';
 import { check } from 'k6';
-import { getCurrentScenario } from 'k6/execution';
+import execution from 'k6/execution';
 
 const BASE_URL = 'http://backend-api-user:8000/user-api/v1/auth';
+
+// Helper to safely get scenario tag
+function getScenarioTag() {
+    try {
+        return execution.scenario?.tags?.scenario || 'default';
+    } catch (e) {
+        return 'default';
+    }
+}
 
 export function register(first_name, middle_name, last_name, username, password, password_confirmation) {
     const url = `${BASE_URL}/register`;
@@ -15,8 +24,8 @@ export function register(first_name, middle_name, last_name, username, password,
         password_confirmation: password_confirmation,
     });
 
-    // ✅ Get scenario tag from current execution context
-    const scenarioTag = getCurrentScenario().tags.scenario || 'unknown';
+    // ✅ Safely get scenario tag
+    const scenarioTag = getScenarioTag();
 
     const params = {
         headers: {
@@ -26,7 +35,7 @@ export function register(first_name, middle_name, last_name, username, password,
         },
         tags: { 
             name: 'Register API',
-            scenario: scenarioTag  // ✅ Add scenario tag
+            scenario: scenarioTag
         },
         timeout: '10s'
     };
@@ -59,8 +68,8 @@ export function login(username, password) {
         password: password,
     });
 
-    // ✅ Get scenario tag from current execution context
-    const scenarioTag = getCurrentScenario().tags.scenario || 'unknown';
+    // ✅ Safely get scenario tag
+    const scenarioTag = getScenarioTag();
 
     const params = {
         headers: {
@@ -70,7 +79,7 @@ export function login(username, password) {
         },
         tags: { 
             name: 'Login API',
-            scenario: scenarioTag  // ✅ Add scenario tag
+            scenario: scenarioTag
         },
         timeout: '10s'
     };
