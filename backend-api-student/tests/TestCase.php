@@ -19,20 +19,47 @@ abstract class TestCase extends BaseTestCase
         $this->url = config('api.version');
 
         if (self::$token === null) {
-            $res = Http::timeout(10)
-                ->retry(2, 100)
-                ->post('http://backend-api-user:8000/' . env('USER_API_VERSION') . '/auth/login', [
-                    'username' => Repository::USERNAME,
-                    'password' => Repository::PASSWORD
-                ]);
+            $maxRetries = 3;
+            $attempt = 0;
 
-            if ($res->successful()) {
-                $cookies = $res->header('Set-Cookie');
-                preg_match('/access_token=([^;]+)/', $cookies, $matches);
-                self::$token = $matches[1] ?? null;
+            while ($attempt < $maxRetries) {
+                try {
+                    $attempt++;
+                    echo "\n🔑 Login attempt $attempt/$maxRetries...\n";
+
+                    $res = Http::timeout(10)
+                        ->retry(2, 100) // 👈 Retry 2x dengan delay 100ms
+                        ->post('http://backend-api-user:8000/'. env('USER_API_VERSION') . '/auth/login', [
+                            'username' => Repository::USERNAME,
+                            'password' => Repository::PASSWORD
+                        ]);
+
+                    if ($res->successful()) {
+                        $cookies = $res->header('Set-Cookie');
+                        preg_match('/access_token=([^;]+)/', $cookies, $matches);
+                        self::$token = $matches[1] ?? null;
+
+                        if (self::$token !== null) {
+                            echo "✅ Token obtained!\n";
+                            break;
+                        }
+                    }
+
+                    echo "⚠️ Attempt $attempt failed, retrying...\n";
+                    sleep(2); // Wait 2 detik sebelum retry
+
+                } catch (\Exception $e) {
+                    echo "❌ Attempt $attempt error: " . $e->getMessage() . "\n";
+                    if ($attempt >= $maxRetries) {
+                        throw $e;
+                    }
+                    sleep(2);
+                }
             }
 
-            sleep(2);
+            if (self::$token === null) {
+                throw new \Exception("Failed to obtain token after $maxRetries attempts");
+            }
         }
     }
 
