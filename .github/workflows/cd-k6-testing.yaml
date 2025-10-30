@@ -150,11 +150,7 @@ jobs:
 
           echo "🧪 Running k6 tests..."
 
-          # Test dalam urutan dependency
-          echo "Testing backend-api-user (base service)..."
           sudo docker compose -f docker-compose-cd-k6-test.yaml run --rm set-k6 run /k6-scripts/test/login.js
-#          sudo docker compose -f docker-compose-cd-k6-test.yaml run --rm set-k6 run /k6-scripts/test/public.js
-#          sudo docker compose -f docker-compose-cd-k6-test.yaml run --rm set-k6 run /k6-scripts/test/register.js
 
           echo "✅ All k6 tests passed!"
 
