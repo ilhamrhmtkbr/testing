@@ -19,7 +19,7 @@ function getRandomUserData() {
         first_name: 'User',
         middle_name: 'Test',
         last_name: `${timestamp}`,
-        username: `user${random}${timestamp}`,
+        username: `user${random}`,
         password: 'Test123!',
         password_confirmation: 'Test123!'
     };
