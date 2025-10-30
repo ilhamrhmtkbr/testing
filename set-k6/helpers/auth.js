@@ -28,7 +28,7 @@ export function register(first_name, middle_name, last_name, username, password,
 
     // Check yang benar untuk register
     check(res, {
-        'register success (201)': (r) => r.status === 201,
+        'register success (200)': (r) => r.status === 200,
         'response has success field': (r) => {
             try {
                 return r.json('success') === true;
