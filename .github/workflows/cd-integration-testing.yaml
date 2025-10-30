@@ -142,9 +142,25 @@ jobs:
 
       - name: Tests Student
         run: |
+          echo "Checking user API health before student tests..."
+          # 👇 Tambahin health check dulu
+          for i in {1..10}; do
+            STATUS=$(sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-user curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/health || echo "000")
+            echo "User API health check attempt $i: $STATUS"
+            if [ "$STATUS" = "200" ]; then
+              echo "✅ User API is healthy"
+              break
+            fi
+            if [ $i -eq 10 ]; then
+              echo "❌ User API is not responding after 10 attempts"
+              sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml logs backend-api-user
+              exit 1
+            fi
+            sleep 3
+          done
+
           echo "Testing backend-api-student..."
           sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-student php artisan test --debug --stop-on-failure
-
       - name: Tests Instructor
         run: |
           echo "Testing backend-api-instructor..."
