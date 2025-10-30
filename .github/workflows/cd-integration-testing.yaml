@@ -124,6 +124,7 @@ jobs:
           # Check if all containers are running
           sudo docker compose -f docker-compose-cd-integration-test.yaml ps
 
+      # Step 4: Install Composer
       - name: Install Composer
         run: |
           for containerName in student instructor public user forum; do
@@ -131,35 +132,20 @@ jobs:
           done
 
       # Step 5: Setup Laravel applications
-      - name: Setup Laravel Applications
+      - name: Migration and Seeder
         run: |
           sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-public php artisan migrate:fresh --seed
 
-      - name: Tests User
+      # Step 6: Testing
+      - name: Integration Testing
         run: |
-          echo "Testing backend-api-user (base service)..."
-          sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-user php artisan test --debug --stop-on-failure
+          echo "Testing..."
+          
+          for containerName in user student instructor public user forum; do
+            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-${containerName} php artisan test --debug --stop-on-failure
+          done
 
-      - name: Tests Student
-        run: |
-          echo "Testing backend-api-student..."
-          sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-student php artisan test --debug --stop-on-failure
-      - name: Tests Instructor
-        run: |
-          echo "Testing backend-api-instructor..."
-          sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-instructor php artisan test --debug --stop-on-failure
-
-      - name: Tests Forum
-        run: |          
-          echo "Testing backend-api-forum..."
-          sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-forum php artisan test --debug --stop-on-failure
-
-      - name: Tests Public
-        run: |
-          echo "Testing backend-api-public..."
-          sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-public php artisan test --debug --stop-on-failure
-
-      # Step 6: Cleanup
+      # Step 7: Cleanup
       - name: Cleanup Docker
         if: always()
         run: |
