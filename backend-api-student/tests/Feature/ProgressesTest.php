@@ -10,7 +10,7 @@ class ProgressesTest extends TestCase
     function test_student_berhasil_mendapatkan_data_course_progresses()
     {
         Repository::insertProgress();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/progresses');
         $res->assertStatus(200)
             ->assertJsonStructure([
@@ -73,7 +73,7 @@ class ProgressesTest extends TestCase
     function test_student_berhasil_mendapatkan_data_course_progress_detail()
     {
         Repository::insertProgress();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/progresses/show?instructor_course_id=' . Repository::INSTRUCTOR_COURSE_ID);
         $res->assertStatus(200)
             ->assertJsonStructure([
@@ -108,7 +108,7 @@ class ProgressesTest extends TestCase
 
     function test_student_gagal_mendapatkan_data_course_progress_detail_karena_tidak_mengirimkan_course_id()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/progresses/show');
         $res->assertStatus(422)
             ->assertJson([
@@ -119,7 +119,7 @@ class ProgressesTest extends TestCase
 
     function test_student_gagal_mendapatkan_data_course_progress_detail_karena_belum_menyelesaikan_kursus()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/progresses/show?instructor_course_id=' . Repository::INSTRUCTOR_COURSE_ID);
         $res->assertStatus(400)
             ->assertJson([
@@ -131,7 +131,7 @@ class ProgressesTest extends TestCase
     function test_student_berhasil_menambahkan_data_course_progress()
     {
         Repository::insertStudentBuyCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/progresses', [
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
                 'instructor_section_id' => 999,
@@ -149,7 +149,7 @@ class ProgressesTest extends TestCase
     function test_student_gagal_menambahkan_data_course_progress_karena_tidak_mengirimkan_data_apapun()
     {
         Repository::insertStudentBuyCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/progresses');
         $res->assertStatus(422)
             ->assertJsonStructure([
@@ -168,7 +168,7 @@ class ProgressesTest extends TestCase
     {
         Repository::insertStudentBuyCourse();
         Repository::insertProgress();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/progresses', [
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
                 'instructor_section_id' => 999,

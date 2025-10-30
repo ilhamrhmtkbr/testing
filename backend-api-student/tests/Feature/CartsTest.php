@@ -9,7 +9,7 @@ class CartsTest extends TestCase
 {
     function test_student_berhasil_mendapatkan_seluruh_data_carts()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/carts');
 
         $res->assertStatus(200)
@@ -55,7 +55,7 @@ class CartsTest extends TestCase
 
     function test_student_berhasil_memasukan_data_ke_dalam_carts()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/carts', [
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID
             ]);
@@ -69,7 +69,7 @@ class CartsTest extends TestCase
 
     function test_student_gagal_memasukan_data_ke_dalam_carts_karena_tidak_mengirimkan_data_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/carts');
 
         $res->assertStatus(422)
@@ -85,7 +85,7 @@ class CartsTest extends TestCase
     function test_student_gagal_memasukan_data_ke_dalam_carts_karena_data_duplikat()
     {
         Repository::insertCart();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/carts', [
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID
             ]);
@@ -101,7 +101,7 @@ class CartsTest extends TestCase
     function test_student_berhasil_menghapus_data_ke_dalam_carts()
     {
         Repository::insertCart();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/carts?id=999');
 
         $res->assertStatus(200)
@@ -113,7 +113,7 @@ class CartsTest extends TestCase
     function test_student_gagal_menghapus_data_ke_dalam_carts_karena_tidak_mengirimkan_id()
     {
         Repository::insertCart();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/carts');
         $res->assertJson([
             'success' => false,

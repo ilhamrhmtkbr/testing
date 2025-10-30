@@ -10,7 +10,7 @@ class CertificatesTest extends TestCase
     function test_student_berhasil_mendapatkan_seluruh_data_certificates()
     {
         Repository::insertCertificates();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/certificates');
         $res->assertStatus(200)
             ->assertJsonStructure([
@@ -63,7 +63,7 @@ class CertificatesTest extends TestCase
     function test_student_berhasil_mendapatkan_data_certificate_detail()
     {
         Repository::insertCertificates();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/certificates/show?id=' . Repository::STUDENT_CERT_ID);
         $res->assertStatus(200)
             ->assertJsonStructure([
@@ -95,7 +95,7 @@ class CertificatesTest extends TestCase
     function test_student_gagal_mendapatkan_data_certificate_detail_karena_tidak_menyertakan_id()
     {
         Repository::insertCertificates();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/certificates/show');
         $res->assertJson([
             'success' => false,
@@ -107,7 +107,7 @@ class CertificatesTest extends TestCase
     function test_student_berhasil_mendapatkan_link_certificate_untuk_app_android()
     {
         Repository::insertCertificates();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/certificates/link?certificate_id=' . Repository::STUDENT_CERT_ID);
         $res->assertStatus(200)
             ->assertJson([
@@ -120,7 +120,7 @@ class CertificatesTest extends TestCase
     function test_student_gagal_mendapatkan_link_certificate_untuk_app_android_karena_tidak_menyertakan_cert_id()
     {
         Repository::insertCertificates();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/certificates/link');
         $res->assertStatus(422);
         Repository::deleteCertificates();
@@ -129,7 +129,7 @@ class CertificatesTest extends TestCase
     function test_student_berhasil_mendownload_certificate()
     {
         Repository::insertCertificates();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/certificates/download?id=' . Repository::STUDENT_CERT_ID);
         $res->assertStatus(200);
         $res->assertHeader('Content-Type', 'application/pdf');
@@ -139,7 +139,7 @@ class CertificatesTest extends TestCase
     function test_student_gagal_mendownload_certificate()
     {
         Repository::insertCertificates();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/certificates/download');
         $res->assertStatus(422);
         Repository::deleteCertificates();
@@ -148,7 +148,7 @@ class CertificatesTest extends TestCase
     function test_student_gagal_menambahkan_certificate_karena_belum_menyelesaikan_progress_satupun()
     {
         Repository::insertStudentBuyCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/certificates' ,[
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID
             ]);
@@ -164,7 +164,7 @@ class CertificatesTest extends TestCase
     {
         Repository::insertStudentBuyCourse();
         Repository::insertCertificates();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/certificates' ,[
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID
             ]);
@@ -180,7 +180,7 @@ class CertificatesTest extends TestCase
     function test_student_gagal_menambahkan_certificate_karena_tidak_mengirimkan_data_apapun()
     {
         Repository::insertStudentBuyCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/certificates');
         $res->assertStatus(422)
             ->assertJson([

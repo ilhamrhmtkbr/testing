@@ -10,7 +10,7 @@ class ReviewsTest extends TestCase
     function test_student_berhasil_mendapatkan_data_reviews()
     {
         Repository::insertReviews();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/reviews');
         $res->assertJsonStructure([
             'success',
@@ -61,7 +61,7 @@ class ReviewsTest extends TestCase
     function test_student_berhasil_menambahkan_data_review()
     {
         Repository::insertStudentBuyCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/reviews' , [
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
                 'review' => 'review satu',
@@ -80,7 +80,7 @@ class ReviewsTest extends TestCase
     {
         Repository::insertStudentBuyCourse();
         Repository::insertReviews();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/reviews' , [
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
                 'review' => 'review satu',
@@ -94,7 +94,7 @@ class ReviewsTest extends TestCase
     function test_student_gagal_menambahkan_data_review_karena_tidak_mengirimkan_data_apapun()
     {
         Repository::insertStudentBuyCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/reviews');
         $res->assertStatus(422)
             ->assertJson([
@@ -113,7 +113,7 @@ class ReviewsTest extends TestCase
     {
         Repository::insertStudentBuyCourse();
         Repository::insertReviews();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/reviews', [
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
                 'review' => 'review update',
@@ -127,7 +127,7 @@ class ReviewsTest extends TestCase
     function test_student_gagal_mengubah_data_review_karena_tidak_mengirimkan_data_apapun()
     {
         Repository::insertStudentBuyCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/reviews');
         $res->assertStatus(422)
             ->assertJson([
@@ -146,7 +146,7 @@ class ReviewsTest extends TestCase
     {
         Repository::insertStudentBuyCourse();
         Repository::insertReviews();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/reviews?id=999');
         $res->assertStatus(200);
         Repository::deleteStudentBuyCourse();

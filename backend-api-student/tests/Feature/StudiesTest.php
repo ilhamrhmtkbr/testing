@@ -10,7 +10,7 @@ class StudiesTest extends TestCase
     public function test_student_berhasil_mendapatkan_data_kursus_yang_diikuti(): void
     {
         Repository::insertStudentBuyCourse();
-        $response = $this->withUnencryptedCookie('access_token', $this->token)
+        $response = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/studies/courses');
 
         $response->assertJsonStructure([
@@ -40,7 +40,7 @@ class StudiesTest extends TestCase
     public function test_student_berhasil_mendapatkan_data_bab_yang_diikut(): void
     {
         Repository::insertStudentBuyCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/studies/sections?course_id=' . Repository::INSTRUCTOR_COURSE_ID);
         $res->assertJsonFragment([
             'id' => '550e8400-e29b-41d4-a716-446655440000',
@@ -60,7 +60,7 @@ class StudiesTest extends TestCase
     public function test_student_berhasil_mendapatkan_data_materi_yang_diikut(): void
     {
         Repository::insertStudentBuyCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/studies/lessons?section_id=999');
         $res->assertJsonFragment([
             'instructor_section_id' => 999,

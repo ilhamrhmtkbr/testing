@@ -10,7 +10,7 @@ class QuestionsTest extends TestCase
     function test_student_berhasil_mendapatkan_data_questions()
     {
         Repository::insertQuestions('question1');
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/questions');
         $res->assertJsonFragment([
             'question' => 'question1',
@@ -32,7 +32,7 @@ class QuestionsTest extends TestCase
     function test_student_berhasil_mendapatkan_data_question_detail()
     {
         Repository::insertQuestions('question1');
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/questions/show?id=999');
         $res->assertJsonFragment([
             'id' => 999,
@@ -45,7 +45,7 @@ class QuestionsTest extends TestCase
 
     function test_student_gagal_mendapatkan_data_question_detail_karena_tidak_mengirimkan_id()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/questions/show');
         $res->assertStatus(422)
             ->assertJson([
@@ -57,7 +57,7 @@ class QuestionsTest extends TestCase
     function test_student_berhasil_menambahkan_data_question()
     {
         Repository::insertStudentBuyCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
                 ->post($this->url . '/questions' , [
                     'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
                     'question' => 'custom-question 123'
@@ -74,7 +74,7 @@ class QuestionsTest extends TestCase
     function test_student_gagal_menambahkan_data_question_karena_tidak_mengirimkan_data_apapun()
     {
         Repository::insertStudentBuyCourse();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/questions' );
         $res->assertStatus(422)
             ->assertJson([
@@ -92,7 +92,7 @@ class QuestionsTest extends TestCase
     {
         Repository::insertStudentBuyCourse();
         Repository::insertQuestions('custom-question 123');
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/questions' , [
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
                 'question' => 'custom-question 123'
@@ -110,7 +110,7 @@ class QuestionsTest extends TestCase
     {
         Repository::insertStudentBuyCourse();
         Repository::insertQuestions('custom-question 123');
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/questions' , [
                 'id' => 999,
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
@@ -127,7 +127,7 @@ class QuestionsTest extends TestCase
 
     function test_student_gagal_mengubah_data_question_karena_tidak_mengirimkan_data_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->patch($this->url . '/questions' , [
                 'id' => '',
                 'instructor_course_id' => '',
@@ -147,7 +147,7 @@ class QuestionsTest extends TestCase
     function test_student_berhasil_menghapus_data_question()
     {
         Repository::insertQuestions('custom-question 123');
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/questions' , [
                 'id' => 999,
             ]);
@@ -160,7 +160,7 @@ class QuestionsTest extends TestCase
 
     function test_student_gagal_menghapus_data_question_karena_tidak_mengirimkan_data_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->delete($this->url . '/questions' , [
                 'id' => '',
             ]);

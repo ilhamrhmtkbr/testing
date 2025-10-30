@@ -10,7 +10,7 @@ class TransactionsTest extends TestCase
     public function test_student_berhasil_mendapatkan_semua_data_transactions(): void
     {
         Repository::insertTransactions();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/transactions');
         $res->assertJsonFragment([
             'order_id' => '93ca88t635ba5',
@@ -35,7 +35,7 @@ class TransactionsTest extends TestCase
     public function test_student_berhasil_mendapatkan_data_transaction_detail(): void
     {
         Repository::insertTransactions();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/transactions/show?order_id=' . Repository::STUDENT_ORDER_ID);
         $res->assertJsonFragment([
             'order_id' => '93ca88t635ba5',
@@ -52,7 +52,7 @@ class TransactionsTest extends TestCase
     public function test_student_gagal_mendapatkan_data_transaction_detail_karena_tidak_mengirimkan_order_id()
     {
         Repository::insertTransactions();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->get($this->url . '/transactions/show');
         $res->assertJson([
            'success' => false,
@@ -63,7 +63,7 @@ class TransactionsTest extends TestCase
 
 //    public function test_student_berhasil_menambahkan_data_transaction(): void
 //    {
-//        $res = $this->withUnencryptedCookie('access_token', $this->token)
+//        $res = $this->withUnencryptedCookie('access_token', self::$token)
 //            ->post($this->url . '/transactions', [
 //                'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
 //                'instructor_course_coupon' => ''
@@ -79,7 +79,7 @@ class TransactionsTest extends TestCase
     public function test_student_gagal_menambahkan_data_transaction_karena_data_duplikat()
     {
         Repository::insertTransactions();
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/transactions', [
                 'instructor_course_id' => Repository::INSTRUCTOR_COURSE_ID,
                 'instructor_course_coupon' => ''
@@ -93,7 +93,7 @@ class TransactionsTest extends TestCase
 
     public function test_student_gagal_menambahkan_data_transaction_karena_tidak_mengirimkan_data_apapun()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/transactions');
         $res->assertStatus(422)
             ->assertJson([
@@ -107,35 +107,35 @@ class TransactionsTest extends TestCase
 
 //    public function test_student_berhasil_mengubah_data_transaction(): void
 //    {
-//        $res = $this->withUnencryptedCookie('access_token', $this->token)
+//        $res = $this->withUnencryptedCookie('access_token', self::$token)
 //            ->patch($this->url . '/transactions');
 //        var_dump($res->json());
 //    }
 //
 //    public function test_student_gagal_mengubah_data_transaction()
 //    {
-//        $res = $this->withUnencryptedCookie('access_token', $this->token)
+//        $res = $this->withUnencryptedCookie('access_token', self::$token)
 //            ->patch($this->url . '/transactions');
 //        var_dump($res->json());
 //    }
 
 //    public function test_student_berhasil_menghapus_data_transaction(): void
 //    {
-//        $res = $this->withUnencryptedCookie('access_token', $this->token)
+//        $res = $this->withUnencryptedCookie('access_token', self::$token)
 //            ->delete($this->url . '/transactions');
 //        var_dump($res->json());
 //    }
 //
 //    public function test_student_gagal_menghapus_data_transaction()
 //    {
-//        $res = $this->withUnencryptedCookie('access_token', $this->token)
+//        $res = $this->withUnencryptedCookie('access_token', self::$token)
 //            ->delete($this->url . '/transactions');
 //        var_dump($res->json());
 //    }
 
     public function test_student_berhasil_mengecek_kupon(): void
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/transactions/check-coupon', [
                 'course_id' => 'tidak-ada'
             ]);
@@ -148,7 +148,7 @@ class TransactionsTest extends TestCase
 
     public function test_student_gagal_mengecek_kupon_karena_tidak_mengirimkan_course_id()
     {
-        $res = $this->withUnencryptedCookie('access_token', $this->token)
+        $res = $this->withUnencryptedCookie('access_token', self::$token)
             ->post($this->url . '/transactions/check-coupon');
         $res->assertStatus(422)
             ->assertJson([
