@@ -2,7 +2,7 @@ import http from 'k6/http';
 import { check } from 'k6';
 
 export function getCourses(token) {
-    const url = `http://backend-api-public/public-api/v1/courses`;
+    const url = `http://backend-api-public:8000/public-api/v1/courses`;
     const params = {
         headers: {
             'Authorization': `Bearer ${token}`,

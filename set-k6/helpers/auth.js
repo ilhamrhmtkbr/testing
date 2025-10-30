@@ -1,7 +1,7 @@
 import http from 'k6/http';
 import { check } from 'k6';
 
-const BASE_URL = 'http://backend-api-user/user-api/v1/auth';
+const BASE_URL = 'http://backend-api-user:8000/user-api/v1/auth';
 
 export function register(first_name, middle_name, last_name, username, password, password_confirmation) {
     const url = `${BASE_URL}/register`;
