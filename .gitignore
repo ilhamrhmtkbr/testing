@@ -2,7 +2,7 @@
 # Laravel Backend APIs
 #######################
 
-# Environment files - WAJIB IGNORE (ada credential)
+# Environment files - WAJIB IGNORE (kalo ada credential)
 **/.env
 **/.env.*
 !**/.env.example
@@ -11,8 +11,8 @@
 **/backend-api-*/.env.staging
 **/docker/dev/frontend-react/.env.shared
 **/docker/dev/backend-laravel/_shared/.env.shared
-**/docker/prod/backend-laravel/_shared/.env.shared
 !**/docker/prod/frontend-react/.env.shared
+!**/docker/prod/backend-laravel/_shared/.env.shared
 
 # Laravel Dependencies & Cache
 **/backend-api-*/vendor/
@@ -67,7 +67,6 @@
 
 # Development environment files
 **/docker/dev/backend-laravel/_shared/.env.shared
-**/docker/prod/backend-laravel/_shared/.env.shared
 
 # Docker override files (personal configurations)
 **/docker-compose.override.yml
