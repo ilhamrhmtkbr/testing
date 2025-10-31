@@ -1,12 +1,21 @@
 import http from 'k6/http';
 import { check } from 'k6';
-import { getCurrentScenario } from 'k6/execution';
+import execution from 'k6/execution';
+
+// Helper to safely get scenario tag
+function getScenarioTag() {
+    try {
+        return execution.scenario?.tags?.scenario || 'default';
+    } catch (e) {
+        return 'default';
+    }
+}
 
 export function getCourses(token) {
     const url = `http://backend-api-public:8000/public-api/v1/courses`;
     
-    // ✅ Get scenario tag from current execution context
-    const scenarioTag = getCurrentScenario().tags.scenario || 'unknown';
+    // ✅ Safely get scenario tag
+    const scenarioTag = getScenarioTag();
     
     const params = {
         headers: {
@@ -15,7 +24,7 @@ export function getCourses(token) {
         },
         tags: { 
             name: 'Get Courses API',
-            scenario: scenarioTag  // ✅ Add scenario tag
+            scenario: scenarioTag
         }
     };
     
