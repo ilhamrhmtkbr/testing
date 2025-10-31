@@ -89,4 +89,4 @@ for service in "${LARAVEL_SERVICES[@]}"; do
   fi
 done
 
-log "All Laravel optimizations completed!"
+log "All Laravel optimizations completed! ✓"
