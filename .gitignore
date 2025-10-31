@@ -12,6 +12,7 @@
 **/docker/dev/frontend-react/.env.shared
 **/docker/dev/backend-laravel/_shared/.env.shared
 **/docker/prod/backend-laravel/_shared/.env.shared
+!**/docker/prod/frontend-react/.env.shared
 
 # Laravel Dependencies & Cache
 **/backend-api-*/vendor/
