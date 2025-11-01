@@ -238,7 +238,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 48M
+                    memory: 40M
                     cpus: '0.05'
 
             backend-api-user:
@@ -276,7 +276,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 80M
+                    memory: 82M
                     cpus: '0.1'
 
             backend-api-public:
@@ -295,7 +295,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 107M
+                    memory: 109M
                     cpus: '0.1'
 
             backend-api-student:
@@ -314,7 +314,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 80M
+                    memory: 82M
                     cpus: '0.1'
 
             backend-api-instructor:
@@ -333,7 +333,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 80M
+                    memory: 82M
                     cpus: '0.1'
 
             backend-api-forum:
@@ -352,7 +352,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 90M
+                    memory: 92M
                     cpus: '0.1'
 
             backend-api-forum-reverb:
@@ -440,8 +440,7 @@ jobs:
 
           # Setup socket directory dengan permission yang benar
           mkdir -p ./sockets
-          sudo chown -R 1000:1000 ./sockets
-          chmod 775 ./sockets
+          chmod 777 ./sockets
 
           # Fix Docker permissions
           sudo chmod 666 /var/run/docker.sock
