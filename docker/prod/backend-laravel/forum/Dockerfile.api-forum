@@ -37,7 +37,10 @@ RUN mkdir -p \
    /app/bootstrap/cache
 
 # Set permissions sebelum install composer (agar bisa write cache)
-RUN chown -R ilhamrhmtkbr:ilhamrhmtkbr /app /var/log && \
+RUN mkdir -p /var/run/sockets && \
+    chown -R ilhamrhmtkbr:ilhamrhmtkbr /var/run/sockets && \
+    chmod 775 /var/run/sockets && \
+    chown -R ilhamrhmtkbr:ilhamrhmtkbr /app /var/log && \
     chmod -R 755 /app && \
     chmod -R 775 /app/storage /app/bootstrap/cache
 

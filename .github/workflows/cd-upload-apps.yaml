@@ -248,7 +248,7 @@ jobs:
                 - ./letsencrypt:/etc/letsencrypt:rw
                 - ./certbot:/var/www/certbot:rw
                 - ./nginx-http.conf:/etc/nginx/nginx.conf:ro
-                - ./sockets:/var/run/sockets
+                - ./sockets:/var/run/sockets:rw
               networks:
                 - app-network
               restart: unless-stopped
@@ -267,7 +267,7 @@ jobs:
               depends_on:
                 - database-redis
               volumes:
-                - ./sockets:/var/run/sockets
+                - ./sockets:/var/run/sockets:rw
               networks:
                 - app-network
               restart: unless-stopped
@@ -305,7 +305,7 @@ jobs:
               depends_on:
                 - database-redis
               volumes:
-                - ./sockets:/var/run/sockets              
+                - ./sockets:/var/run/sockets:rw              
               networks:
                 - app-network
               restart: unless-stopped
@@ -324,7 +324,7 @@ jobs:
               depends_on:
                 - database-redis
               volumes:
-                - ./sockets:/var/run/sockets
+                - ./sockets:/var/run/sockets:rw
               networks:
                 - app-network
               restart: unless-stopped
@@ -343,7 +343,7 @@ jobs:
               depends_on:
                 - database-redis
               volumes:
-                - ./sockets:/var/run/sockets
+                - ./sockets:/var/run/sockets:rw
               networks:
                 - app-network
               restart: unless-stopped
@@ -362,7 +362,7 @@ jobs:
               depends_on:
                 - database-redis
               volumes:
-                - ./sockets:/var/run/sockets
+                - ./sockets:/var/run/sockets:rw
               networks:
                 - app-network
               restart: unless-stopped
@@ -458,7 +458,8 @@ jobs:
           fi
 
           mkdir -p ./sockets
-          chmod 777 ./sockets
+          sudo chown -R 1000:1000 ./sockets
+          chmod 775 ./sockets
 
           # Fix Docker permissions
           sudo chmod 666 /var/run/docker.sock
