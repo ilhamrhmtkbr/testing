@@ -248,6 +248,7 @@ jobs:
                 - ./letsencrypt:/etc/letsencrypt:rw
                 - ./certbot:/var/www/certbot:rw
                 - ./nginx-http.conf:/etc/nginx/nginx.conf:ro
+                - ./sockets:/var/run/sockets
               networks:
                 - app-network
               restart: unless-stopped
@@ -265,6 +266,8 @@ jobs:
                 - .env.secret-user
               depends_on:
                 - database-redis
+              volumes:
+                - ./sockets:/var/run/sockets
               networks:
                 - app-network
               restart: unless-stopped
@@ -301,6 +304,8 @@ jobs:
                 - .env.secret-public
               depends_on:
                 - database-redis
+              volumes:
+                - ./sockets:/var/run/sockets              
               networks:
                 - app-network
               restart: unless-stopped
@@ -318,6 +323,8 @@ jobs:
                 - .env.secret-student
               depends_on:
                 - database-redis
+              volumes:
+                - ./sockets:/var/run/sockets
               networks:
                 - app-network
               restart: unless-stopped
@@ -335,6 +342,8 @@ jobs:
                 - .env.secret-instructor
               depends_on:
                 - database-redis
+              volumes:
+                - ./sockets:/var/run/sockets
               networks:
                 - app-network
               restart: unless-stopped
@@ -352,6 +361,8 @@ jobs:
                 - .env.secret-forum
               depends_on:
                 - database-redis
+              volumes:
+                - ./sockets:/var/run/sockets
               networks:
                 - app-network
               restart: unless-stopped
@@ -445,6 +456,9 @@ jobs:
 
             log "Docker installed successfully"
           fi
+
+          mkdir -p ./sockets
+          chmod 777 ./sockets
 
           # Fix Docker permissions
           sudo chmod 666 /var/run/docker.sock

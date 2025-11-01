@@ -4,18 +4,13 @@ rpc:
   listen: tcp://127.0.0.1:6001
 
 server:
-  command: "php artisan octane:start --server=roadrunner --port=8000"
+  command: "php artisan octane:start --server=roadrunner --host=0.0.0.0 --port=8000"
   relay: pipes
 
 http:
-  # Pakai Unix socket instead of TCP
-  address: unix:///var/run/rr-user.sock
-
+  address: unix:///var/run/sockets/backend-api-student.sock
   pool:
-    num_workers: 1
-    max_jobs: 0
-    allocate_timeout: 60s
-    destroy_timeout: 60s
+    num_workers: 4
 
 logs:
   mode: production
