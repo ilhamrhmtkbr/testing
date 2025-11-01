@@ -3,16 +3,32 @@ version: "3"
 rpc:
   listen: tcp://127.0.0.1:6001
 
+server:
+  command: "php artisan octane:start --server=roadrunner"
+  relay: "unix:///var/run/sockets/backend-api-student.sock"
+
 http:
-  address: unix:///var/run/sockets/backend-api-student.sock
+  address: "unix:///var/run/sockets/backend-api-student.sock"
+  middleware: ["gzip", "headers"]
   pool:
-    num_workers: 1 
-    max_jobs: 50 
+    num_workers: 2
+    max_jobs: 100
     allocate_timeout: 60s
     destroy_timeout: 60s
+  headers:
+    response:
+      X-Powered-By: "RoadRunner"
+  static:
+    dir: "public"
+    forbid: [".php", ".htaccess"]
 
 logs:
   mode: production
   level: error
   encoding: json
   output: stdout
+  channels:
+    http:
+      level: error
+    server:
+      level: error

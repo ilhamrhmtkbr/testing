@@ -22,25 +22,35 @@ optimize_service() {
   # Clear existing caches first (ignore errors)
   docker-compose exec -T $service php artisan cache:clear 2>/dev/null || true
   docker-compose exec -T $service php artisan config:clear 2>/dev/null || true
+  docker-compose exec -T $service php artisan route:clear 2>/dev/null || true
   docker-compose exec -T $service php artisan view:clear 2>/dev/null || true
 
   # Run optimization commands with error handling
-  if docker-compose exec -T $service php artisan cache:cache 2>&1; then
-      log "✓ Cache successful for $service"
-    else
-      log "✗ Cache failed for $service"
-    fi
-
   if docker-compose exec -T $service php artisan config:cache 2>&1; then
     log "✓ Config cache successful for $service"
   else
     log "✗ Config cache failed for $service"
   fi
 
+  if docker-compose exec -T $service php artisan route:cache 2>&1; then
+    log "✓ Route cache successful for $service"
+  else
+    log "✗ Route cache failed for $service"
+  fi
+
   if docker-compose exec -T $service php artisan view:cache 2>&1; then
     log "✓ View cache successful for $service"
   else
-    log "✗ View cache failed for $service (this is normal for API-only services)"
+    log "✗ View cache failed for $service (normal for API-only services)"
+  fi
+
+  # Only cache events if they exist
+  if docker-compose exec -T $service php artisan event:list 2>/dev/null | grep -q .; then
+    if docker-compose exec -T $service php artisan event:cache 2>&1; then
+      log "✓ Event cache successful for $service"
+    else
+      log "✗ Event cache failed for $service"
+    fi
   fi
 
   log "Optimization completed for $service"

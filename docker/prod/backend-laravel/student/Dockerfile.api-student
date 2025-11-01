@@ -73,4 +73,4 @@ RUN php /app/artisan route:cache || true
 # Switch ke non-root user untuk runtime
 USER ilhamrhmtkbr
 
-CMD ["php", "artisan", "octane:start", "--server=roadrunner", "--host=0.0.0.0"]
+CMD ["php", "artisan", "octane:start", "--server=roadrunner"]
