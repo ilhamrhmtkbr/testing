@@ -6,7 +6,10 @@ rpc:
 http:
   address: unix:///var/run/sockets/backend-api-public.sock
   pool:
-    num_workers: 4
+    num_workers: 1 
+    max_jobs: 50 
+    allocate_timeout: 60s
+    destroy_timeout: 60s
 
 logs:
   mode: production
