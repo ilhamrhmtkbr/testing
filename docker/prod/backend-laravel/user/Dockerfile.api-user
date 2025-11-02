@@ -77,4 +77,4 @@ LABEL maintainer="ilhamrhmtkbr" \
 # Switch ke non-root user untuk runtime
 USER ilhamrhmtkbr
 
-CMD ["php", "artisan", "octane:start", "--server=roadrunner"]
+CMD ["./rr", "serve", "-c", ".rr.yaml"]

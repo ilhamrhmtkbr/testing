@@ -4,7 +4,6 @@ rpc:
   listen: tcp://127.0.0.1:6001
 
 server:
-  command: "php artisan octane:start --server=roadrunner"
   relay: "unix:///var/run/sockets/backend-api-student.sock"
 
 http:
@@ -20,7 +19,7 @@ http:
       ttl: 0
       idle_ttl: 10s
       exec_ttl: 120s
-      max_worker_memory: 82
+      max_worker_memory: 112
   headers:
     response:
       X-Powered-By: "RoadRunner"
