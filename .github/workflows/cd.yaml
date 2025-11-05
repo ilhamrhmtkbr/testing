@@ -12,7 +12,7 @@ jobs:
     needs: integration-testing
     uses: ./.github/workflows/cd-k6-testing.yaml
 
-  deploy-ke-aws:
-    needs: k6-testing
-    uses: ./.github/workflows/cd-upload-apps.yaml
-    secrets: inherit
+#  deploy-ke-aws:
+#    needs: k6-testing
+#    uses: ./.github/workflows/cd-upload-apps.yaml
+#    secrets: inherit
