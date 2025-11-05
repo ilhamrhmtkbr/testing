@@ -38,6 +38,8 @@ jobs:
           FORUM_REVERB_APP_SECRET: ${{ secrets.FORUM_REVERB_APP_SECRET }}
           RECAPTCHA_SECRET_KEY: ${{ secrets.RECAPTCHA_SECRET_KEY }}
         run: |
+          cd docker/prod
+          
           cat > .env.secret-shared << EOF
           APP_KEY=$APP_KEY
           DB_HOST=database-mysql
@@ -60,6 +62,14 @@ jobs:
           REVERB_PORT=8080
           REVERB_SCHEME=http
           RECAPTCHA_SECRET_KEY=$RECAPTCHA_SECRET_KEY
+          EOF
+          
+          cat > .env.secret-student << EOF
+          APP_URL=https://api-student.course.iamra.site
+          EOF
+          
+          cat > .env.secret-instructor << EOF
+          APP_URL=https://api-instructor.course.iamra.site
           EOF
           
           cat > .env.secret-public << EOF
