@@ -129,11 +129,11 @@ jobs:
           # Check if all containers are running
           sudo docker compose -f docker-compose-cd-integration-test.yaml ps
 
+      #            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-${containerName} composer install --optimize-autoloader --no-interaction
       # Step 4: Install Composer
       - name: Install Composer
         run: |
           for containerName in student instructor public user forum; do
-#            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-${containerName} composer install --optimize-autoloader --no-interaction
              sudo docker logs backend-api-${containerName}
           done
 
