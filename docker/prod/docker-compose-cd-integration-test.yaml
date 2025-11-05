@@ -29,6 +29,9 @@ services:
       context: ../../
       dockerfile: docker/prod/backend-laravel/user/Dockerfile.api-user
     container_name: backend-api-user
+    env_file:
+      - .env.secret-shared
+      - .env.secret-user
     depends_on:
       database-mysql:
         condition: service_healthy
@@ -46,6 +49,9 @@ services:
       context: ../../
       dockerfile: docker/prod/backend-laravel/student/Dockerfile.api-student
     container_name: backend-api-student
+    env_file:
+      - .env.secret-shared
+      - .env.secret-student
     depends_on:
       database-mysql:
         condition: service_healthy
@@ -63,6 +69,9 @@ services:
       context: ../../
       dockerfile: docker/prod/backend-laravel/instructor/Dockerfile.api-instructor
     container_name: backend-api-instructor
+    env_file:
+      - .env.secret-shared
+      - .env.secret-instructor
     depends_on:
       database-mysql:
         condition: service_healthy
@@ -80,6 +89,9 @@ services:
       context: ../../
       dockerfile: docker/prod/backend-laravel/forum/Dockerfile.api-forum
     container_name: backend-api-forum
+    env_file:
+      - .env.secret-shared
+      - .env.secret-forum
     depends_on:
       - backend-api-user
     volumes:
@@ -92,6 +104,9 @@ services:
       context: ../../
       dockerfile: docker/prod/backend-laravel/public/Dockerfile.api-public
     container_name: backend-api-public
+    env_file:
+      - .env.secret-shared
+      - .env.secret-public
     depends_on:
       database-mysql:
         condition: service_healthy
