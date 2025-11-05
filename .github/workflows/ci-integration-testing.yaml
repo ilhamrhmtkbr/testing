@@ -43,7 +43,7 @@ jobs:
 
           # Shared environment untuk semua backend
           mkdir -p backend-laravel/_shared
-          cat > backend-laravel/_shared/.env.shared << EOF
+          cat > .env.shared << EOF
           APP_NAME=iamra.course
           APP_ENV=testing
           APP_DEBUG=true
@@ -100,7 +100,7 @@ jobs:
           echo "✅ All environment files created with shared secrets!"
           
           for service in user student instructor forum public; do
-            cp backend-laravel/_shared/.env.shared ../../backend-api-$service/.env
+            cp .env.shared ../../backend-api-$service/.env
           done
           echo "✅ .env files copied to each backend!"
 
