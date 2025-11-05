@@ -133,7 +133,8 @@ jobs:
       - name: Install Composer
         run: |
           for containerName in student instructor public user forum; do
-            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-${containerName} composer install --optimize-autoloader --no-interaction
+#            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-${containerName} composer install --optimize-autoloader --no-interaction
+             sudo docker logs backend-api-${containerName}
           done
 
       # Step 5: Setup Laravel applications
