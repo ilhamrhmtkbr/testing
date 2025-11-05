@@ -31,7 +31,7 @@ abstract class TestCase extends BaseTestCase
 
                     $res = Http::timeout(10)
                         ->retry(2, 100)
-                        ->post('http://backend-api-user:8080/' . env('USER_API_VERSION') . '/auth/login', [
+                        ->post('http://backend-api-user:8000/' . env('USER_API_VERSION') . '/auth/login', [
                             'username' => Repository::INSTRUCTOR_USERNAME,
                             'password' => Repository::INSTRUCTOR_PASSWORD
                         ]);
