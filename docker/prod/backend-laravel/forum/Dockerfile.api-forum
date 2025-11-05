@@ -28,6 +28,7 @@ COPY backend-api-forum/ /app/
 
 # Create necessary directories
 RUN mkdir -p \
+   /var/run/sockets \
    /var/log \
    /app/storage/app/public \
    /app/storage/framework/views \
@@ -37,9 +38,9 @@ RUN mkdir -p \
    /app/bootstrap/cache
 
 # Set permissions sebelum install composer (agar bisa write cache)
-RUN chown -R ilhamrhmtkbr:ilhamrhmtkbr /app /var/log && \
+RUN chown -R ilhamrhmtkbr:ilhamrhmtkbr /app /var/log /var/run/sockets && \
     chmod -R 755 /app && \
-    chmod -R 775 /app/storage /app/bootstrap/cache
+    chmod -R 775 /app/storage /app/bootstrap/cache /var/run/sockets
 
 # Switch to non-root user untuk composer install
 USER ilhamrhmtkbr
