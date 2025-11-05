@@ -43,18 +43,18 @@ RUN mkdir -p \
    /app/bootstrap/cache
 
 # Set permissions sebelum install composer
-RUN mkdir -p /var/run/sockets && \
-    chown -R ilhamrhmtkbr:ilhamrhmtkbr /var/run/sockets && \
-    chmod 777 /var/run/sockets && \
-    chown -R ilhamrhmtkbr:ilhamrhmtkbr /app /var/log && \
+RUN chown -R ilhamrhmtkbr:ilhamrhmtkbr /app /var/log && \
     chmod -R 755 /app && \
     chmod -R 775 /app/storage /app/bootstrap/cache
 
 # Switch to non-root user untuk composer install
 USER ilhamrhmtkbr
 
-# Install dependencies
+# Install dependencies dengan user non-root
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+
+# Download RoadRunner binary ke direktori /app (akan menghasilkan file /app/rr)
+RUN ./vendor/bin/rr get-binary --location /app
 
 # Switch back to root untuk copy config
 USER root
@@ -67,8 +67,15 @@ COPY docker/prod/backend-laravel/_shared/.env.shared /app/.env
 RUN chown ilhamrhmtkbr:ilhamrhmtkbr /app/.env && \
     chmod 644 /app/.env
 
+RUN chmod +x /app/rr && \
+    chown ilhamrhmtkbr:ilhamrhmtkbr /app/rr /app/.rr.yaml /app/worker.php /app/.env
+
 # Cache routes (optional)
 RUN php /app/artisan route:cache || true
+
+LABEL maintainer="ilhamrhmtkbr" \
+      version="1.0" \
+      description="Laravel + RoadRunner Unix Socket - Instructor API (DEV)"
 
 # Switch ke non-root user untuk runtime
 USER ilhamrhmtkbr

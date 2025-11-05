@@ -1,40 +1,73 @@
 version: "3"
 
+# RPC untuk management & monitoring
 rpc:
   listen: tcp://127.0.0.1:6001
 
+# Server configuration
 server:
-  command: "php artisan octane:start --server=roadrunner"
-  relay: "unix:///var/run/sockets/backend-api-public.sock"
+  command: "php /app/worker.php"
+  relay: pipes
 
+
+# HTTP Server - UNIX SOCKET MODE
 http:
-  address: "unix:///var/run/sockets/backend-api-public.sock"
-  middleware: ["gzip", "headers"]
+  address: unix:///var/run/sockets/backend-api-public.sock
+  middleware: ["headers", "gzip"]
+  # Worker pool configuration
   pool:
     num_workers: 1
-    max_jobs: 50
-    allocate_timeout: 180s
+    max_jobs: 200
+    allocate_timeout: 60s
     destroy_timeout: 60s
+
     supervisor:
       watch_tick: 1s
-      ttl: 0
+      ttl: 0s
       idle_ttl: 10s
-      exec_ttl: 120s
-      max_worker_memory: 112
-  headers:
-    response:
-      X-Powered-By: "RoadRunner"
-  static:
-    dir: "public"
-    forbid: [".php", ".htaccess"]
+      exec_ttl: 60s
+      max_worker_memory: 90
 
+  # Headers middleware
+  headers:
+    # CORS untuk development
+    cors:
+      allowed_origin: "*"
+      allowed_headers: "*"
+      allowed_methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS,HEAD"
+      allow_credentials: true
+      exposed_headers: "Cache-Control,Content-Language,Content-Type,Expires,Last-Modified,Pragma"
+      max_age: 600
+
+    # Response headers
+    response:
+      X-Powered-By: "RoadRunner + Laravel"
+      X-Frame-Options: "SAMEORIGIN"
+
+# Logging configuration
 logs:
-  mode: production
-  level: error
-  encoding: json
+  mode: development
+  level: debug
+  encoding: console
   output: stdout
-  channels:
+  err_output: stderr
+
+# Hot reload untuk development (DISABLE di production!)
+reload:
+  interval: 1s
+  patterns: [".php"]
+  services:
     http:
-      level: error
-    server:
-      level: error
+      dirs: ["app", "config", "routes", "bootstrap", "resources/views"]
+      recursive: true
+      ignore: ["vendor", "storage", "node_modules", "public", "tests"]
+
+
+# Resource limits
+limits:
+  services:
+    http:
+      max_memory: 120
+      ttl: 0s
+      idle_ttl: 10s
+      exec_ttl: 60s

@@ -22,6 +22,8 @@
 **/backend-api-*/storage/framework/views/*
 **/backend-api-*/storage/logs/*
 **/backend-api-*/bootstrap/cache/*
+**/backend-api-*/rr
+**/backend-api-*/rr.exe
 
 # Laravel Generated Files
 **/backend-api-*/storage/oauth-private.key

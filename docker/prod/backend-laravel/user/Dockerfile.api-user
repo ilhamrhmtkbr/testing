@@ -42,20 +42,20 @@ RUN mkdir -p \
    /app/bootstrap/cache
 
 # Set permissions sebelum install composer
-RUN mkdir -p /var/run/sockets && \
-    chown -R ilhamrhmtkbr:ilhamrhmtkbr /var/run/sockets && \
-    chmod 777 /var/run/sockets && \
-    chown -R ilhamrhmtkbr:ilhamrhmtkbr /app /tmp && \
+RUN chown -R ilhamrhmtkbr:ilhamrhmtkbr /app /tmp && \
     chmod -R 755 /app && \
     chmod -R 775 /app/storage /app/bootstrap/cache
 
 # Switch to non-root user untuk composer install
 USER ilhamrhmtkbr
 
-# Install dependencies
+# Install dependencies dengan user non-root
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
-# Switch back to root untuk copy config dan optimization
+# Download RoadRunner binary ke direktori /app (akan menghasilkan file /app/rr)
+RUN ./vendor/bin/rr get-binary --location /app
+
+# Switch back to root untuk copy config
 USER root
 
 # Copy configs
@@ -69,6 +69,9 @@ RUN php /app/artisan route:cache || true && \
 # Set final permissions
 RUN chown ilhamrhmtkbr:ilhamrhmtkbr /app/.env && \
     chmod 644 /app/.env
+
+RUN chmod +x /app/rr && \
+    chown ilhamrhmtkbr:ilhamrhmtkbr /app/rr /app/.rr.yaml /app/worker.php /app/.env
 
 LABEL maintainer="ilhamrhmtkbr" \
       version="1.0" \

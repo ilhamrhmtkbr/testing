@@ -37,7 +37,7 @@ services:
       database-mongo:
         condition: service_started
     env_file:
-      - "backend-laravel/_shared/.env.shared"
+      - "backend-laravel/_shared/.env.shared" # Environment dari file yang dibuat di workflow
     networks:
       - iamra_net
 
@@ -54,7 +54,7 @@ services:
       database-mongo:
         condition: service_started
     env_file:
-      - "backend-laravel/_shared/.env.shared"
+      - "backend-laravel/_shared/.env.shared" # Environment dari file yang dibuat di workflow
     networks:
       - iamra_net
 
@@ -71,7 +71,7 @@ services:
       database-mongo:
         condition: service_started
     env_file:
-      - "backend-laravel/_shared/.env.shared"
+      - "backend-laravel/_shared/.env.shared" # Environment dari file yang dibuat di workflow
     networks:
       - iamra_net
 
@@ -83,7 +83,7 @@ services:
     depends_on:
       - backend-api-user
     env_file:
-      - "backend-laravel/_shared/.env.shared"
+      - "backend-laravel/_shared/.env.shared" # Environment dari file yang dibuat di workflow
     networks:
       - iamra_net
 
@@ -100,7 +100,7 @@ services:
       database-mongo:
         condition: service_started
     env_file:
-      - "backend-laravel/_shared/.env.shared"
+      - "backend-laravel/_shared/.env.shared" # Environment dari file yang dibuat di workflow
     networks:
       - iamra_net
 

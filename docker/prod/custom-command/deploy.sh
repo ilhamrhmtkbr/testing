@@ -24,10 +24,6 @@ if ! command -v docker &> /dev/null; then
   log "Docker installed successfully"
 fi
 
-# Setup socket directory dengan permission yang benar
-mkdir -p ./sockets
-chmod 777 ./sockets
-
 # Fix Docker permissions
 sudo chmod 666 /var/run/docker.sock
 
@@ -75,19 +71,6 @@ for service in "${BACKEND_SERVICES[@]}"; do
   log "Starting $service..."
   docker-compose up -d $service
 
-  # Wait untuk socket file dibuat
-  for i in {1..30}; do
-    SOCKET_NAME=$(echo $service | sed 's/-/_/g')
-    if [ -S "./sockets/${SOCKET_NAME}.sock" ]; then
-      log "Socket created for $service"
-      break
-    fi
-    if [ $i -eq 30 ]; then
-      log "Warning: Socket not created for $service after 30s"
-    fi
-    sleep 1
-  done
-
   sleep 10
 done
 
@@ -116,9 +99,5 @@ for service in "${ALL_SERVICES[@]}"; do
     log "✗ $service failed to start"
   fi
 done
-
-# Check socket files
-log "Checking socket files..."
-ls -lah ./sockets/ || true
 
 log "Deployment completed!"
