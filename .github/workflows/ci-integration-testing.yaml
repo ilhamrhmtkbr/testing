@@ -100,7 +100,6 @@ jobs:
           echo "✅ All environment files created with shared secrets!"
           
           for service in user student instructor forum public; do
-            mkdir -p ../../backend-api-$service
             cp backend-laravel/_shared/.env.shared ../../backend-api-$service/.env
           done
           echo "✅ .env files copied to each backend!"
