@@ -127,9 +127,8 @@ jobs:
       # Step 4: Setup Laravel applications
       - name: Setup Laravel Applications
         run: |
-          sudo docker logs backend-api-public
-#          cd docker/dev
-#          sudo docker compose -f docker-compose-ci-integration-test.yaml exec -T backend-api-public php artisan migrate:fresh --seed
+          cd docker/dev
+          sudo docker compose -f docker-compose-ci-integration-test.yaml exec -T backend-api-public php artisan migrate:fresh --seed
 
       # Step 5: Debug and Test Services
       - name: Debug Services Before Tests
