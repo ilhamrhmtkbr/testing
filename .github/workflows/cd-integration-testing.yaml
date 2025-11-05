@@ -42,7 +42,6 @@ jobs:
           cd docker/prod
 
           # Shared environment untuk semua backend
-          mkdir -p backend-laravel/_shared
           cat > .env.shared << EOF
           APP_NAME=iamra.course
           APP_ENV=testing
@@ -129,12 +128,11 @@ jobs:
           # Check if all containers are running
           sudo docker compose -f docker-compose-cd-integration-test.yaml ps
 
-      #            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-${containerName} composer install --optimize-autoloader --no-interaction
       # Step 4: Install Composer
       - name: Install Composer
         run: |
           for containerName in student instructor public user forum; do
-             sudo docker logs backend-api-${containerName}
+             sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-${containerName} composer install --optimize-autoloader --no-interaction
           done
 
       # Step 5: Setup Laravel applications
