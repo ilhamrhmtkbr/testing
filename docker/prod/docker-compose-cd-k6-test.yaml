@@ -32,8 +32,6 @@ services:
         condition: service_healthy
       database-redis:
         condition: service_started
-    env_file:
-      - "backend-laravel/_shared/.env.shared"
     networks:
       - iamra_net
 
@@ -47,8 +45,6 @@ services:
         condition: service_healthy
       database-redis:
         condition: service_started
-    env_file:
-      - "backend-laravel/_shared/.env.shared"
     networks:
       - iamra_net
 
