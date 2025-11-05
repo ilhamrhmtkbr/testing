@@ -131,15 +131,16 @@ jobs:
       # Step 4: Setelah step "Create Environment Files"
       - name: Verify and Clear Cache
         run: |
+          cd docker/prod
           echo "🔍 Verifying environment files..."
           
           for service in user student instructor forum public; do
             echo "Checking backend-api-$service..."
-            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-$service cat .env | grep APP_ENV
+            sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-$service cat .env
           
             echo "Clearing cache for backend-api-$service..."
-            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-$service php artisan config:clear
-            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-$service php artisan cache:clear
+            sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-$service php artisan config:clear
+            sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-$service php artisan cache:clear
           done
 
       # Step 4: Install Composer
