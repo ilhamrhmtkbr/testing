@@ -103,20 +103,6 @@ jobs:
           done
           echo "✅ .env files copied to each backend!"
 
-      # Step 4: Setelah step "Create Environment Files"
-      - name: Verify and Clear Cache
-        run: |
-          echo "🔍 Verifying environment files..."
-          
-          for service in user student instructor forum public; do
-            echo "Checking backend-api-$service..."
-            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-$service cat .env | grep APP_ENV
-          
-            echo "Clearing cache for backend-api-$service..."
-            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-$service php artisan config:clear
-            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-$service php artisan cache:clear
-          done
-
       # Step 3: Start Docker dengan environment files yang udah dibuat
       - name: Start Docker Services
         run: |
@@ -141,6 +127,20 @@ jobs:
 
           # Check if all containers are running
           sudo docker compose -f docker-compose-cd-integration-test.yaml ps
+
+      # Step 4: Setelah step "Create Environment Files"
+      - name: Verify and Clear Cache
+        run: |
+          echo "🔍 Verifying environment files..."
+          
+          for service in user student instructor forum public; do
+            echo "Checking backend-api-$service..."
+            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-$service cat .env | grep APP_ENV
+          
+            echo "Clearing cache for backend-api-$service..."
+            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-$service php artisan config:clear
+            sudo docker compose -f docker/prod/docker-compose-cd-integration-test.yaml exec -T backend-api-$service php artisan cache:clear
+          done
 
       # Step 4: Install Composer
       - name: Install Composer
