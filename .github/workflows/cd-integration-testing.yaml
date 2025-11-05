@@ -139,7 +139,7 @@ jobs:
       - name: Migration and Seeder
         run: |
           cd docker/prod
-          sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-public php artisan migrate:fresh --seed
+          sudo docker compose -f docker-compose-cd-integration-test.yaml exec -T backend-api-public php artisan migrate:fresh --seed --force
 
       # Step 7: Testing
       - name: Integration Testing
