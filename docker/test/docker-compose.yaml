@@ -171,4 +171,3 @@ volumes:
   mysql_data:
   shared-sockets:
   nginx-cache:
-  nginx-run:
