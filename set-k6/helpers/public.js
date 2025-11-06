@@ -12,7 +12,7 @@ function getScenarioTag() {
 }
 
 export function getCourses(token) {
-    const url = `http://backend-api-public:8080/public-api/v1/courses`;
+    const url = `http://localhost:8080/public-api/v1/courses`;
     
     // ✅ Safely get scenario tag
     const scenarioTag = getScenarioTag();

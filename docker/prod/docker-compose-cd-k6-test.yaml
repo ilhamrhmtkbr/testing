@@ -1,4 +1,18 @@
 services:
+  nginx:
+    image: nginxinc/nginx-unprivileged:alpine
+    container_name: nginx
+    user: "1000:1000"
+    ports:
+      - "80:8080"
+      - "443:8443"
+    volumes:
+      - "../test/server-entrypoint/nginx-k6.conf:/etc/nginx/nginx.conf:ro"
+      - shared-sockets:/var/run/sockets:rw
+      - nginx-cache:/var/cache/nginx
+    networks:
+      - iamra_net
+
   database-mysql:
     image: mysql:8.0
     container_name: database-mysql
