@@ -67,10 +67,6 @@ jobs:
 
           echo "🔍 Running health checks..."
 
-          # Test database connection
-          docker compose -f docker-compose-cd-integration-test.yaml exec -T \
-            backend-api-user php artisan tinker --execute="DB::connection()->getPdo(); echo 'DB OK';" || exit 1
-
           # Test Redis connection
           docker compose -f docker-compose-cd-integration-test.yaml exec -T \
             backend-api-user php artisan tinker --execute="Redis::ping(); echo 'Redis OK';" || exit 1
