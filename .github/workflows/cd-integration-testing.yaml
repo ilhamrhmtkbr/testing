@@ -43,7 +43,7 @@ jobs:
           cat > .env.secret-shared << EOF
           APP_KEY=$APP_KEY
           DB_HOST=database-mysql
-          DB_DATABASE=iamra_course_test
+          DB_DATABASE=iamra_course
           DB_USERNAME=root
           DB_PASSWORD=root
           JWT_SECRET=$JWT_SECRET

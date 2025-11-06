@@ -4,7 +4,7 @@ services:
     container_name: database-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: iamra_course_test
+      MYSQL_DATABASE: iamra_course
     networks:
       - iamra_net
     healthcheck:
