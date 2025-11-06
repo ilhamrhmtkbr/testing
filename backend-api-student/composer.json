@@ -29,7 +29,7 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         },
-        "file": [
+        "files": [
           "domain/Shared/Helpers/PaginateHelper.php",
           "domain/Shared/Helpers/ResponseApiHelper.php"
         ]

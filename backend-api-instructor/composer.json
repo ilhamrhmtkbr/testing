@@ -27,7 +27,7 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         },
-        "file": [
+        "files": [
             "domain/Shared/Helpers/FileSaveHelper.php",
             "domain/Shared/Helpers/ImageCompressHelper.php",
             "domain/Shared/Helpers/PaginateHelper.php",

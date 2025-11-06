@@ -1,18 +1,18 @@
-name: Main Pipeline
+name: CD Pipeline - Production
 
 on:
   push:
     branches: [ master ]
 
 jobs:
-  integration-testing:
-    uses: ./.github/workflows/cd-integration-testing.yaml
+  smoke-test:
+    uses: ./.github/workflows/cd-smoke-test.yaml
 
-#  k6-testing:
-#    needs: integration-testing
-#    uses: ./.github/workflows/cd-k6-testing.yaml
+  k6-test:
+    needs: smoke-test
+    uses: ./.github/workflows/cd-k6-testing.yaml
 
-#  deploy-ke-aws:
-#    needs: k6-testing
-#    uses: ./.github/workflows/cd-upload-apps.yaml
-#    secrets: inherit
+  build-and-push:
+    needs: smoke-test
+    uses: ./.github/workflows/cd-upload-apps.yaml
+    secrets: inherit
