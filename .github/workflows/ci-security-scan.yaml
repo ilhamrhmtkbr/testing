@@ -1,0 +1,26 @@
+name: Security Scan
+on:
+  workflow_call:
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Composer Security Audit
+        run: |
+          for service in user student instructor forum public; do
+            cd backend-api-$service
+            composer install --no-interaction
+            composer audit || echo "⚠️ Security vulnerabilities found"
+          done
+
+      - name: NPM Security Audit
+        run: |
+          for service in user student instructor forum public; do
+            cd frontend-$service
+            npm ci
+            npm audit --audit-level=high || echo "⚠️ Security vulnerabilities found"
+          done
