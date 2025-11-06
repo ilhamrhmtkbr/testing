@@ -10,6 +10,6 @@ jobs:
     uses: ./.github/workflows/cd-k6-testing.yaml
 
   build-and-push:
-    needs: smoke-test
+    needs: k6-test
     uses: ./.github/workflows/cd-upload-apps.yaml
     secrets: inherit
