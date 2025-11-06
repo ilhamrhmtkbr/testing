@@ -16,7 +16,7 @@ jobs:
               cd backend-api-$service
 
               if [ "$service" = "forum" ]; then
-                composer install --no-interaction --ignore-platform-req=mongodb
+                composer install --no-interaction --ignore-platform-req=ext-mongodb
               else
                 composer install --no-interaction
               fi
