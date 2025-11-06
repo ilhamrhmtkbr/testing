@@ -27,9 +27,11 @@ abstract class TestCase extends BaseTestCase
                     $attempt++;
                     echo "\n🔑 Login attempt $attempt/$maxRetries...\n";
 
+                    $isProd = app()->environment('production');
+
                     $res = Http::timeout(10)
                         ->retry(2, 100) // 👈 Retry 2x dengan delay 100ms
-                        ->post('http://backend-api-user:8000/'. env('USER_API_VERSION') . '/auth/login', [
+                        ->post('http://backend-api-user:/'. $isProd ? '8080' : '8000' . env('USER_API_VERSION') . '/auth/login', [
                             'username' => Repository::USERNAME,
                             'password' => Repository::PASSWORD
                         ]);
