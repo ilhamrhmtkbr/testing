@@ -23,5 +23,6 @@ jobs:
           for service in user student instructor forum public; do
             cd backend-api-$service
             composer validate --strict
+            cd ..
             echo "✅ backend-api-$service valid"
           done
