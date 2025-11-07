@@ -99,28 +99,19 @@ jobs:
 
           echo "✅ All environment files created with shared secrets!"
 
-      # Step 3: Start Docker dengan environment files yang udah dibuat
+      # Step 3: Start Docker Services
       - name: Start Docker Services
         run: |
           cd docker/prod
-
-          echo "🚀 Starting Docker services..."
-
-          # Start databases dulu
-          sudo docker compose -f docker-compose-cd-k6-test.yaml up -d database-mysql database-redis nginx
-          echo "⏳ Waiting for databases..."
-          sleep 45
-
-          # Start user API dulu (most important)
-          sudo docker compose -f docker-compose-cd-k6-test.yaml up -d backend-api-user
-          echo "⏳ Waiting for user API..."
-          sleep 30
-
-          # Start services yang depend ke user API
-          sudo docker compose -f docker-compose-cd-k6-test.yaml up -d backend-api-public
-          echo "⏳ Waiting for all APIs..."
-          sleep 45
-
+          
+          echo "🚀 Starting all Docker services..."
+          
+          # Start SEMUA services sekaligus (termasuk k6)
+          sudo docker compose -f docker-compose-cd-k6-test.yaml up -d
+          
+          echo "⏳ Waiting for all services to be ready..."
+          sleep 60  # Wait untuk semua service ready
+          
           # Check if all containers are running
           sudo docker compose -f docker-compose-cd-k6-test.yaml ps
 
@@ -147,13 +138,13 @@ jobs:
       - name: Run K6 Tests
         run: |
           cd docker/prod
-
+          
           echo "🧪 Running k6 tests..."
-
-          sudo docker compose -f docker-compose-cd-k6-test.yaml run --rm set-k6 run /k6-scripts/test/login.js
-          sudo docker compose -f docker-compose-cd-k6-test.yaml run --rm set-k6 run /k6-scripts/test/register.js
-          sudo docker compose -f docker-compose-cd-k6-test.yaml run --rm set-k6 run /k6-scripts/test/public.js
-
+          
+          sudo docker exec set-k6 k6 run /k6-scripts/test/login.js
+          sudo docker exec set-k6 k6 run /k6-scripts/test/register.js
+          sudo docker exec set-k6 k6 run /k6-scripts/test/public.js
+          
           echo "✅ All k6 tests passed!"
 
       # Step 7: Cleanup
