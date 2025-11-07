@@ -9,7 +9,6 @@ services:
     volumes:
       - "../test/server-entrypoint/nginx-k6.conf:/etc/nginx/nginx.conf:ro"
       - shared-sockets:/var/run/sockets:rw
-      - nginx-cache:/var/cache/nginx
     networks:
       - iamra_net
 
@@ -44,6 +43,8 @@ services:
     depends_on:
       database-mysql:
         condition: service_healthy
+    volumes:
+      - shared-sockets:/var/run/sockets:rw
     networks:
       - iamra_net
 
@@ -55,6 +56,8 @@ services:
     depends_on:
       database-mysql:
         condition: service_healthy
+    volumes:
+      - shared-sockets:/var/run/sockets:rw
     networks:
       - iamra_net
 
@@ -71,3 +74,6 @@ services:
 networks:
   iamra_net:
     driver: bridge
+
+volumes:
+  shared-sockets:
