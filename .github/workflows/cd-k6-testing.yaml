@@ -110,19 +110,7 @@ jobs:
           # Start services
           sudo docker compose -f docker-compose-cd-k6-test.yaml up -d
           
-          echo "⏳ Waiting for services to be healthy..."
-          
-          # Wait for MySQL to be healthy
-          echo "Waiting for MySQL..."
-          timeout 120 bash -c 'until sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T database-mysql mysqladmin ping -h localhost --silent; do sleep 2; done'
-          
-          # Wait for Redis to be healthy
-          echo "Waiting for Redis..."
-          timeout 60 bash -c 'until sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T database-redis redis-cli ping | grep PONG; do sleep 2; done'
-          
-          # Wait for backend sockets to be created
-          echo "Waiting for backend services..."
-          sleep 30
+          sleep 50
           
           # Check container status
           echo "📊 Container Status:"
@@ -159,10 +147,6 @@ jobs:
           # Run migrations and seeds for public API
           echo "Running migrations for public API..."
           sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T backend-api-public php artisan migrate:fresh --seed --force
-          
-          # Verify database
-          echo "Verifying database..."
-          sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T database-mysql mysql -uroot -proot -e "SHOW DATABASES; USE iamra_course_test; SHOW TABLES;"
           
           echo "✅ Laravel setup completed!"
 
