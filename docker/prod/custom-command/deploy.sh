@@ -46,26 +46,6 @@ docker volume prune -f
 log "Pulling latest images..."
 docker-compose pull
 
-# Start services sequentially
-log "Starting services..."
-
-# 1. Start Redis
-log "Starting Redis..."
-docker-compose up -d database-redis
-
-for i in {1..15}; do
-  if docker-compose exec -T database-redis redis-cli ping 2>/dev/null | grep -q PONG; then
-    log "Redis is ready"
-    break
-  fi
-  if [ $i -eq 15 ]; then
-    log "Redis failed to start"
-    exit 1
-  fi
-  sleep 2
-done
-
-# 2. Start backend services
 BACKEND_SERVICES=("backend-api-public" "backend-api-user" "backend-api-student" "backend-api-instructor" "backend-api-forum")
 for service in "${BACKEND_SERVICES[@]}"; do
   log "Starting $service..."
@@ -74,7 +54,6 @@ for service in "${BACKEND_SERVICES[@]}"; do
   sleep 10
 done
 
-# 3. Start Reverb services
 REVERB_SERVICES=("backend-api-user-reverb" "backend-api-forum-reverb")
 for service in "${REVERB_SERVICES[@]}"; do
   log "Starting $service..."
@@ -82,15 +61,13 @@ for service in "${REVERB_SERVICES[@]}"; do
   sleep 10
 done
 
-# 4. Start Nginx last
 log "Starting Nginx..."
 docker-compose up -d nginx
 
-# Final health check
 log "Performing final health check..."
 sleep 30
 
-ALL_SERVICES=(database-redis backend-api-public backend-api-user backend-api-student backend-api-instructor backend-api-forum backend-api-user-reverb backend-api-forum-reverb nginx)
+ALL_SERVICES=(backend-api-public backend-api-user backend-api-student backend-api-instructor backend-api-forum backend-api-user-reverb backend-api-forum-reverb nginx)
 
 for service in "${ALL_SERVICES[@]}"; do
   if docker-compose ps | grep -q "$service.*Up"; then

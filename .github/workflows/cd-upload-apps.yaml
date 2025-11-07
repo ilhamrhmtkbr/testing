@@ -226,8 +226,8 @@ jobs:
               image: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-nginx:${BUILD_TAG}
               container_name: nginx
               ports:
-                - "80:8080"
-                - "443:8443"
+                - "80:80"
+                - "443:443"
               volumes:
                 - ./letsencrypt:/etc/letsencrypt:rw
                 - ./certbot:/var/www/certbot:rw
@@ -438,12 +438,11 @@ jobs:
           ~/deploy.sh
 
           # Auto-run SSL setup if certificates don't exist
-          if [ ! -f letsencrypt/live/course.iamra.site/fullchain.pem ]; then
+          if [ ! -f ~/letsencrypt/live/course.iamra.site/fullchain.pem ]; then
             echo "Running SSL setup for first time..."
             ~/setup-ssl.sh || echo "SSL setup failed, continuing with HTTP"
           else
-            echo "SSL certificates already exist, skipping generation"
-            ~/setup-ssl.sh  # This will just switch to HTTPS if needed
+            echo "SSL certificates already exist"
           fi
 
           ENDSSH
