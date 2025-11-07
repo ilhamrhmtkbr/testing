@@ -13,6 +13,7 @@ server:
 # HTTP Server - UNIX SOCKET MODE
 http:
   address: unix:///var/run/sockets/backend-api-forum.sock
+  permissions: 0660
   middleware: [ "headers", "gzip"]
   # Worker pool configuration
   pool:
@@ -53,14 +54,14 @@ logs:
   err_output: stderr
 
 # Hot reload untuk development (DISABLE di production!)
-reload:
-  interval: 1s
-  patterns: [".php"]
-  services:
-    http:
-      dirs: ["app", "config", "routes", "bootstrap", "resources/views"]
-      recursive: true
-      ignore: ["vendor", "storage", "node_modules", "public", "tests"]
+#reload:
+#  interval: 1s
+#  patterns: [".php"]
+#  services:
+#    http:
+#      dirs: ["app", "config", "routes", "bootstrap", "resources/views"]
+#      recursive: true
+#      ignore: ["vendor", "storage", "node_modules", "public", "tests"]
 
 
 # Resource limits
