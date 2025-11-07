@@ -12,7 +12,7 @@ function getScenarioTag() {
 }
 
 export function getCourses(token) {
-    const url = `http://localhost/public-api/v1/courses`;
+    const url = `http://nginx:8080/public-api/v1/courses`;
     
     // ✅ Safely get scenario tag
     const scenarioTag = getScenarioTag();

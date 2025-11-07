@@ -2,7 +2,7 @@ import http from 'k6/http';
 import { check } from 'k6';
 import execution from 'k6/execution';
 
-const BASE_URL = 'http://localhost/user-api/v1/auth';
+const BASE_URL = 'http://nginx:8080/user-api/v1/auth';
 
 // Helper to safely get scenario tag
 function getScenarioTag() {
