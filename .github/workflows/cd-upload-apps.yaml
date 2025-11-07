@@ -231,7 +231,7 @@ jobs:
               volumes:
                 - ./letsencrypt:/etc/letsencrypt:rw
                 - ./certbot:/var/www/certbot:rw
-                - ./nginx.conf:/etc/nginx/nginx.conf:ro
+                - ./nginx-https.conf:/etc/nginx/nginx.conf:ro
                 - sockets:/var/run/sockets:rw
               networks:
                 - app-network
@@ -256,7 +256,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 120M
+                    memory: 150M
                     cpus: '0.15'
 
             backend-api-user-reverb:
@@ -290,7 +290,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 120M
+                    memory: 150M
                     cpus: '0.1'
 
             backend-api-student:
@@ -307,7 +307,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 120M
+                    memory: 150M
                     cpus: '0.1'
 
             backend-api-instructor:
@@ -324,7 +324,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 120M
+                    memory: 150M
                     cpus: '0.1'
 
             backend-api-forum:
@@ -341,7 +341,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 120M
+                    memory: 150M
                     cpus: '0.1'
 
             backend-api-forum-reverb:
@@ -397,6 +397,7 @@ jobs:
             .env.secret-shared .env.secret-user .env.secret-public .env.secret-student .env.secret-instructor .env.secret-forum \
             docker/prod/custom-command/deploy.sh \
             docker/prod/custom-command/setup-ssl.sh \
+            docker/prod/custom-command/renew-ssl.sh \
             docker/prod/custom-command/laravel-optimize.sh \
             docker/prod/server-entrypoint/nginx-http.conf \
             docker/prod/server-entrypoint/nginx-https.conf \
@@ -420,11 +421,6 @@ jobs:
           else
             echo "No SSL certificates, using HTTP config"
           fi
-
-          # Update docker-compose to use correct nginx config
-          ssh -i ~/.ssh/ec2_key.pem $AWS_EC2_USERNAME@$AWS_EC2_HOST "
-            sed -i 's|./nginx.conf:|./${NGINX_CONFIG}:|' docker-compose.yml
-          "
 
           # Execute deployment
           echo "Executing deployment on EC2..."

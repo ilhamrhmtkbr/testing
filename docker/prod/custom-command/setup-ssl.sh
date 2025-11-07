@@ -9,7 +9,6 @@ log() {
 if [ -f "letsencrypt/live/course.iamra.site/fullchain.pem" ]; then
   log "SSL certificates already exist!"
 
-  # Check expiry
   EXPIRY=$(docker run --rm \
     -v "$PWD/letsencrypt:/etc/letsencrypt" \
     certbot/certbot certificates 2>/dev/null | grep "Expiry Date" | head -1 || echo "")
@@ -18,7 +17,6 @@ if [ -f "letsencrypt/live/course.iamra.site/fullchain.pem" ]; then
     log "Certificate info: $EXPIRY"
   fi
 
-  # Switch to HTTPS config if not already
   if grep -q "nginx-http.conf" docker-compose.yml; then
     log "Switching to HTTPS configuration..."
     docker-compose stop nginx
@@ -35,11 +33,7 @@ fi
 log "No SSL certificates found. Starting certificate generation..."
 log "Make sure your domains are pointing to this server!"
 
-# Stop nginx temporarily
-docker-compose stop nginx
-sleep 5
-
-# Get certificates using standalone mode
+# FIRST TIME: Use standalone (nginx belum jalan)
 docker run --rm \
   -v "$PWD/letsencrypt:/etc/letsencrypt" \
   -v "$PWD/certbot:/var/www/certbot" \
@@ -49,6 +43,7 @@ docker run --rm \
   --email ilhamrhmtkbr@iamra.site \
   --agree-tos \
   --no-eff-email \
+  --non-interactive \
   --expand \
   -d course.iamra.site \
   -d forum.course.iamra.site \
@@ -65,7 +60,6 @@ if [ $? -eq 0 ]; then
   log "SSL certificates obtained successfully!"
 
   # Switch to HTTPS config
-  docker-compose stop nginx
   sed -i 's|./nginx-http.conf:/etc/nginx/nginx.conf:ro|./nginx-https.conf:/etc/nginx/nginx.conf:ro|' docker-compose.yml
   docker-compose up -d nginx
 
@@ -73,6 +67,5 @@ if [ $? -eq 0 ]; then
 else
   log "Failed to obtain SSL certificates."
   log "Continuing with HTTP configuration..."
-  docker-compose start nginx
   exit 1
 fi
