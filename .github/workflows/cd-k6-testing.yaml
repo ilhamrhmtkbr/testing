@@ -107,7 +107,7 @@ jobs:
           echo "🚀 Starting Docker services..."
 
           # Start databases dulu
-          sudo docker compose -f docker-compose-cd-k6-test.yaml up -d database-mysql database-redis
+          sudo docker compose -f docker-compose-cd-k6-test.yaml up -d database-mysql database-redis nginx
           echo "⏳ Waiting for databases..."
           sleep 45
 
