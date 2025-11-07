@@ -54,7 +54,11 @@ USER ilhamrhmtkbr
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
 # Download RoadRunner binary ke direktori /app (akan menghasilkan file /app/rr)
-RUN ./vendor/bin/rr get-binary --location /app
+RUN curl -L https://github.com/roadrunner-server/roadrunner/releases/download/v2024.2.0/roadrunner-2024.2.0-linux-amd64.tar.gz -o /tmp/rr.tar.gz \
+    && tar -xzf /tmp/rr.tar.gz -C /tmp \
+    && mv /tmp/roadrunner-2024.2.0-linux-amd64/rr /app/rr \
+    && rm -rf /tmp/rr.tar.gz /tmp/roadrunner-2024.2.0-linux-amd64 \
+    && chmod +x /app/rr
 
 # Switch back to root untuk copy config
 USER root
