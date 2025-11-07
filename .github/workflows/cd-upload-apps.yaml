@@ -228,8 +228,6 @@ jobs:
               ports:
                 - "80:8080"
                 - "443:8443"
-              depends_on:
-                - database-redis
               volumes:
                 - ./letsencrypt:/etc/letsencrypt:rw
                 - ./certbot:/var/www/certbot:rw
@@ -250,8 +248,6 @@ jobs:
               env_file:
                 - .env.secret-shared
                 - .env.secret-user
-              depends_on:
-                - database-redis
               volumes:
                 - sockets:/var/run/sockets:rw
               networks:
@@ -269,8 +265,6 @@ jobs:
               env_file:
                 - .env.secret-shared
                 - .env.secret-user
-              depends_on:
-                - database-redis
               networks:
                 - app-network
               restart: unless-stopped
@@ -288,8 +282,6 @@ jobs:
               env_file:
                 - .env.secret-shared
                 - .env.secret-public
-              depends_on:
-                - database-redis
               volumes:
                 - sockets:/var/run/sockets:rw
               networks:
@@ -307,8 +299,6 @@ jobs:
               env_file:
                 - .env.secret-shared
                 - .env.secret-student
-              depends_on:
-                - database-redis
               volumes:
                 - sockets:/var/run/sockets:rw
               networks:
@@ -326,8 +316,6 @@ jobs:
               env_file:
                 - .env.secret-shared
                 - .env.secret-instructor
-              depends_on:
-                - database-redis
               volumes:
                 - sockets:/var/run/sockets:rw
               networks:
@@ -345,8 +333,6 @@ jobs:
               env_file:
                 - .env.secret-shared
                 - .env.secret-forum
-              depends_on:
-                - database-redis
               volumes:
                 - sockets:/var/run/sockets:rw
               networks:
@@ -364,8 +350,6 @@ jobs:
               env_file:
                 - .env.secret-shared
                 - .env.secret-forum
-              depends_on:
-                - database-redis
               networks:
                 - app-network
               restart: unless-stopped
