@@ -8,6 +8,7 @@ services:
     volumes:
       - "../test/server-entrypoint/nginx-k6.conf:/etc/nginx/nginx.conf:ro"
       - shared-sockets:/var/run/sockets:rw
+      - nginx-cache:/var/cache/nginx
     networks:
       - iamra_net
 
@@ -77,3 +78,4 @@ networks:
 
 volumes:
   shared-sockets:
+  nginx-cache:
