@@ -6,6 +6,7 @@ on:
 jobs:
   k6-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v4
@@ -17,11 +18,11 @@ jobs:
 
           # Generate APP_KEY (Laravel format)
           APP_KEY="base64:$(openssl rand -base64 32)"
-          echo "Generated APP_KEY: $APP_KEY"
+          echo "Generated APP_KEY"
 
           # Generate JWT_SECRET (untuk semua container)
           JWT_SECRET=$(openssl rand -base64 64)
-          echo "Generated JWT_SECRET: $JWT_SECRET"
+          echo "Generated JWT_SECRET"
 
           # Generate REVERB secrets (untuk user & forum)
           REVERB_APP_ID="cd-$(date +%s)"
@@ -99,29 +100,73 @@ jobs:
 
           echo "✅ All environment files created with shared secrets!"
 
-      # Step 3: Start Docker Services
+      # Step 3: Start Docker Services with proper wait
       - name: Start Docker Services
         run: |
           cd docker/prod
           
           echo "🚀 Starting all Docker services..."
           
-          # Start SEMUA services sekaligus (termasuk k6)
+          # Start services
           sudo docker compose -f docker-compose-cd-k6-test.yaml up -d
           
-          echo "⏳ Waiting for all services to be ready..."
-          sleep 60  # Wait untuk semua service ready
+          echo "⏳ Waiting for services to be healthy..."
           
-          # Check if all containers are running
+          # Wait for MySQL to be healthy
+          echo "Waiting for MySQL..."
+          timeout 120 bash -c 'until sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T database-mysql mysqladmin ping -h localhost --silent; do sleep 2; done'
+          
+          # Wait for Redis to be healthy
+          echo "Waiting for Redis..."
+          timeout 60 bash -c 'until sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T database-redis redis-cli ping | grep PONG; do sleep 2; done'
+          
+          # Wait for backend sockets to be created
+          echo "Waiting for backend services..."
+          sleep 30
+          
+          # Check container status
+          echo "📊 Container Status:"
           sudo docker compose -f docker-compose-cd-k6-test.yaml ps
 
-      # Step 4: Setup Laravel applications
+      # Step 4: Verify Services
+      - name: Verify Services Health
+        run: |
+          cd docker/prod
+          
+          echo "🔍 Verifying services..."
+          
+          # Check if sockets exist
+          echo "Checking Unix sockets..."
+          sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T backend-api-user ls -la /var/run/sockets/ || true
+          sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T backend-api-public ls -la /var/run/sockets/ || true
+          
+          # Check nginx configuration
+          echo "Testing Nginx configuration..."
+          sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T nginx nginx -t
+          
+          # Check nginx is responding
+          echo "Testing Nginx health..."
+          sleep 5
+          curl -f http://localhost/health || echo "Health check failed, but continuing..."
+
+      # Step 5: Setup Laravel applications
       - name: Setup Laravel Applications
         run: |
           cd docker/prod
-          sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T backend-api-public php artisan migrate:fresh --seed
+          
+          echo "🔧 Setting up Laravel applications..."
+          
+          # Run migrations and seeds for public API
+          echo "Running migrations for public API..."
+          sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T backend-api-public php artisan migrate:fresh --seed --force
+          
+          # Verify database
+          echo "Verifying database..."
+          sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T database-mysql mysql -uroot -proot -e "SHOW DATABASES; USE iamra_course_test; SHOW TABLES;"
+          
+          echo "✅ Laravel setup completed!"
 
-      # Step 5: Debug and Test Services
+      # Step 6: Debug and Test Services
       - name: Debug Services Before Tests
         run: |
           cd docker/prod
@@ -131,26 +176,83 @@ jobs:
           echo "---- Container Status ----"
           sudo docker compose -f docker-compose-cd-k6-test.yaml ps
 
-          echo "---- Network Information ----"
-          sudo docker logs nginx
+          # Check logs
+          echo "---- Nginx Logs (last 50 lines) ----"
+          sudo docker logs nginx --tail 50
 
-      # Step 6: Run K6 Tests
+          echo "---- Backend User Logs (last 30 lines) ----"
+          sudo docker logs backend-api-user --tail 30
+
+          echo "---- Backend Public Logs (last 30 lines) ----"
+          sudo docker logs backend-api-public --tail 30
+
+          # Test endpoints
+          echo "---- Testing Endpoints ----"
+          curl -v http://localhost/health || echo "Health endpoint failed"
+          curl -v http://localhost/public-api/v1/health || echo "Public API health failed"
+
+      # Step 7: Run K6 Tests
       - name: Run K6 Tests
         run: |
           cd docker/prod
           
           echo "🧪 Running k6 tests..."
           
-          sudo docker exec set-k6 k6 run /k6-scripts/test/login.js
-          sudo docker exec set-k6 k6 run /k6-scripts/test/register.js
-          sudo docker exec set-k6 k6 run /k6-scripts/test/public.js
+          # Run each test with error handling
+          echo "Running login test..."
+          sudo docker exec set-k6 k6 run /k6-scripts/test/login.js || {
+            echo "❌ Login test failed"
+            exit 1
+          }
+          
+          echo "Running register test..."
+          sudo docker exec set-k6 k6 run /k6-scripts/test/register.js || {
+            echo "❌ Register test failed"
+            exit 1
+          }
+          
+          echo "Running public API test..."
+          sudo docker exec set-k6 k6 run /k6-scripts/test/public.js || {
+            echo "❌ Public API test failed"
+            exit 1
+          }
           
           echo "✅ All k6 tests passed!"
 
-      # Step 7: Cleanup
+      # Step 8: Show logs on failure
+      - name: Show Logs on Failure
+        if: failure()
+        run: |
+          cd docker/prod
+          echo "📋 Showing all logs for debugging..."
+          
+          echo "==== Nginx Logs ===="
+          sudo docker logs nginx
+          
+          echo "==== Backend User Logs ===="
+          sudo docker logs backend-api-user
+          
+          echo "==== Backend Public Logs ===="
+          sudo docker logs backend-api-public
+          
+          echo "==== MySQL Logs ===="
+          sudo docker logs database-mysql
+          
+          echo "==== Redis Logs ===="
+          sudo docker logs database-redis
+
+      # Step 9: Cleanup
       - name: Cleanup Docker
         if: always()
         run: |
           cd docker/prod
+          
+          echo "🧹 Cleaning up..."
+          
+          # Stop and remove containers
           sudo docker compose -f docker-compose-cd-k6-test.yaml down -v --remove-orphans
+          
+          # Clean up Docker system
           sudo docker system prune -f
+          
+          echo "✅ Cleanup completed!"

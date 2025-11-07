@@ -8,7 +8,10 @@ services:
     volumes:
       - "../test/server-entrypoint/nginx-k6.conf:/etc/nginx/nginx.conf:ro"
       - shared-sockets:/var/run/sockets:rw
-      - nginx-cache:/var/cache/nginx:rw
+    tmpfs:
+      - /var/cache/nginx:uid=1000,gid=1000,mode=0755
+      - /var/run:uid=1000,gid=1000,mode=0755
+      - /tmp:uid=1000,gid=1000,mode=0755
     networks:
       - iamra_net
 
@@ -22,10 +25,6 @@ services:
       - "3307:3306"
     networks:
       - iamra_net
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      retries: 10
-      timeout: 10s
 
   database-redis:
     image: redis:latest
@@ -70,7 +69,8 @@ services:
     networks:
       - iamra_net
     depends_on:
-      - nginx
+      nginx:
+        condition: service_healthy
 
 networks:
   iamra_net:
@@ -78,4 +78,3 @@ networks:
 
 volumes:
   shared-sockets:
-  nginx-cache:
