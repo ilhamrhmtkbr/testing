@@ -141,7 +141,7 @@ jobs:
           sudo docker compose -f docker-compose-cd-k6-test.yaml ps
 
           echo "---- Network Information ----"
-          sudo docker network ls
+          sudo docker logs nginx
 
       # Step 6: Run K6 Tests
       - name: Run K6 Tests
