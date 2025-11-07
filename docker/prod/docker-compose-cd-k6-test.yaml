@@ -39,9 +39,6 @@ services:
       context: ../../
       dockerfile: docker/prod/backend-laravel/user/Dockerfile.api-user
     container_name: backend-api-user
-    depends_on:
-      database-mysql:
-        condition: service_healthy
     volumes:
       - shared-sockets:/var/run/sockets:rw
     networks:
@@ -52,9 +49,6 @@ services:
       context: ../../
       dockerfile: docker/prod/backend-laravel/public/Dockerfile.api-public
     container_name: backend-api-public
-    depends_on:
-      database-mysql:
-        condition: service_healthy
     volumes:
       - shared-sockets:/var/run/sockets:rw
     networks:
@@ -68,9 +62,6 @@ services:
     command: tail -f /dev/null
     networks:
       - iamra_net
-    depends_on:
-      nginx:
-        condition: service_healthy
 
 networks:
   iamra_net:
