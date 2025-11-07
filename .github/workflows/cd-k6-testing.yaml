@@ -123,29 +123,7 @@ jobs:
           sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T backend-api-public php artisan migrate:fresh --seed --force
           echo "✅ Laravel setup completed!"
 
-      # Step 5: Debug and Test Services
-      - name: Debug Services Before Tests
-        run: |
-          cd docker/prod
-          
-          sudo docker compose -f docker-compose-cd-k6-test.yaml ps
-
-          # Check logs
-          echo "---- Nginx Logs (last 50 lines) ----"
-          sudo docker logs nginx --tail 50
-
-          echo "---- Backend User Logs (last 30 lines) ----"
-          sudo docker logs backend-api-user --tail 30
-
-          echo "---- Backend Public Logs (last 30 lines) ----"
-          sudo docker logs backend-api-public --tail 30
-
-          # Test endpoints
-          echo "---- Testing Endpoints ----"
-          curl -v http://localhost/health || echo "Health endpoint failed"
-          curl -v http://localhost/public-api/v1/health || echo "Public API health failed"
-
-      # Step 6: Run K6 Tests
+      # Step 5: Run K6 Tests
       - name: Run K6 Tests
         run: |
           cd docker/prod
