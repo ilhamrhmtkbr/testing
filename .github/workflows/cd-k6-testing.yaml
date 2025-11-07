@@ -116,48 +116,18 @@ jobs:
           echo "📊 Container Status:"
           sudo docker compose -f docker-compose-cd-k6-test.yaml ps
 
-      # Step 4: Verify Services
-      - name: Verify Services Health
-        run: |
-          cd docker/prod
-          
-          echo "🔍 Verifying services..."
-          
-          # Check if sockets exist
-          echo "Checking Unix sockets..."
-          sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T backend-api-user ls -la /var/run/sockets/ || true
-          sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T backend-api-public ls -la /var/run/sockets/ || true
-          
-          # Check nginx configuration
-          echo "Testing Nginx configuration..."
-          sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T nginx nginx -t
-          
-          # Check nginx is responding
-          echo "Testing Nginx health..."
-          sleep 5
-          curl -f http://localhost/health || echo "Health check failed, but continuing..."
-
-      # Step 5: Setup Laravel applications
+      # Step 4: Setup Laravel applications
       - name: Setup Laravel Applications
         run: |
           cd docker/prod
-          
-          echo "🔧 Setting up Laravel applications..."
-          
-          # Run migrations and seeds for public API
-          echo "Running migrations for public API..."
           sudo docker compose -f docker-compose-cd-k6-test.yaml exec -T backend-api-public php artisan migrate:fresh --seed --force
-          
           echo "✅ Laravel setup completed!"
 
-      # Step 6: Debug and Test Services
+      # Step 5: Debug and Test Services
       - name: Debug Services Before Tests
         run: |
           cd docker/prod
-          echo "🔍 Debugging all services..."
-
-          # Check container status
-          echo "---- Container Status ----"
+          
           sudo docker compose -f docker-compose-cd-k6-test.yaml ps
 
           # Check logs
@@ -175,68 +145,24 @@ jobs:
           curl -v http://localhost/health || echo "Health endpoint failed"
           curl -v http://localhost/public-api/v1/health || echo "Public API health failed"
 
-      # Step 7: Run K6 Tests
+      # Step 6: Run K6 Tests
       - name: Run K6 Tests
         run: |
           cd docker/prod
           
-          echo "🧪 Running k6 tests..."
-          
-          # Run each test with error handling
-          echo "Running login test..."
-          sudo docker exec set-k6 k6 run /k6-scripts/test/login.js || {
-            echo "❌ Login test failed"
-            exit 1
-          }
-          
-          echo "Running register test..."
-          sudo docker exec set-k6 k6 run /k6-scripts/test/register.js || {
-            echo "❌ Register test failed"
-            exit 1
-          }
-          
-          echo "Running public API test..."
-          sudo docker exec set-k6 k6 run /k6-scripts/test/public.js || {
-            echo "❌ Public API test failed"
-            exit 1
-          }
+          sudo docker exec set-k6 k6 run /k6-scripts/test/login.js
+          sudo docker exec set-k6 k6 run /k6-scripts/test/register.js
+          sudo docker exec set-k6 k6 run /k6-scripts/test/public.js
           
           echo "✅ All k6 tests passed!"
 
-      # Step 8: Show logs on failure
-      - name: Show Logs on Failure
-        if: failure()
-        run: |
-          cd docker/prod
-          echo "📋 Showing all logs for debugging..."
-          
-          echo "==== Nginx Logs ===="
-          sudo docker logs nginx
-          
-          echo "==== Backend User Logs ===="
-          sudo docker logs backend-api-user
-          
-          echo "==== Backend Public Logs ===="
-          sudo docker logs backend-api-public
-          
-          echo "==== MySQL Logs ===="
-          sudo docker logs database-mysql
-          
-          echo "==== Redis Logs ===="
-          sudo docker logs database-redis
-
-      # Step 9: Cleanup
+      # Step 7: Cleanup
       - name: Cleanup Docker
         if: always()
         run: |
           cd docker/prod
           
-          echo "🧹 Cleaning up..."
-          
-          # Stop and remove containers
           sudo docker compose -f docker-compose-cd-k6-test.yaml down -v --remove-orphans
-          
-          # Clean up Docker system
           sudo docker system prune -f
           
           echo "✅ Cleanup completed!"
