@@ -72,22 +72,36 @@ RUN cat > /entrypoint.sh << 'EOF'
 #!/bin/sh
 set -e
 
+# Ensure socket directory has correct permissions
+mkdir -p /var/run/sockets
+chmod 777 /var/run/sockets
+
 # Start RoadRunner in background sebagai ilhamrhmtkbr
 su - ilhamrhmtkbr -s /bin/sh -c "cd /app && /app/rr serve -c /app/.rr.yaml" &
 RR_PID=$!
 
-# Wait for socket creation (max 10 seconds)
-for i in $(seq 1 10); do
+# Wait for socket creation (max 30 seconds)
+echo "Waiting for socket creation..."
+for i in $(seq 1 30); do
     if [ -S /var/run/sockets/backend-api-user.sock ]; then
+        echo "Socket created!"
         break
+    fi
+    if [ $i -eq 30 ]; then
+        echo "ERROR: Socket not created after 30 seconds"
+        kill $RR_PID 2>/dev/null || true
+        exit 1
     fi
     sleep 1
 done
 
-# Fix socket permissions
-chmod 666 /var/run/sockets/backend-api-user.sock 2>/dev/null || true
+# Fix socket permissions - make it accessible by nginx
+chmod 666 /var/run/sockets/backend-api-user.sock
+ls -la /var/run/sockets/
 
-# Bring RoadRunner to foreground
+echo "RoadRunner started successfully"
+
+# Keep container running and monitor RoadRunner
 wait $RR_PID
 EOF
 
