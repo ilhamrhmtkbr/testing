@@ -13,7 +13,7 @@ server:
 # HTTP Server - UNIX SOCKET MODE
 http:
   address: unix:///var/run/sockets/backend-api-instructor.sock
-  permissions: 0660
+  permissions: 0666
   middleware: ["headers", "gzip"]
   # Worker pool configuration
   pool:
