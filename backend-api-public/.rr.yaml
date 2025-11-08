@@ -32,8 +32,7 @@ http:
   headers:
     # CORS untuk development
     cors:
-      allowed_origin:
-        - "https?://([a-zA-Z0-9-]+\\.)?iamra\\.site"
+      allowed_origin: "*"
       allowed_headers: "*"
       allowed_methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS,HEAD"
       allow_credentials: true
