@@ -32,7 +32,8 @@ http:
   headers:
     # CORS untuk development
     cors:
-      allowed_origin: "*"
+      allowed_origin:
+        - "https?://([a-zA-Z0-9-]+\\.)?iamra\\.site"
       allowed_headers: "*"
       allowed_methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS,HEAD"
       allow_credentials: true
@@ -46,8 +47,8 @@ http:
 
 # Logging configuration
 logs:
-  mode: development
-  level: debug
+  mode: production
+  level: info
   encoding: console
   output: stdout
   err_output: stderr
