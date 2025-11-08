@@ -127,10 +127,6 @@ EOF
 
 RUN chmod +x /entrypoint.sh
 
-# Pre-optimize Laravel
-RUN php /app/artisan route:cache || true && \
-    php /app/artisan view:cache || true
-
 # Set final permissions
 RUN chown ilhamrhmtkbr:ilhamrhmtkbr /app/.env && \
     chmod 644 /app/.env && \

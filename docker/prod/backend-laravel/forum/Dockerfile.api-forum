@@ -128,9 +128,6 @@ RUN chown ilhamrhmtkbr:ilhamrhmtkbr /app/.env && \
     chmod +x /app/rr && \
     chown ilhamrhmtkbr:ilhamrhmtkbr /app/rr /app/.rr.yaml /app/worker.php
 
-# Cache routes (optional, bisa fail jadi pakai || true)
-RUN php /app/artisan route:cache || true
-
 LABEL maintainer="ilhamrhmtkbr" \
       version="1.0" \
       description="Laravel + RoadRunner Unix Socket - Forum API (PROD)"
