@@ -30,15 +30,6 @@ http:
 
   # Headers middleware
   headers:
-    # CORS untuk development
-    cors:
-      allowed_origin: "*"
-      allowed_headers: "*"
-      allowed_methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS,HEAD"
-      allow_credentials: true
-      exposed_headers: "Cache-Control,Content-Language,Content-Type,Expires,Last-Modified,Pragma"
-      max_age: 600
-
     # Response headers
     response:
       X-Powered-By: "RoadRunner + Laravel"
