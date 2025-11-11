@@ -239,7 +239,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 40M
+                    memory: 30M
                     cpus: '0.05'
 
             backend-api-user:
@@ -256,7 +256,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 150M
+                    memory: 112M
                     cpus: '0.15'
 
             backend-api-user-reverb:
@@ -290,7 +290,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 150M
+                    memory: 112M
                     cpus: '0.1'
 
             backend-api-student:
@@ -307,7 +307,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 150M
+                    memory: 112M
                     cpus: '0.1'
 
             backend-api-instructor:
@@ -324,7 +324,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 150M
+                    memory: 112M
                     cpus: '0.1'
 
             backend-api-forum:
@@ -341,7 +341,7 @@ jobs:
               deploy:
                 resources:
                   limits:
-                    memory: 150M
+                    memory: 112M
                     cpus: '0.1'
 
             backend-api-forum-reverb:
