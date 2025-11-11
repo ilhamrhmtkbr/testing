@@ -82,6 +82,13 @@ chmod 777 /var/run/sockets
 umask 000
 
 echo "Starting RoadRunner as user ilhamrhmtkbr..."
+sleep 5
+
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan optimize:clear 2>/dev/null || true"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan optimize"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan storage:link"
+
+echo "✓ Laravel optimization complete!"
 
 # Start RoadRunner di background
 su - ilhamrhmtkbr -s /bin/sh -c "cd /app && umask 000 && /app/rr serve -c /app/.rr.yaml" &

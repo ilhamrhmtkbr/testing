@@ -76,6 +76,14 @@ chmod 777 /var/run/sockets
 # Set umask agar socket dibuat dengan permissions yang benar
 umask 000
 
+sleep 5
+
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan optimize:clear 2>/dev/null || true"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan optimize"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan storage:link"
+
+echo "✓ Laravel optimization complete!"
+
 echo "Starting RoadRunner as user ilhamrhmtkbr..."
 
 # Start RoadRunner di background

@@ -398,7 +398,6 @@ jobs:
             docker/prod/custom-command/deploy.sh \
             docker/prod/custom-command/setup-ssl.sh \
             docker/prod/custom-command/renew-ssl.sh \
-            docker/prod/custom-command/laravel-optimize.sh \
             docker/prod/server-entrypoint/nginx-http.conf \
             docker/prod/server-entrypoint/nginx-https.conf \
             $AWS_EC2_USERNAME@$AWS_EC2_HOST:~/
@@ -430,7 +429,7 @@ jobs:
           export DOCKER_PASSWORD="$DOCKER_PASSWORD"
           export IMAGE_PREFIX="$IMAGE_PREFIX"
 
-          chmod +x ~/deploy.sh ~/laravel-optimize.sh ~/setup-ssl.sh
+          chmod +x ~/deploy.sh ~/setup-ssl.sh ~/renew-ssl.sh
           ~/deploy.sh
 
           # Auto-run SSL setup if certificates don't exist

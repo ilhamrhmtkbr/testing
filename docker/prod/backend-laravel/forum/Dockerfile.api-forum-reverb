@@ -55,10 +55,23 @@ COPY docker/prod/backend-laravel/_shared/.env.shared /app/.env
 RUN chown ilhamrhmtkbr:ilhamrhmtkbr /app/.env && \
     chmod 644 /app/.env
 
-# Cache routes (optional)
-RUN php /app/artisan route:cache || true
+RUN cat > /entrypoint-reverb.sh << 'EOF'
+#!bin/sh
+set -e
+
+sleep 5
+
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan optimize:clear 2>/dev/null || true"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan optimize"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan storage:link"
+
+echo "✓ Laravel optimization complete!"
+exec php artisan reverb:start
+EOF
+
+RUN chmod +x /entrypoint-reverb.sh
 
 # Switch ke non-root user untuk runtime
 USER ilhamrhmtkbr
 
-ENTRYPOINT ["php", "artisan", "reverb:start"]
+ENTRYPOINT ["./entrypoint-reverb.sh"]
