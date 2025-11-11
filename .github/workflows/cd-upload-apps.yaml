@@ -228,7 +228,7 @@ jobs:
               ports:
                 - "80:80"
                 - "443:443"
-              depens_on: 
+              depends_on: 
                 - backend-api-user
                 - backend-api-user-reverb
                 - backend-api-public

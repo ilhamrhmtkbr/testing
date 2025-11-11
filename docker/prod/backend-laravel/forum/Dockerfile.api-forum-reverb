@@ -61,9 +61,8 @@ set -e
 
 sleep 5
 
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan optimize:clear 2>/dev/null || true"
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan optimize"
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan storage:link"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan config:clear 2>/dev/null || true"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan config:cache"
 
 echo "✓ Laravel optimization complete!"
 exec php artisan reverb:start
