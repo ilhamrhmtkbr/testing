@@ -7,7 +7,6 @@ import {useState} from "react";
 import SvgComp from "../components/SvgComp.jsx";
 import {useUserStore} from "../zustand/store.js";
 import BreadcrumbsComp from "../components/BreadcrumbsComp.jsx";
-import useMediaQuery from "../hooks/useMediaQuery.js";
 
 const Layout = () => {
     const {t, i18n} = useTranslation();
@@ -15,7 +14,6 @@ const Layout = () => {
     const user = useUserStore(state => state.user)
     const [isMinifySidebar, setMinifySidebar] = useState(false);
     const location = useLocation()
-    const isMobile = useMediaQuery('(max-width: 800px)');
 
     function handleChangeLang(lang) {
         localStorage.setItem('lang', lang);
@@ -123,7 +121,7 @@ const Layout = () => {
                     </div>
                 </aside>
             </main>
-            <footer className={`justify-around ${isMobile ? 'w-4' : 'w-[269px]'}`}>
+            <footer className={`justify-around`}>
                 <div className="grid-start">
                     <img src={'./iamra-logo.svg'} className={'max-w-[31px] max-h-[31px]'} alt={import.meta.env.VITE_APP_NAME}/>
                     <h1>iamra</h1>

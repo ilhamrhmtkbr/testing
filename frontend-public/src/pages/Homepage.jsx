@@ -7,11 +7,9 @@ import {useCustomNavigate} from "../utils/Helper.js";
 import NoDataComp from "../components/NoDataComp.jsx";
 import CourseCardSkeletonComp from "../components/CourseCardSkeletonComp.jsx";
 import usePublic from "../hooks/usePublic.js";
-import useMediaQuery from "../hooks/useMediaQuery.js";
 
 export default function Homepage() {
     const {t} = useTranslation();
-    const isMobile = useMediaQuery('(max-width: 800px)');
     const {
         courses,
         page, setPage,
@@ -46,9 +44,7 @@ export default function Homepage() {
         <>
             <div className={'card-wrapper replace-shadow-with-border mb-x'}>
                 <p className={'font-medium'}>Filter</p>
-                <div className={'gap-m grid'} style={{
-                    gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr'
-                }}>
+                <div className={'gap-m grid max-[800px]:grid-cols-[1fr] grid-cols-[2fr_1fr]'}>
                     <div className={'max-width-700 ps-center flex-aic-jcs flex-nowrap gap-m'}>
                         <input list="search" type="search" placeholder="..." name="search"
                                onChange={e => setKeyword(e.target.value)}/>

@@ -228,6 +228,14 @@ jobs:
               ports:
                 - "80:80"
                 - "443:443"
+              depens_on: 
+                - backend-api-user
+                - backend-api-user-reverb
+                - backend-api-public
+                - backend-api-instructor
+                - backend-api-student
+                - backend-api-forum
+                - backend-api-forum-reverb
               volumes:
                 - ./letsencrypt:/etc/letsencrypt:rw
                 - ./certbot:/var/www/certbot:rw

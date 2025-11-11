@@ -8,13 +8,11 @@ import {logout} from "../services/authService.js";
 import SetThemeComp from "../components/SetThemeComp.jsx";
 import GetMenuComp from "../components/GetMenuComp.jsx";
 import useMember from "../hooks/useMember.js";
-import useMediaQuery from "../hooks/useMediaQuery.js";
 
 export default function Layout() {
     const {t, i18n} = useTranslation();
     const [lang, setLang] = useState(i18n.language);
     const location = useLocation();
-    const isMobile = useMediaQuery('(max-width: 800px)');
 
     function handleChangeLang(lang) {
         localStorage.setItem('lang', lang);
@@ -117,7 +115,7 @@ export default function Layout() {
                 </aside>
             </main>
 
-            <footer className={`justify-around ${isMobile ? 'w-4' : 'w-[269px]'}`}>
+            <footer className={`justify-around`}>
                 <div className="grid-start">
                     <img src={'./iamra-logo.svg'} className={'max-w-[31px] max-h-[31px]'} alt={import.meta.env.VITE_APP_NAME}/>
                     <h1>iamra</h1>
