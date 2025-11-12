@@ -67,7 +67,7 @@ USER root
 # Copy konfigurasi custom PHP & env
 COPY docker/prod/backend-laravel/_shared/php-custom-api-shared.ini /usr/local/etc/php/conf.d/99-custom.ini
 
-# Create entrypoint script dengan permission handling yang lebih baik
+# Create entrypoint script dengan environment variable verification
 RUN cat > /entrypoint.sh << 'EOF'
 #!/bin/sh
 set -e
@@ -81,11 +81,55 @@ chmod 777 /var/run/sockets
 # Set umask agar socket dibuat dengan permissions yang benar
 umask 000
 
-sleep 5
+# CRITICAL FIX: Wait and verify environment variables are loaded
+echo "Waiting for environment variables..."
+sleep 3
 
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan optimize:clear 2>/dev/null || true"
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan optimize"
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan storage:link"
+# Verify critical env vars exist
+echo "Verifying environment variables..."
+if [ -z "$REDIS_HOST" ]; then
+    echo "WARNING: REDIS_HOST is not set!"
+fi
+if [ -z "$DB_HOST" ]; then
+    echo "WARNING: DB_HOST is not set!"
+fi
+
+# Export env vars untuk memastikan tersedia untuk PHP
+export $(cat /proc/1/environ | tr '\0' '\n' | grep -E '^(DB_|REDIS_|APP_|MAIL_|JWT_)' | xargs)
+
+# Debug: Print actual environment variables (remove in production)
+echo "Environment check:"
+echo "REDIS_HOST: ${REDIS_HOST:-NOT SET}"
+echo "DB_HOST: ${DB_HOST:-NOT SET}"
+echo "APP_KEY: ${APP_KEY:0:20}..." # Only show first 20 chars for security
+
+# IMPORTANT: Clear any existing cache FIRST
+echo "Clearing existing cache..."
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan config:clear 2>/dev/null || true"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan cache:clear 2>/dev/null || true"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan route:clear 2>/dev/null || true"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan view:clear 2>/dev/null || true"
+
+sleep 2
+
+# Now rebuild cache with loaded environment
+echo "Building fresh cache with environment variables..."
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan config:cache"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan route:cache"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan view:cache"
+su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan storage:link 2>/dev/null || true"
+
+# Verify cached config
+echo "Verifying cached configuration..."
+CACHED_REDIS=$(su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan tinker --execute=\"echo config('database.redis.default.host');\"" 2>/dev/null || echo "FAILED")
+echo "Cached REDIS_HOST: $CACHED_REDIS"
+
+if [ "$CACHED_REDIS" = "127.0.0.1" ] || [ "$CACHED_REDIS" = "localhost" ]; then
+    echo "ERROR: Config cache still using default values!"
+    echo "Attempting emergency fix..."
+    su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan config:clear"
+    sleep 1
+fi
 
 echo "✓ Laravel optimization complete!"
 
