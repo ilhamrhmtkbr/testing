@@ -55,112 +55,25 @@ RUN curl -L https://github.com/roadrunner-server/roadrunner/releases/download/v2
 
 USER root
 
+COPY docker/prod/backend-laravel/_shared/.env.shared /app/.env
 COPY docker/prod/backend-laravel/_shared/php-custom-api-shared.ini /usr/local/etc/php/conf.d/99-custom.ini
 
 RUN cat > /entrypoint.sh << 'EOF'
 #!/bin/bash
 set -e
 
-echo "Starting entrypoint script..."
+# append semua env vars
+printenv >> /app/.env
 
 mkdir -p /var/run/sockets
 chmod 777 /var/run/sockets
 umask 000
 
-# ✅ SOLUSI: Tunggu sampai CRITICAL env vars benar-benar ada
-echo "Waiting for critical environment variables..."
-MAX_WAIT=30
-COUNTER=0
-
-while [ $COUNTER -lt $MAX_WAIT ]; do
-    # Cek env vars yang HARUS ada
-    if [ -n "$DB_HOST" ] && [ -n "$REDIS_HOST" ] && [ -n "$APP_KEY" ]; then
-        echo "✓ All critical environment variables loaded!"
-        break
-    fi
-
-    echo "Waiting for env vars... ($COUNTER/$MAX_WAIT)"
-    sleep 1
-    COUNTER=$((COUNTER + 1))
-
-    if [ $COUNTER -eq $MAX_WAIT ]; then
-        echo "❌ ERROR: Environment variables not loaded after ${MAX_WAIT}s!"
-        echo "DB_HOST: ${DB_HOST:-NOT SET}"
-        echo "REDIS_HOST: ${REDIS_HOST:-NOT SET}"
-        echo "APP_KEY: ${APP_KEY:0:20}..."
-        exit 1
-    fi
-done
-
-# ✅ Verifikasi nilai env vars SEBELUM caching
-echo "=== Environment Verification ==="
-echo "DB_HOST: ${DB_HOST}"
-echo "DB_DATABASE: ${DB_DATABASE}"
-echo "REDIS_HOST: ${REDIS_HOST}"
-echo "REDIS_PORT: ${REDIS_PORT:-6379}"
-echo "APP_KEY: ${APP_KEY:0:25}..."
-echo "APP_URL: ${APP_URL}"
-echo "================================"
-
-# Pastikan tidak ada nilai default yang salah
-if [ "$DB_HOST" = "127.0.0.1" ] || [ "$DB_CONNECTION" = "sqlite" ]; then
-    echo "❌ ERROR: DB still using default values!"
-    exit 1
-fi
-
-if [ -z "$REDIS_HOST" ] || [ "$REDIS_HOST" = "127.0.0.1" ]; then
-    echo "❌ ERROR: REDIS_HOST not properly set!"
-    exit 1
-fi
-
-echo "✓ Environment variables verified successfully!"
-
-# Clear cache DENGAN konfirmasi
-echo "Clearing existing cache..."
-su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan config:clear 2>/dev/null || true"
-su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan cache:clear 2>/dev/null || true"
-su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan route:clear 2>/dev/null || true"
-su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan view:clear 2>/dev/null || true"
-
+su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan optimize:clear 2>/dev/null || true"
 sleep 2
-
-# Build cache dengan env yang sudah verified
 echo "Building fresh cache..."
-su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan config:cache"
-su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan route:cache"
-su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan view:cache"
+su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan optimize 2>/dev/null || true"
 su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan storage:link 2>/dev/null || true"
-
-# ✅ VERIFIKASI cache yang baru dibuat
-echo "Verifying cached configuration..."
-CACHED_DB=$(su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan tinker --execute=\"echo config('database.default');\"" 2>/dev/null || echo "FAILED")
-CACHED_DB_HOST=$(su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan tinker --execute=\"echo config('database.connections.mysql.host');\"" 2>/dev/null || echo "FAILED")
-CACHED_REDIS=$(su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan tinker --execute=\"echo config('database.redis.default.host');\"" 2>/dev/null || echo "FAILED")
-
-echo "Cached DB Connection: $CACHED_DB"
-echo "Cached DB Host: $CACHED_DB_HOST"
-echo "Cached Redis Host: $CACHED_REDIS"
-
-# Validasi hasil cache
-if [ "$CACHED_DB" = "sqlite" ]; then
-    echo "❌ FATAL: Config cache still using sqlite!"
-    su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan config:clear"
-    exit 1
-fi
-
-if [ "$CACHED_DB_HOST" = "127.0.0.1" ] || [ -z "$CACHED_DB_HOST" ]; then
-    echo "❌ FATAL: DB_HOST not properly cached!"
-    su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan config:clear"
-    exit 1
-fi
-
-if [ "$CACHED_REDIS" = "127.0.0.1" ] || [ -z "$CACHED_REDIS" ] || [ "$CACHED_REDIS" = "null" ]; then
-    echo "❌ FATAL: REDIS_HOST not properly cached!"
-    su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan config:clear"
-    exit 1
-fi
-
-echo "✓ Laravel optimization complete with verified config!"
 
 echo "Starting RoadRunner as user ilhamrhmtkbr..."
 
@@ -170,9 +83,9 @@ RR_PID=$!
 echo "Waiting for socket creation..."
 COUNTER=0
 while [ $COUNTER -lt 30 ]; do
-    if [ -S /var/run/sockets/backend-api-user.sock ]; then
+    if [ -S /var/run/sockets/backend-api-instructor.sock ]; then
         echo "Socket created successfully!"
-        chmod 666 /var/run/sockets/backend-api-user.sock
+        chmod 666 /var/run/sockets/backend-api-instructor.sock
         echo "Socket permissions set:"
         ls -la /var/run/sockets/
         break

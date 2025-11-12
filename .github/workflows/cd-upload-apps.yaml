@@ -254,7 +254,6 @@ jobs:
               image: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-user:${BUILD_TAG}
               container_name: backend-api-user
               env_file:
-                - .env.shared
                 - .env.secret-shared
                 - .env.secret-user
               volumes:
@@ -272,7 +271,6 @@ jobs:
               image: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-user-reverb:${BUILD_TAG}
               container_name: backend-api-user-reverb
               env_file:
-                - .env.shared
                 - .env.secret-shared
                 - .env.secret-user
               networks:
@@ -290,7 +288,6 @@ jobs:
               image: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-public:${BUILD_TAG}
               container_name: backend-api-public
               env_file:
-                - .env.shared
                 - .env.secret-shared
                 - .env.secret-public
               volumes:
@@ -308,7 +305,6 @@ jobs:
               image: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-student:${BUILD_TAG}
               container_name: backend-api-student
               env_file:
-                - .env.shared
                 - .env.secret-shared
                 - .env.secret-student
               volumes:
@@ -326,7 +322,6 @@ jobs:
               image: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-instructor:${BUILD_TAG}
               container_name: backend-api-instructor
               env_file:
-                - .env.shared
                 - .env.secret-shared
                 - .env.secret-instructor
               volumes:
@@ -344,7 +339,6 @@ jobs:
               image: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-forum:${BUILD_TAG}
               container_name: backend-api-forum
               env_file:
-                - .env.shared
                 - .env.secret-shared
                 - .env.secret-forum
               volumes:
@@ -362,7 +356,6 @@ jobs:
               image: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-forum-reverb:${BUILD_TAG}
               container_name: backend-api-forum-reverb
               env_file:
-                - .env.shared
                 - .env.secret-shared
                 - .env.secret-forum
               networks:
@@ -410,7 +403,6 @@ jobs:
           scp -i ~/.ssh/ec2_key.pem -o ConnectTimeout=30 \
             docker-compose.yml \
             .env.secret-shared .env.secret-user .env.secret-public .env.secret-student .env.secret-instructor .env.secret-forum \
-            docker/prod/backend-laravel/_shared/.env.shared \
             docker/prod/custom-command/deploy.sh \
             docker/prod/custom-command/setup-ssl.sh \
             docker/prod/custom-command/renew-ssl.sh \
