@@ -60,7 +60,6 @@ USER root
 
 # Copy konfigurasi custom PHP & env
 COPY docker/prod/backend-laravel/_shared/php-custom-api-shared.ini /usr/local/etc/php/conf.d/99-custom.ini
-COPY docker/prod/backend-laravel/_shared/.env.shared /app/.env
 
 # Create entrypoint script dengan permission handling yang lebih baik
 RUN cat > /entrypoint.sh << 'EOF'
@@ -131,9 +130,7 @@ EOF
 RUN chmod +x /entrypoint.sh
 
 # Set final permissions
-RUN chown ilhamrhmtkbr:ilhamrhmtkbr /app/.env && \
-    chmod 644 /app/.env && \
-    chmod +x /app/rr && \
+RUN chmod +x /app/rr && \
     chown ilhamrhmtkbr:ilhamrhmtkbr /app/rr /app/.rr.yaml /app/worker.php
 
 LABEL maintainer="ilhamrhmtkbr" \

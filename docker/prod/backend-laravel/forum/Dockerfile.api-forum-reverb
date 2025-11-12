@@ -48,13 +48,6 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progre
 # Switch back to root untuk copy config
 USER root
 
-# Copy environment config
-COPY docker/prod/backend-laravel/_shared/.env.shared /app/.env
-
-# Set final permissions
-RUN chown ilhamrhmtkbr:ilhamrhmtkbr /app/.env && \
-    chmod 644 /app/.env
-
 # Switch ke non-root user untuk runtime
 USER ilhamrhmtkbr
 
