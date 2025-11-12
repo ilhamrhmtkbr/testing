@@ -1,10 +1,10 @@
 FROM php:8.2-cli
 
-# Set working directory
 WORKDIR /app
 
-# Install dependencies dan PHP extensions
+# Install bash dan dependencies
 RUN apt-get update && apt-get install -y \
+    bash \
     git curl zip unzip \
     libssl-dev libcurl4-openssl-dev \
     libicu-dev libzip-dev \
@@ -14,19 +14,15 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-enable redis mongodb \
     && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Create user
 RUN if ! id -u ilhamrhmtkbr > /dev/null 2>&1; then \
         groupadd -g 1000 ilhamrhmtkbr && \
-        useradd -u 1000 -g ilhamrhmtkbr -m ilhamrhmtkbr; \
+        useradd -u 1000 -g ilhamrhmtkbr -m -s /bin/bash ilhamrhmtkbr; \
     fi
 
-# Copy source code
 COPY backend-api-forum/ /app/
 
-# Create necessary directories
 RUN mkdir -p \
    /var/run/sockets \
    /var/log \
@@ -37,49 +33,37 @@ RUN mkdir -p \
    /app/storage/logs \
    /app/bootstrap/cache
 
-# Set permissions sebelum install composer (agar bisa write cache)
 RUN chown -R ilhamrhmtkbr:ilhamrhmtkbr /app /var/log /var/run/sockets && \
     chmod -R 755 /app && \
     chmod -R 775 /app/storage /app/bootstrap/cache /var/run/sockets
 
-# Switch to non-root user untuk composer install
 USER ilhamrhmtkbr
 
-# Install dependencies dengan user non-root
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
-# Download RoadRunner binary ke direktori /app (akan menghasilkan file /app/rr)
 RUN curl -L https://github.com/roadrunner-server/roadrunner/releases/download/v2024.2.0/roadrunner-2024.2.0-linux-amd64.tar.gz -o /tmp/rr.tar.gz \
     && tar -xzf /tmp/rr.tar.gz -C /tmp \
     && mv /tmp/roadrunner-2024.2.0-linux-amd64/rr /app/rr \
     && rm -rf /tmp/rr.tar.gz /tmp/roadrunner-2024.2.0-linux-amd64 \
     && chmod +x /app/rr
 
-# Switch back to root untuk setup entrypoint
 USER root
 
-# Copy konfigurasi custom PHP & env
 COPY docker/prod/backend-laravel/_shared/php-custom-api-shared.ini /usr/local/etc/php/conf.d/99-custom.ini
 
-# Create entrypoint script dengan permission handling yang lebih baik
 RUN cat > /entrypoint.sh << 'EOF'
-#!/bin/sh
+#!/bin/bash
 set -e
 
 echo "Starting entrypoint script..."
 
-# Create socket directory with full permissions
 mkdir -p /var/run/sockets
 chmod 777 /var/run/sockets
-
-# Set umask agar socket dibuat dengan permissions yang benar
 umask 000
 
-# CRITICAL FIX: Wait and verify environment variables are loaded
 echo "Waiting for environment variables..."
 sleep 3
 
-# Verify critical env vars exist
 echo "Verifying environment variables..."
 if [ -z "$REDIS_HOST" ]; then
     echo "WARNING: REDIS_HOST is not set!"
@@ -88,40 +72,34 @@ if [ -z "$DB_HOST" ]; then
     echo "WARNING: DB_HOST is not set!"
 fi
 
-# Export env vars untuk memastikan tersedia untuk PHP
-export $(cat /proc/1/environ | tr '\0' '\n' | grep -E '^(DB_|REDIS_|APP_|MAIL_|JWT_)' | xargs)
-
-# Debug: Print actual environment variables (remove in production)
 echo "Environment check:"
 echo "REDIS_HOST: ${REDIS_HOST:-NOT SET}"
 echo "DB_HOST: ${DB_HOST:-NOT SET}"
-echo "APP_KEY: ${APP_KEY:0:20}..." # Only show first 20 chars for security
+APP_KEY_PREVIEW="${APP_KEY:0:20}"
+echo "APP_KEY: ${APP_KEY_PREVIEW}..."
 
-# IMPORTANT: Clear any existing cache FIRST
 echo "Clearing existing cache..."
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan config:clear 2>/dev/null || true"
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan cache:clear 2>/dev/null || true"
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan route:clear 2>/dev/null || true"
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan view:clear 2>/dev/null || true"
+su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan config:clear 2>/dev/null || true"
+su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan cache:clear 2>/dev/null || true"
+su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan route:clear 2>/dev/null || true"
+su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan view:clear 2>/dev/null || true"
 
 sleep 2
 
-# Now rebuild cache with loaded environment
 echo "Building fresh cache with environment variables..."
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan config:cache"
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan route:cache"
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan view:cache"
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan storage:link 2>/dev/null || true"
+su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan config:cache"
+su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan route:cache"
+su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan view:cache"
+su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan storage:link 2>/dev/null || true"
 
-# Verify cached config
 echo "Verifying cached configuration..."
-CACHED_REDIS=$(su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan tinker --execute=\"echo config('database.redis.default.host');\"" 2>/dev/null || echo "FAILED")
+CACHED_REDIS=$(su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan tinker --execute=\"echo config('database.redis.default.host');\"" 2>/dev/null || echo "FAILED")
 echo "Cached REDIS_HOST: $CACHED_REDIS"
 
 if [ "$CACHED_REDIS" = "127.0.0.1" ] || [ "$CACHED_REDIS" = "localhost" ]; then
     echo "ERROR: Config cache still using default values!"
     echo "Attempting emergency fix..."
-    su - ilhamrhmtkbr -s /bin/sh -c "cd /app && php artisan config:clear"
+    su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan config:clear"
     sleep 1
 fi
 
@@ -129,23 +107,17 @@ echo "✓ Laravel optimization complete!"
 
 echo "Starting RoadRunner as user ilhamrhmtkbr..."
 
-# Start RoadRunner di background
-su - ilhamrhmtkbr -s /bin/sh -c "cd /app && umask 000 && /app/rr serve -c /app/.rr.yaml" &
+su - ilhamrhmtkbr -s /bin/bash -c "cd /app && umask 000 && /app/rr serve -c /app/.rr.yaml" &
 RR_PID=$!
 
-# Wait for socket creation
 echo "Waiting for socket creation..."
 COUNTER=0
 while [ $COUNTER -lt 30 ]; do
     if [ -S /var/run/sockets/backend-api-forum.sock ]; then
         echo "Socket created successfully!"
-
-        # Set socket permissions to be readable/writable by everyone
         chmod 666 /var/run/sockets/backend-api-forum.sock
-
         echo "Socket permissions set:"
         ls -la /var/run/sockets/
-
         break
     fi
 
@@ -153,7 +125,6 @@ while [ $COUNTER -lt 30 ]; do
 
     if [ $COUNTER -eq 30 ]; then
         echo "ERROR: Socket not created after 30 seconds!"
-        echo "RoadRunner logs:"
         kill $RR_PID 2>/dev/null || true
         exit 1
     fi
@@ -163,7 +134,6 @@ done
 
 echo "RoadRunner started successfully on PID $RR_PID"
 
-# Monitor RoadRunner process
 wait $RR_PID
 EXIT_CODE=$?
 
@@ -173,7 +143,6 @@ EOF
 
 RUN chmod +x /entrypoint.sh
 
-# Set final permissions
 RUN chmod +x /app/rr && \
     chown ilhamrhmtkbr:ilhamrhmtkbr /app/rr /app/.rr.yaml /app/worker.php
 
@@ -181,5 +150,4 @@ LABEL maintainer="ilhamrhmtkbr" \
       version="1.0" \
       description="Laravel + RoadRunner Unix Socket - Forum API (PROD)"
 
-# Tetap root untuk bisa chmod socket
 CMD ["/entrypoint.sh"]
