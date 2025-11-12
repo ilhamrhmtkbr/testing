@@ -70,10 +70,14 @@ env | grep -v '^PATH=' | grep -v '^PWD=' | grep -v '^SHLVL=' | \
      grep -v '^TERM=' | grep -v '^OLDPWD=' | \
      grep -E '^[A-Z_][A-Z0-9_]*=' | \
 while IFS='=' read -r key value; do
+    # Escape double quotes in value and wrap in double quotes
+    escaped_value=$(echo "$value" | sed 's/"/\\"/g')
+
     if grep -q "^${key}=" /app/.env 2>/dev/null; then
-        sed -i "s|^${key}=.*|${key}=${value}|" /app/.env
+        # Use # as delimiter to avoid issues with / in base64
+        sed -i "s#^${key}=.*#${key}=\"${escaped_value}\"#" /app/.env
     else
-        echo "${key}=${value}" >> /app/.env
+        echo "${key}=\"${escaped_value}\"" >> /app/.env
     fi
 done
 
