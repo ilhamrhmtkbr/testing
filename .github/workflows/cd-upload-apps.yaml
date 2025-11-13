@@ -241,6 +241,8 @@ jobs:
                 - ./certbot:/var/www/certbot:rw
                 - ./nginx-https.conf:/etc/nginx/nginx.conf:ro
                 - sockets:/var/run/sockets:rw
+                - backend_api_instructor_course_images:/var/www/backend-api-instructor-course-images:ro
+                - backend_api_user_images:/var/www/backend-api-user-images:ro
               networks:
                 - app-network
               restart: unless-stopped
@@ -258,6 +260,7 @@ jobs:
                 - .env.secret-user
               volumes:
                 - sockets:/var/run/sockets:rw
+                - backend_api_user_images:/app/storage/app/public/user-images
               networks:
                 - app-network
               restart: unless-stopped
@@ -326,6 +329,7 @@ jobs:
                 - .env.secret-instructor
               volumes:
                 - sockets:/var/run/sockets:rw
+                - backend_api_instructor_course_images:/app/storage/app/public/instructor-course-images
               networks:
                 - app-network
               restart: unless-stopped
@@ -372,6 +376,10 @@ jobs:
           volumes:
             redis_data:
             sockets:
+            backend_api_instructor_course_images:
+              driver:local
+            backend_api_user_images:
+              driver:local
 
           networks:
             app-network:

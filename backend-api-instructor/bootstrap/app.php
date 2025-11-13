@@ -9,23 +9,6 @@ use Illuminate\Support\Facades\Route;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(function () {
         Route::prefix(config('api.version'))
-            ->group(function () {
-                Route::get('/storage/instructor-course-images/{filename}', function ($filename) {
-                    // Validate filename format
-                    if (!preg_match('/^[a-zA-Z0-9._-]+$/', $filename)) {
-                        abort(404);
-                    }
-
-                    $path = storage_path('app/public/instructor-course-images/' . $filename);
-
-                    if (!File::exists($path)) {
-                        abort(404);
-                    }
-
-                    return response()->file($path);
-                })->where('filename', '[a-zA-Z0-9._-]+');
-            });
-        Route::prefix(config('api.version'))
             ->middleware([
                 'throttle:custom_limiter',
                 \App\Http\Middleware\JwtMiddleware::class

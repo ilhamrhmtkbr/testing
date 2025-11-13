@@ -619,7 +619,8 @@
         color: var(--link-color);
         font-size: var(--s);
         border-top: var(--border);
-        padding: 10dvh var(--m) 20dvh var(--m);
+        padding: 10dvh var(--m) 20dvh 341px;
+        justify-content: space-around;
     }
 
     /* Loading States */
@@ -1717,6 +1718,10 @@
         background-color: var(--bg-color);
         box-shadow: var(--box-shadow);
         border: var(--border);
+    }
+
+    footer {
+        padding-left: var(--m);
     }
 }
 

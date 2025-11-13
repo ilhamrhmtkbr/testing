@@ -59,7 +59,7 @@ export default function Authentication() {
     }
 
     return (
-        <main className={`bg-[url("${import.meta.env.VITE_APP_FRONTEND_USER_URL?.includes('ngrok') ? './' : './../'}bg-auth.jpg")] place-content-center bg-no-repeat bg-center bg-cover grid-cols-1 md:grid-cols-2`}>
+        <main className={`bg-[url('/bg-auth.jpg')] place-content-center bg-no-repeat bg-center bg-cover grid-cols-1 md:grid-cols-2`}>
             <div className={'bg-white/1 backdrop-blur-md border border-white/30 md:grid hidden items-end pl-l pr-l box-border ps-center radius-l bg-[rgba(0, 0, 0, 0.5)] w-[90%] h-[90dvh] text-white'}>
                 <div className={'mb-x'}>
                     <br/>

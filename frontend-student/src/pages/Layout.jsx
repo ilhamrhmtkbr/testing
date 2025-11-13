@@ -25,7 +25,7 @@ const Layout = () => {
         <>
             <header className={'header'}>
                 <a className={'header-logo'} href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL}>
-                    <img src={'./iamra-logo.svg'} className={'header-logo-img'} alt={import.meta.env.VITE_APP_NAME}/>
+                    <img src={'/iamra-logo.svg'} className={'header-logo-img'} alt={import.meta.env.VITE_APP_NAME}/>
                     <span>{import.meta.env.VITE_APP_NAME}</span>
                 </a>
 
@@ -127,9 +127,9 @@ const Layout = () => {
                     </div>
                 </aside>
             </main>
-            <footer className={`justify-around`}>
+            <footer>
                 <div className="grid-start">
-                    <img src={'./iamra-logo.svg'} className={'max-w-[31px] max-h-[31px]'} alt={import.meta.env.VITE_APP_NAME}/>
+                    <img src={'/iamra-logo.svg'} className={'max-w-[31px] max-h-[31px]'} alt={import.meta.env.VITE_APP_NAME}/>
                     <h1>iamra</h1>
                     <p>Senen, Jakarta Pusat</p>
                     <p>copyright &copy; <a className='text-primary text-hover-underline cursor-pointer'

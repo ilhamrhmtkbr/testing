@@ -88,7 +88,6 @@ umask 000
 su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan optimize:clear 2>/dev/null || true"
 sleep 2
 su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan optimize 2>/dev/null || true"
-su - ilhamrhmtkbr -s /bin/bash -c "cd /app && php artisan storage:link 2>/dev/null || true"
 
 su - ilhamrhmtkbr -s /bin/bash -c "cd /app && umask 000 && /app/rr serve -c /app/.rr.yaml" &
 RR_PID=$!
