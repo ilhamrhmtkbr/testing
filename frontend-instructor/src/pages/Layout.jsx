@@ -23,7 +23,7 @@ const Layout = () => {
 
     return (
         <>
-            <header className={'header'}>
+            <header className={'header prose'}>
                 <a className={'header-logo'} href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL}>
                     <img src={'/iamra-logo.svg'} className={'header-logo-img'} alt={import.meta.env.VITE_APP_NAME}/>
                     <span>{import.meta.env.VITE_APP_NAME}</span>
@@ -35,10 +35,10 @@ const Layout = () => {
 
                 <div className={'navigation'}>
                     <a href={import.meta.env.VITE_APP_FRONTEND_USER_URL + '/member/additional-info#top'}
-                       className={'hover-progress'}>{user?.full_name}</a>
+                       className={'hover-progress max-w-[111px] truncate'}>{user?.full_name}</a>
                 </div>
             </header>
-            <nav>
+            <nav className={'prose'}>
                 <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL} className={'hover-progress'}>
                     {t('homepage')}
                 </a>
@@ -48,7 +48,7 @@ const Layout = () => {
                     {t('forum')}
                 </a>
             </nav>
-            <main className={`has-sidebar ${isMinifySidebar ? 'active' : ''}`}>
+            <main className={`has-sidebar prose ${isMinifySidebar ? 'active' : ''}`}>
                 <section>
                     <BreadcrumbsComp/>
                     <Outlet/>
@@ -121,7 +121,7 @@ const Layout = () => {
                     </div>
                 </aside>
             </main>
-            <footer>
+            <footer className={'prose'}>
                 <div className="grid-start">
                     <img src={'/iamra-logo.svg'} className={'max-w-[31px] max-h-[31px]'} alt={import.meta.env.VITE_APP_NAME}/>
                     <h1>iamra</h1>

@@ -27,7 +27,7 @@ export default function Layout() {
 
     return (
         <>
-            <header className={'header'}>
+            <header className={'header prose'}>
                 <a className={'header-logo'} href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL}>
                     <img src={'/iamra-logo.svg'} className={'header-logo-img'} alt={import.meta.env.VITE_APP_NAME}/>
                     <span>{import.meta.env.VITE_APP_NAME}</span>
@@ -38,12 +38,12 @@ export default function Layout() {
                 <GetMenuComp/>
 
                 <div className={'navigation'}>
-                    <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL} className={'hover-progress'}>
+                    <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL} className={'hover-progress max-w-[111px] truncate'}>
                         {t('courses')}
                     </a>
                 </div>
             </header>
-            <nav>
+            <nav className={'prose'}>
                 <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL} className={'hover-progress'}>
                     {t('courses')}
                 </a>
@@ -58,7 +58,7 @@ export default function Layout() {
                 </a>
             </nav>
 
-            <main className={`has-sidebar ${isMinifySidebar ? 'active' : ''}`}>
+            <main className={`has-sidebar prose ${isMinifySidebar ? 'active' : ''}`}>
                 <section>
                     <Outlet/>
                 </section>
@@ -115,7 +115,7 @@ export default function Layout() {
                 </aside>
             </main>
 
-            <footer>
+            <footer className={'prose'}>
                 <div className="grid-start">
                     <img src={'/iamra-logo.svg'} className={'max-w-[31px] max-h-[31px]'} alt={import.meta.env.VITE_APP_NAME}/>
                     <h1>iamra</h1>

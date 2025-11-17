@@ -35,7 +35,7 @@ export default function Layout() {
 
     return (
         <>
-            <header className={'header'}>
+            <header className={'header prose'}>
                 <div className={'header-logo'}>
                     <img src={'/iamra-logo.svg'} className={'header-logo-img'} alt={import.meta.env.VITE_APP_NAME}/>
                     <span>{import.meta.env.VITE_APP_NAME}</span>
@@ -52,13 +52,13 @@ export default function Layout() {
                             user?.role === 'instructor' ?
                                 import.meta.env.VITE_APP_FRONTEND_INSTRUCTOR_URL :
                                 import.meta.env.VITE_APP_FRONTEND_USER_URL + '/member/additional-info#top'}
-                           className={'hover-progress'}>{user.full_name}</a> :
+                           className={'hover-progress max-w-[111px] truncate'}>{user.full_name}</a> :
                         <a href={import.meta.env.VITE_APP_FRONTEND_USER_URL + '/authentication#top'}
-                           className={'hover-progress'}>Login</a>
+                           className={'hover-progress max-w-[111px] truncate'}>Login</a>
                     }
                 </div>
             </header>
-            <nav>
+            <nav className={'prose'}>
                 <HashLink className={'hover-progress'} to="/#top">
                     {t('courses')}
                 </HashLink>
@@ -77,7 +77,7 @@ export default function Layout() {
                 </HashLink>
             </nav>
 
-            <main className={`has-sidebar ${isMinifySidebar ? 'active' : ''}`}>
+            <main className={`has-sidebar prose ${isMinifySidebar ? 'active' : ''}`}>
                 <Suspense fallback={<div className={'flex-aic-jcc w-full-dvw h-full-dvh'}>
                     <div className={'loading-spinner'}></div>
                 </div>}>
@@ -140,7 +140,7 @@ export default function Layout() {
                 </aside>
             </main>
 
-            <footer>
+            <footer className={'prose'}>
                 <div className="grid-start">
                     <img src={'/iamra-logo.svg'} className={'max-w-[31px] max-h-[31px]'} alt={import.meta.env.VITE_APP_NAME}/>
                     <h1>iamra</h1>

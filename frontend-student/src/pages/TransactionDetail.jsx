@@ -61,8 +61,10 @@ const TransactionDetail = () => {
 
             {transaction &&
                 <>
-                    <img className={'max-width-500 border-style-default radius-m object-fit-cover min-h-[275px] max-h-[275px]'}
-                         src={import.meta.env.VITE_APP_IMAGE_COURSE_URL + transaction.instructor_course?.image} alt={transaction.instructor_course?.title}
+                    <img
+                        className={'max-width-500 border-style-default radius-m object-fit-cover min-h-[275px] max-h-[275px]'}
+                        src={import.meta.env.VITE_APP_IMAGE_COURSE_URL + transaction.instructor_course?.image}
+                        alt={transaction.instructor_course?.title}
                     />
 
                     <div className={'table-box'}>
@@ -74,7 +76,8 @@ const TransactionDetail = () => {
                                 <div className={'data-key'}>Order Id</div>
                                 <div className={'data-value'}> : {transaction.order_id}</div>
                                 <div className={'data-key'}>Status</div>
-                                <div className={`data-value capitalize ${transaction.status === 'settlement' ? 'text-success' : 'text-warning'}`}> : {transaction.status}</div>
+                                <div
+                                    className={`data-value capitalize ${transaction.status === 'settlement' ? 'text-success' : 'text-warning'}`}> : {transaction.status}</div>
                                 <div className={'data-key'}>{t('price')}</div>
                                 <div className={'data-value'}> : {formatNumber(transaction.amount)}</div>
                                 <div className={'data-key'}>{t('created_at')}</div>
@@ -92,13 +95,15 @@ const TransactionDetail = () => {
                             </>
                         }
                     </div>}
-                    <div className={'card-wrapper replace-shadow-with-border'}>
-                        <small>{t('stud_transaction_detail_warning')}</small>
-                        <a href={'https://simulator.sandbox.midtrans.com/openapi/va/index'} target={'_blank'}
-                           className={'text-primary text-hover-underline'}>
-                            Get Free Pay Now!
-                        </a>
-                    </div>
+                    {transaction?.status !== 'settlement' &&
+                        <div className={'card-wrapper replace-shadow-with-border'}>
+                            <small>{t('stud_transaction_detail_warning')}</small>
+                            <a href={'https://simulator.sandbox.midtrans.com/openapi/va/index'} target={'_blank'}
+                               className={'text-primary text-hover-underline'}>
+                                Get Free Pay Now!
+                            </a>
+                        </div>
+                    }
                 </>
             }
         </>

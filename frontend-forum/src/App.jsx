@@ -137,7 +137,7 @@ const App = () => {
     };
 
     return (
-        <>
+        <div className={'prose'}>
             <nav className="chat-nav">
                 <a className="chat-nav-link text-2xl"
                    style={{textDecoration: 'none'}}
@@ -205,7 +205,7 @@ const App = () => {
                     <div className="chat-messages-send" onClick={handleSendMessage}>➤</div>
                 </footer>
             </main>
-        </>
+        </div>
     )
 }
 
