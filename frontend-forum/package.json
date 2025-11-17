@@ -10,7 +10,6 @@
     "preview": "node node_modules/vite/bin/vite.js preview"
   },
   "dependencies": {
-    "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.16",
     "axios": "^1.10.0",
     "i18next": "^25.2.1",

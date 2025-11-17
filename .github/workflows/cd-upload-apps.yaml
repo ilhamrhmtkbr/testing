@@ -377,9 +377,7 @@ jobs:
             redis_data:
             sockets:
             backend_api_instructor_course_images:
-              driver:local
             backend_api_user_images:
-              driver:local
 
           networks:
             app-network:
