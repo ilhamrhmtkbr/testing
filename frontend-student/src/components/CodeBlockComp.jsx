@@ -24,6 +24,7 @@ import dart from "highlight.js/lib/languages/dart";
 import rust from "highlight.js/lib/languages/rust";
 import dockerfile from "highlight.js/lib/languages/dockerfile";
 import "highlight.js/styles/atom-one-dark-reasonable.min.css";
+import useMediaQuery from "../hooks/useMediaQuery.js";
 
 const languages = {
     javascript,
@@ -54,15 +55,23 @@ const languages = {
 
 Object.entries(languages).forEach(([name, lang]) => hljs.registerLanguage(name, lang));
 
-const CodeBlockComp = ({ language, code }) => {
-    const highlightedCode = hljs.highlight(code, { language }).value;
+const CodeBlockComp = ({language, code}) => {
+    const highlightedCode = hljs.highlight(code, {language}).value;
+    const isMobile = useMediaQuery('(width < 800px)')
+
     return (
-        <div className={'radius-m overflow-auto pb-[25px] max-[800px]:w-[88dvw] w-[calc(100dvw_-_325px)] bg-[#0e171f]'}>
+        <div className={'radius-m'}
+             style={{
+                 overflow: 'auto',
+                 paddingBottom: 25,
+                 maxWidth: isMobile ? '88dvw' : 'calc(100dvw - 373px)',
+                 backgroundColor: '#0e171f'
+             }}>
             <p className={'capitalize p-m font-size-s font-medium'} style={{color: 'whitesmoke'}}>{language}</p>
             <pre>
                 <code
                     className={`hljs language-${language}`}
-                    dangerouslySetInnerHTML={{ __html: highlightedCode }}
+                    dangerouslySetInnerHTML={{__html: highlightedCode}}
                 />
             </pre>
         </div>

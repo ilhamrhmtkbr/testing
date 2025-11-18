@@ -7,7 +7,9 @@ const BackComp = memo(() => {
     return (
         <div onClick={() => {
             nav(-1)
-        }} className={'button btn-primary w-max-content rounded min-w-[25px]'}>
+        }} className={'button btn-primary w-max-content rounded'}
+             style={{minWidth: 25}}
+        >
             ⟵
         </div>
     )

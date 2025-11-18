@@ -129,7 +129,7 @@ export default function Answers() {
                     <br id={'form'}/>
                     <hr className={'padding-top-ideal-distance-to-header'}/>
 
-                    <form className={'card-wrapper max-width-700 margin-top-l'}
+                    <form className={'card-wrapper max-width-700 mt-l'}
                           onSubmit={handleSubmit(onSubmit)}>
                         {question && <p className={'capitalize'}>{question}</p>}
                         <div className="max-width-500">

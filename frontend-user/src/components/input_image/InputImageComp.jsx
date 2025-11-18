@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import {memo, useCallback, useEffect, useRef, useState} from "react";
 import ReactCrop, {
     centerCrop,
     convertToPixelCrop,
@@ -11,7 +11,7 @@ import ModalComp from "../ModalComp.jsx"; // Consider renaming this to something
 const ASPECT_RATIO = 1;
 const MIN_DIMENSION = 77;
 
-const InputImageComp = (props) => {
+const InputImageComp = memo((props) => {
     const imgRef = useRef(null);
     const inputRef = useRef(null);
     const previewCanvasRef = useRef(null);
@@ -21,6 +21,12 @@ const InputImageComp = (props) => {
     const [croppedImage, setCroppedImage] = useState(null);
     const [crop, setCrop] = useState();
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        if (props.error) {
+            setError(props.error)
+        }
+    }, [props.error]);
 
     // Menggunakan useCallback untuk mengoptimalkan performa
     const onSelectFile = useCallback((e) => {
@@ -92,31 +98,29 @@ const InputImageComp = (props) => {
         handleModalClose();
     }, [crop, props.handleInputOnChange, handleModalClose]);
 
-    useEffect(() => {
-        if (props.error) {
-            setError(props.error)
-        }
-    }, [props.error]);
-
     return (
         <div className={'max-width-500'}>
-            <label htmlFor={props.name} className={'block'}>{props.name}</label>
-
             {/* Tampilkan gambar yang sudah di-crop atau gambar lama */}
             {(croppedImage || props.oldImage) &&
-                <img className={'picture-default rounded mb-4'}
+                <img className={'max-width-500 border-style-default radius-m object-fit-cover'}
+                     style={{
+                         minHeight: 111,
+                         minWidth: 111
+                     }}
                      src={croppedImage || props.oldImage}
                      alt="Preview"/>}
 
-            <input
-                ref={inputRef}
-                type="file"
-                accept="image/*"
-                onChange={onSelectFile}
-                name={props.name}
-                id={props.name}
-            />
-
+            <div>
+                <label htmlFor="image">Image</label>
+                <input
+                    ref={inputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={onSelectFile}
+                    name={props.name}
+                    id={props.name}
+                />
+            </div>
             {error && <p className="text-danger">{error}</p>}
 
             {/* Modal untuk crop gambar */}
@@ -128,7 +132,7 @@ const InputImageComp = (props) => {
                             {props.oldImage &&
                                 <div className="card-wrapper replace-shadow-with-border">
                                     <h3 className="text-center">Old Image</h3>
-                                    <img className={'object-fit-cover max-w-[600px] w-full'}
+                                    <img className={'object-fit-cover w-full max-width-600'}
                                          src={props.oldImage}
                                          alt="Old"/>
                                 </div>
@@ -138,13 +142,11 @@ const InputImageComp = (props) => {
                                 <ReactCrop
                                     crop={crop}
                                     onChange={(_, percentCrop) => setCrop(percentCrop)}
-                                    circularCrop
                                     keepSelection
-                                    aspect={ASPECT_RATIO}
                                     minWidth={MIN_DIMENSION}
                                 >
                                     <img
-                                        className={'max-w-[600px] w-full'}
+                                        className={'max-width-600 w-full'}
                                         ref={imgRef}
                                         src={imgSrc}
                                         alt="Upload"
@@ -165,17 +167,15 @@ const InputImageComp = (props) => {
             {crop && (
                 <canvas
                     ref={previewCanvasRef}
+                    className={'border-style-default display-none object-fit-contain'}
                     style={{
-                        display: "none",
-                        border: "1px solid black",
-                        objectFit: "contain",
-                        width: 212,
                         height: 212,
+                        width: 212
                     }}
                 />
             )}
         </div>
     );
-};
+});
 
 export default InputImageComp;

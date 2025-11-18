@@ -78,7 +78,10 @@ export default function Lessons() {
 
             {loading ? <div className={'loading-spinner'}></div> :
                 lessons?.total > 0 ? lessons?.data.map((value, index) => (
-                    <article className={'card-wrapper grid-rows-[1fr_max-content_max-content]'}
+                    <article className={'card-wrapper'}
+                             style={{
+                                 gridTemplateRows: '1fr max-content max-content'
+                             }}
                              key={index}>
                         <p className={'card-wrapper-title text-break'}>{value.title}</p>
                         <p className={'text-break'}>{value.description}</p>

@@ -115,7 +115,7 @@ export default function Socials() {
                 <h2>{t(formMode)} Social</h2>
                 <div className="max-width-500">
                     <label htmlFor="url_link">{t('url_link')}</label>
-                    <small className={'max-width-500 block'}>{t('inst_socials_explanation_1')}</small>
+                    <small className={'max-width-500 display-block'}>{t('inst_socials_explanation_1')}</small>
                     <input type="text" id="url_link" {...register('url_link')}/>
                     <ErrorInputMessageComp errorsYup={errorsYup} errorsFromBackend={errorsFromBackend} field={'url_link'}/>
                 </div>

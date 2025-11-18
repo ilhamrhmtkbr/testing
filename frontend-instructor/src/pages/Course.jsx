@@ -104,7 +104,8 @@ export default function Course() {
 
             {loading ? <div className={'loading-spinner'}></div> :
                 <>
-                    <img className={'max-width-500 radius-m border-style-default max-h-[275px] object-fit-cover'}
+                    <img className={'max-width-500 radius-m border-style-default object-fit-cover'}
+                         style={{maxHeight: 275}}
                          src={import.meta.env.VITE_APP_IMAGE_COURSE_URL + getValues('image')}
                          alt={'ilhamrhmtkbr'}/>
                     <div>

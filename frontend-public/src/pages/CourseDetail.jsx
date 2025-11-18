@@ -120,7 +120,11 @@ export default function CourseDetail() {
                     <div className={'max-width-1000 card-wrapper'}>
                         <BackComp/>
                         <img
-                            className={'max-width-500 border-style-default radius-m object-fit-cover min-h-[275] min-w-[275]'}
+                            className={'max-width-500 border-style-default radius-m object-fit-cover'}
+                            style={{
+                                minHeight: 275,
+                                minWidth: 275
+                            }}
                             src={import.meta.env.VITE_APP_IMAGE_COURSE_URL + courseDetail?.course?.image}
                             alt={courseDetail?.course?.title}
                         />
@@ -128,7 +132,8 @@ export default function CourseDetail() {
                         {loadingRequest ?
                             <div className={'loading-spinner'}></div> :
                             <div onClick={() => handleLike(courseDetail?.course?.id)}
-                                 className={'flex-aic-jcc cursor-pointer w-[17px]'}>
+                                 className={'flex-aic-jcc cursor-pointer'}
+                                 style={{width: 17}}>
                                 <SvgComp rule={`svg-m svg-fill-blue ${courseDetail?.isLikes ? 'fill-blue' : ''}`}
                                          file={'sprite'}
                                          icon={'like'}/>

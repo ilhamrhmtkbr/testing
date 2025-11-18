@@ -11,10 +11,16 @@ const SubmitComp = memo((props) => {
 
     return (
         props.isLoading ?
-            <div className={`button bg-primary py-[5px] px-[3px] min-h-[37px] ${isCenter ? 'ps-center' : ''}`}>
-                <div className={'loading-spinner w-4 h-4'}
+            <div className={`button bg-primary ${isCenter ? 'ps-center' : ''}`}
+                style={{
+                    padding: '3px 5px',
+                    minHeight: '37px'
+                }}>
+                <div className={'loading-spinner'}
                      style={{
                          borderTopColor: 'white',
+                         width: '1rem',
+                         height: '1rem'
                      }}></div>
             </div>
             :

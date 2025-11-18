@@ -99,7 +99,7 @@ const Coupons = () => {
             <div className={'h-full-dvh'}>
                 {loading ? <div className={'loading-spinner'}></div> :
                     courseCoupons?.meta?.total > 0 ?
-                        <div className={'table-box max-w-[88dvw]'}>
+                        <div className={'table-box'} style={{maxWidth: '88dvw'}}>
                             <table>
                                 <thead>
                                 <tr>
@@ -134,31 +134,31 @@ const Coupons = () => {
             <br id={'form'}/>
             <hr className={"margin-top-ideal-distance-to-header"}/>
 
-            <form className={'card-wrapper max-width-700 margin-top-l'}
+            <form className={'card-wrapper max-width-700 mt-l'}
                   onSubmit={handleSubmit(onSubmit)}>
                 <h2 className={'capitalize'}>{t(formMode)} {t('coupon')}</h2>
                 {formMode === 'add' ?
                     <div className="max-width-500">
                         <label htmlFor="instructor_course_id">Id {t('course')}</label>
-                        <small className={'block'}>{t('inst_coupons_form_id')}</small>
+                        <small className={'display-block'}>{t('inst_coupons_form_id')}</small>
                         <input type="text" id="instructor_course_id" {...register("instructor_course_id")}/>
                         <ErrorInputMessageComp errorsYup={errorsYup} errorsFromBackend={errorsFromBackend} field={"instructor_course_id"} />
                     </div> : null}
                 <div className="max-width-500">
                     <label htmlFor="discount">{t('discount')}</label>
-                    <small className={'block'}>{t('inst_coupons_form_discount')}</small>
+                    <small className={'display-block'}>{t('inst_coupons_form_discount')}</small>
                     <input type="number" id="discount" {...register("discount")}/>
                     <ErrorInputMessageComp errorsYup={errorsYup} errorsFromBackend={errorsFromBackend} field={"discount"} />
                 </div>
                 <div className="max-width-500">
                     <label htmlFor="max_redemptions">{t('max_redemptions')}</label>
-                    <small className={'block'}>{t('inst_coupons_form_max_redemptions')}</small>
+                    <small className={'display-block'}>{t('inst_coupons_form_max_redemptions')}</small>
                     <input type="number" id="max_redemptions" {...register("max_redemptions")}/>
                     <ErrorInputMessageComp errorsYup={errorsYup} errorsFromBackend={errorsFromBackend} field={"max_redemptions"} />
                 </div>
                 <div className="max-width-500">
                     <label htmlFor="expiry_date">{t('expiry_date')}</label>
-                    <small className={'block'}>{t('inst_coupons_form_expiry_date')}</small>
+                    <small className={'display-block'}>{t('inst_coupons_form_expiry_date')}</small>
                     <input type="date" id="expiry_date" min={new Date().toISOString().split('T')[0]}
                         {...register("expiry_date", {valueAsDate: true})}/>
                     <ErrorInputMessageComp errorsYup={errorsYup} errorsFromBackend={errorsFromBackend} field={"expiry_date"} />

@@ -4,7 +4,8 @@ const CourseDetailSkeleton = () => {
     const {t} = useTranslation()
 
     return (
-        <div className={'max-width-1000 card-wrapper min-w-70dvw'}>
+        <div className={'max-width-1000 card-wrapper'}
+             style={{minWidth: '70dvw'}}>
             <img className={'max-width-500 card-wrapper replace-shadow-with-border loading-pulse'}
                  src={'./courses-ilhamrhmtkbr.webp'}
                  alt={'ilhamrhmtkbr'}/>
@@ -41,15 +42,18 @@ const CourseDetailSkeleton = () => {
             <br/>
             <hr/>
             <h4>Socials</h4>
-            <div className={'loading-pulse radius-s w-full h-[31px]'}></div>
+            <div className={'loading-pulse radius-s w-full'}
+                 style={{height: 31}}></div>
             <hr/>
             <div>
                 <h3 className={'capitalize radius-s'}>{t('notes')}</h3>
-                <p className={'loading-pulse h-[77px]'}></p>
+                <p className={'loading-pulse'}
+                   style={{height: 77}}>< /p>
             </div>
             <div>
                 <h3 className={'capitalize radius-s'}>{t('requirements')}</h3>
-                <p className={'loading-pulse h-[77px]'}></p>
+                <p className={'loading-pulse'}
+                   style={{height: 77}}></p>
             </div>
         </div>
     )

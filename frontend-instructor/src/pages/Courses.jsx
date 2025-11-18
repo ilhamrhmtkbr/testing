@@ -131,7 +131,7 @@ export default function Courses() {
             <br id={'insert'}/>
             <hr className={"margin-top-ideal-distance-to-header"}/>
 
-            <form className={'card-wrapper max-width-700 margin-top-l'}
+            <form className={'card-wrapper max-width-700 mt-l'}
                   onSubmit={handleSubmit(data => handleCourseStore(data))}
                   key={key}
             >

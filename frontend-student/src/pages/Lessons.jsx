@@ -64,7 +64,7 @@ export default function Lessons() {
             {loading ? <div className={'loading-spinner'}></div> :
                 lessons?.total > 0 ?
                     <>
-                        <div className={'grid gap-[42]'}>
+                        <div className={'grid'} style={{gap: 42}}>
                             {lessons?.data.map((value, index) => (
                                 <article key={index}>
                                     <h3>{value.title}</h3>

@@ -119,7 +119,7 @@ export default function Sections() {
                 <ToastComp msg={success || errorsFromBackend?.message} type={success ? 'success' : 'danger'}
                            handleOnClose={() => handleAfterClose(success)}/>}
 
-            <div className={'grid-start min-h-[100dvh]'}>
+            <div className={'grid-start'} style={{minHeight: '100dvh'}}>
                 <div>
                     <h2 className={'text-break'}>{state?.courseTitle}</h2>
                     <p className={'text-break'}>{state?.courseDesc}</p>
@@ -135,7 +135,8 @@ export default function Sections() {
                         <>
                             <div className={'card-layout'}>
                                 {sections?.data?.map((value, index) => (
-                                    <div key={index} className={'card-wrapper replace-shadow-with-border grid-rows-[1fr max-content max-content]'}>
+                                    <div key={index} className={'card-wrapper replace-shadow-with-border'}
+                                         style={{gridTemplateRows: '1fr max-content max-content'}}>
                                         <div className={'table-box'}>
                                             <div className={'data-content'}>
                                                 <div className={'data-key'}>{t('order')}</div>
@@ -181,7 +182,8 @@ export default function Sections() {
                 <div className="max-width-500">
                     <label htmlFor="order_in_course">{t('order')}</label>
                     <input type="number" id="order_in_course" {...register("order_in_course")}/>
-                    <ErrorInputMessageComp errorsYup={errorsYup} errorsFromBackend={errorsFromBackend} field={"order_in_course"}/>
+                    <ErrorInputMessageComp errorsYup={errorsYup} errorsFromBackend={errorsFromBackend}
+                                           field={"order_in_course"}/>
                 </div>
 
                 <div className="max-width-500">

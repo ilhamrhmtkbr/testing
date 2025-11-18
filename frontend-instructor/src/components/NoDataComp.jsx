@@ -1,7 +1,11 @@
 const NoDataComp = props => {
     return (
-        <div className={'ps-center mt-[10vh] mb-[10vh] grid place-items-center gap-4'}>
-            <svg className={'max-w-[63px] max-h-[63px]'}
+        <div className={'grid-custom'}
+            style={{
+                marginTop: '10dvh',
+                marginBottom: '10dvh'
+            }}>
+            <svg style={{maxWidth: '77px', maxHeight: '77px'}}
                  fill={'var(--link-color)'} xmlns="http://www.w3.org/2000/svg" shapeRendering="geometricPrecision"
                  imageRendering="optimizeQuality" fillRule="evenodd" viewBox="0 0 840 1002">
                 <ellipse cx="420" cy="115" rx="420" ry="115"/>

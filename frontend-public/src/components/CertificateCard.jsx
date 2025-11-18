@@ -2,8 +2,15 @@ import {memo} from "react";
 
 const CertificateCard = memo((props) => {
     return (
-        <div className={'ps-center card-wrapper max-width-1000 table-box max-w-[88dvw] py-[50px]'}>
-            <div className={'grid-custom border-style-default border-radius-m p-[20px]'}>
+        <div className={'ps-center card-wrapper table-box'}
+             style={{
+                 padding: '50px 0',
+                 width: '88dvw'
+             }}>
+            <div className={'grid-custom border-style-default radius-m'}
+                 style={{
+                     padding: 20
+                 }}>
                 <p className={'font-size-x font-bold'}>Certificate of Completion</p>
                 <p>This is to certify that</p>
                 <p className={'font-size-l font-medium'}>{props.name}</p>

@@ -2,11 +2,22 @@ import {memo} from "react";
 
 const CourseCardComp = memo(({children, title, desc, image}) => {
     return (
-        <article className={'border-style-default radius-m grid grid-rows-[212px_1fr] max-w-[500px]'}>
+        <article className={'border-style-default radius-m max-width-500'}
+                 style={{
+                     display: 'grid',
+                     gridTemplateRows: '212px 1fr'
+                 }}>
             <img src={import.meta.env.VITE_APP_IMAGE_COURSE_URL + image}
-                 className={'radius-s object-fit-cover w-full h-[-webkit-fill-available]'}
+                 className={'radius-s object-fit-cover w-full'}
+                 style={{
+                     height: '-webkit-fit-content'
+                 }}
                  alt={title}/>
-            <div className={'box-border p-m grid grid-rows-[1fr_max-content_max-content]'}>
+            <div className={'box-border p-m'}
+                 style={{
+                     display: 'grid',
+                     gridTemplateRows: '1fr max-content max-content'
+                 }}>
                 <p className={'font-medium font-size-l'}>{title}</p>
                 <p className={'font-light'}>{desc.length > 111 ? desc.slice(0, 111) + '…' : desc}</p>
                 {children}

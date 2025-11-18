@@ -66,14 +66,14 @@ export default function Account() {
                     <h3>Account</h3>
                     <div className="max-width-500">
                         <label htmlFor="account_id">{t('account')}</label>
-                        <small className={'max-width-500 block'}>{t('inst_account_explanation_1')}</small>
+                        <small className={'max-width-500 display-block'}>{t('inst_account_explanation_1')}</small>
                         <input type="number" id="account_id" {...register('account_id')}/>
                         <ErrorInputMessageComp errorsYup={errorsYup} errorsFromBackend={errorsFromBackend}
                                                field={'account_id'}/>
                     </div>
                     <div className="max-width-500">
                         <label htmlFor="bank_name">{t('bank')}</label>
-                        <small className={'max-width-500 block'}> {t('inst_account_explanation_2')}</small>
+                        <small className={'max-width-500 display-block'}> {t('inst_account_explanation_2')}</small>
                         <input type="text" id="bank_name" {...register('bank_name')} readOnly={true}
                                onClick={() => setShowBank(true)}/>
                         <ErrorInputMessageComp errorsYup={errorsYup} errorsFromBackend={errorsFromBackend}
@@ -88,7 +88,12 @@ export default function Account() {
                                            onChange={e => searchData(e.target.value, dataBanks, result => setBanks(result))}/>
                                 </div>
 
-                                <div className={'max-width-500 max-h-[200px] overflow-y-auto overflow-x-hidden'}>
+                                <div className={'max-width-500'}
+                                    style={{
+                                        maxHeight: 200,
+                                        overflowY: 'auto',
+                                        overflowX: 'hidden'
+                                    }}>
                                     {banks && Object.entries(banks).map(([code, name], index) => (
                                         <div key={index}
                                              className={'button btn-primary mb-m mr-m '}
@@ -107,7 +112,7 @@ export default function Account() {
                         }/>}
                     <div className="max-width-500">
                         <label htmlFor="alias_name">{t('alias_name')}</label>
-                        <small className={'max-width-500 block'}>{t('inst_account_explanation_3')}</small>
+                        <small className={'max-width-500 display-block'}>{t('inst_account_explanation_3')}</small>
                         <input type="text" id="alias_name" {...register('alias_name')}/>
                         <ErrorInputMessageComp errorsYup={errorsYup} errorsFromBackend={errorsFromBackend}
                                                field={'alias_name'}/>

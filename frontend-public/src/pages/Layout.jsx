@@ -35,7 +35,7 @@ export default function Layout() {
 
     return (
         <>
-            <header className={'header prose'}>
+            <header className={'header'}>
                 <div className={'header-logo'}>
                     <img src={'/iamra-logo.svg'} className={'header-logo-img'} alt={import.meta.env.VITE_APP_NAME}/>
                     <span>{import.meta.env.VITE_APP_NAME}</span>
@@ -58,7 +58,7 @@ export default function Layout() {
                     }
                 </div>
             </header>
-            <nav className={'prose'}>
+            <nav>
                 <HashLink className={'hover-progress'} to="/#top">
                     {t('courses')}
                 </HashLink>
@@ -77,7 +77,7 @@ export default function Layout() {
                 </HashLink>
             </nav>
 
-            <main className={`has-sidebar prose ${isMinifySidebar ? 'active' : ''}`}>
+            <main className={`has-sidebar ${isMinifySidebar ? 'active' : ''}`}>
                 <Suspense fallback={<div className={'flex-aic-jcc w-full-dvw h-full-dvh'}>
                     <div className={'loading-spinner'}></div>
                 </div>}>
@@ -140,9 +140,14 @@ export default function Layout() {
                 </aside>
             </main>
 
-            <footer className={'prose'}>
+            <footer>
                 <div className="grid-start">
-                    <img src={'/iamra-logo.svg'} className={'max-w-[31px] max-h-[31px]'} alt={import.meta.env.VITE_APP_NAME}/>
+                    <img src={'/iamra-logo.svg'}
+                         style={{
+                             maxWidth: 31,
+                             maxHeight: 31
+                         }}
+                         alt={import.meta.env.VITE_APP_NAME}/>
                     <h1>iamra</h1>
                     <p>Senen, Jakarta Pusat</p>
                     <p>copyright &copy; <a className='text-primary text-hover-underline cursor-pointer'
@@ -151,7 +156,7 @@ export default function Layout() {
                 </div>
 
                 <div className="grid-start">
-                    <h2 className='font-medium margin-bottom-s'>My Contact</h2>
+                    <h2 className='font-mb-s'>My Contact</h2>
                     <a className='text-hover-underline' target='_blank'
                        href={import.meta.env.VITE_LINK_GITHUB}>Github</a>
                     <a className='text-hover-underline' target='_blank' href={import.meta.env.VITE_LINK_EMAIL}>Email</a>
@@ -162,7 +167,7 @@ export default function Layout() {
                 </div>
 
                 <div className="grid-start">
-                    <h2 className='font-medium margin-bottom-s'>Feature</h2>
+                    <h2 className='font-mb-s'>Feature</h2>
                     <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL + '/certificates#top'}
                        className={'text-hover-underline capitalize'}>
                         {t('certificate_verify')}
@@ -175,15 +180,17 @@ export default function Layout() {
                         <div>Lang:</div>
                         <div className={'flex-aic-jcs gap-s'}>
                             <div
-                                className={`text-hover-underline cursor-pointer px-[3px] ${lang === 'id' ? 'bg-primary radius-s' : ''}`}
+                                className={`text-hover-underline cursor-pointer ${lang === 'id' ? 'bg-primary radius-s' : ''}`}
                                 style={{
+                                    padding: '0 3px',
                                     color: lang === 'id' ? 'white' : 'var(--text-color)'
                                 }}
                                 onClick={() => handleChangeLang('id')}>id
                             </div>
                             <div
-                                className={`text-hover-underline cursor-pointer px-[3px] ${lang === 'en' ? 'bg-primary radius-s' : ''}`}
+                                className={`text-hover-underline cursor-pointer ${lang === 'en' ? 'bg-primary radius-s' : ''}`}
                                 style={{
+                                    padding: '0 3px',
                                     color: lang === 'en' ? 'white' : 'var(--text-color)'
                                 }}
                                 onClick={() => handleChangeLang('en')}>en

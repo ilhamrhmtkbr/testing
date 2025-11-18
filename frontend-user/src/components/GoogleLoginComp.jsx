@@ -7,7 +7,7 @@ const GoogleLoginComp = ({ handleInputOnChange }) => {
     useEffect(() => { }, [])
 
     return (
-        <div className={'place-items-center'}>
+        <div style={{placeItems: 'center'}}>
             <GoogleLogin
                 onSuccess={(res) => handleInputOnChange(res)}
                 onError={() => {

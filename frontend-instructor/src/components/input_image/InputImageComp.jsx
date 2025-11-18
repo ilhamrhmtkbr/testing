@@ -102,7 +102,11 @@ const InputImageComp = memo((props) => {
         <div className={'max-width-500'}>
             {/* Tampilkan gambar yang sudah di-crop atau gambar lama */}
             {(croppedImage || props.oldImage) &&
-                <img className={'max-width-500 border-style-default border-radius-m object-fit-cover max-h-[275px]'}
+                <img className={'max-width-500 border-style-default radius-m object-fit-cover'}
+                     style={{
+                         minHeight: 111,
+                         minWidth: 111
+                     }}
                      src={croppedImage || props.oldImage}
                      alt="Preview"/>}
 
@@ -128,7 +132,7 @@ const InputImageComp = memo((props) => {
                             {props.oldImage &&
                                 <div className="card-wrapper replace-shadow-with-border">
                                     <h3 className="text-center">Old Image</h3>
-                                    <img className={'object-fit-cover w-full max-w-[600px]'}
+                                    <img className={'object-fit-cover w-full max-width-600'}
                                          src={props.oldImage}
                                          alt="Old"/>
                                 </div>
@@ -142,7 +146,7 @@ const InputImageComp = memo((props) => {
                                     minWidth={MIN_DIMENSION}
                                 >
                                     <img
-                                        className={'max-w-600 w-full'}
+                                        className={'max-width-600 w-full'}
                                         ref={imgRef}
                                         src={imgSrc}
                                         alt="Upload"
@@ -163,7 +167,11 @@ const InputImageComp = memo((props) => {
             {crop && (
                 <canvas
                     ref={previewCanvasRef}
-                    className={'hidden border border-solid object-contain w-[212px] h-[212px]'}
+                    className={'border-style-default display-none object-fit-contain'}
+                    style={{
+                        height: 212,
+                        width: 212
+                    }}
                 />
             )}
         </div>

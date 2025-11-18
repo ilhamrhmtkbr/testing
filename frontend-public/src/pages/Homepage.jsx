@@ -1,109 +1,193 @@
-import CourseCardComp from "../components/CourseCardComp.jsx";
 import {useTranslation} from "react-i18next";
+import './Homepage.css';
 import SvgComp from "../components/SvgComp.jsx";
-import {useEffect} from "react";
-import PaginationComp from "../components/PaginationComp.jsx";
-import {useCustomNavigate} from "../utils/Helper.js";
-import NoDataComp from "../components/NoDataComp.jsx";
-import CourseCardSkeletonComp from "../components/CourseCardSkeletonComp.jsx";
-import usePublic from "../hooks/usePublic.js";
+import {useState} from "react";
+import {HashLink} from "react-router-hash-link";
+import Typewriter from "../components/Typewriter.jsx";
 
 export default function Homepage() {
     const {t} = useTranslation();
-    const {
-        courses,
-        page, setPage,
-        sort, setSort,
-        level, setLevel,
-        status, setStatus,
-        keyword, setKeyword,
-        loading,
-        fetchCourses, searchCourses
-    } = usePublic();
+    const [isBannerHide, setBannerHide] = useState(false);
 
-    useEffect(() => {
-        fetchCourses()
-    }, [page, sort, level, status]);
+    const [typeRole, setTypeRole] = useState('student');
 
-    const handleSearch = () => {
-        (async () => {
-            if (keyword.trim() !== '') {
-                await searchCourses()
-            } else {
-                await fetchCourses()
-            }
-        })()
-    };
+    const programming = ['html', 'css', 'javascript', 'laravel', 'mysql', 'postgresql', 'php', 'restapi', 'react', 'github', 'svg']
+    const programming2 = ['expressjs', 'mongodb', 'firebase', 'vuejs', 'ajax', 'git', 'cpp', 'python', 'sql-server', 'docker']
 
-    const navigate = useCustomNavigate();
-
-    const handleSeeDetail = (id) => {
-        navigate('/course#top', {id});
-    }
     return (
         <>
-            <div className={'card-wrapper replace-shadow-with-border mb-x'}>
-                <p className={'font-medium'}>Filter</p>
-                <div className={'gap-m grid max-[800px]:grid-cols-[1fr] grid-cols-[2fr_1fr]'}>
-                    <div className={'max-width-700 ps-center flex-aic-jcs flex-nowrap gap-m'}>
-                        <input list="search" type="search" placeholder="..." name="search"
-                               onChange={e => setKeyword(e.target.value)}/>
-                        <datalist id="search">
-                            <option value="PHP"/>
-                            <option value="Docker"/>
-                            <option value="C++"/>
-                            <option value="SQL"/>
-                            <option value="Python"/>
-                        </datalist>
-                        <div className={'cursor-pointer'} onClick={handleSearch}>
-                            <SvgComp rule={'svg-m fill-text svg-fill-blue'} file={'sprite'} icon={'search'}/>
-                        </div>
+            {!isBannerHide &&
+                <div className={'bg-trans-primary flex-ais-jcc gap-m radius-l p-x'}>
+                    <div className={'font-medium font-size-x text-center'}>
+                        <p>{t('about_download_the_mobile_version_of_the_android_application')} </p>
+                        <a href={'http://ilhamrhmtkbr.github.io/iamra-course-apk-download/'}
+                           className={'text-primary capitalize cursor-pointer text-hover-underline'}>{t('now')}</a>
                     </div>
-                    <div className={'gap-m grid grid-cols-3'}>
-                        <select className={'max-width-300'} value={level} onChange={e => {
-                            setPage(1);
-                            setLevel(e.target.value)
-                        }}>
-                            <option value="" disabled>Level</option>
-                            <option value={'junior'}>Junior</option>
-                            <option value={'middle'}>Middle</option>
-                            <option value={'senior'}>Senior</option>
-                            <option value={'all'}>All</option>
-                        </select>
-                        <select className={'max-width-300'} value={status} onChange={e => {
-                            setPage(1);
-                            setStatus(e.target.value);
-                        }}>
-                            <option value="" disabled>Status</option>
-                            <option value={'paid'}>Paid</option>
-                            <option value={'free'}>Free</option>
-                            <option value={'all'}>All</option>
-                        </select>
-                        <select className={'max-width-300'} value={sort} onChange={e => {
-                            setPage(1);
-                            setSort(e.target.value);
-                        }}>
-                            <option value="" disabled>Sort</option>
-                            <option value={'old'}>Old</option>
-                            <option value={'new'}>New</option>
-                        </select>
+                    <div className={'badge-button-close'} onClick={() => setBannerHide(true)}>
+                        <SvgComp file={'sprite'} icon={'close'}/>
+                    </div>
+                </div>}
+
+            <div className={'grid-start'}>
+                <img src={'./bg-about.jpg'}
+                     className={'object-fit-cover radius-l'}
+                     alt={'ilhamrhmtkbr'}
+                     style={{minHeight: 325, maxHeight: 325, width: '100%'}}
+                />
+                <div className={'grid-start'}>
+                    <div>
+                        <h1 className={'font-medium font-size-x flex-aic-jcs gap-s'}>
+                            <span>{t('welcome')}, </span>
+                            <Typewriter data={[t('instructor'), t('student'), t('visitor')]}/>
+                        </h1>
+                        <h3>{t("about_great_subtitle")}</h3>
+                        <p>{t("about_great_desc")}</p>
+                    </div>
+                    <HashLink className={'button btn-primary ps-center mt-m'}
+                              smooth to={'#info'}>
+                        <p>{t("about_great_button")}</p>
+                        <SvgComp rule={'svg-s fill-blue margin-left-s'} file={'sprite'} icon={'mouse'}/>
+                    </HashLink>
+                </div>
+            </div>
+
+            <div className='about__anm__section'>
+                <div className="about__anm__container">
+                    <div className="about__anm__box">
+                        {programming && programming.map((value, i) => (
+                            <div className="about__anm__pack" key={i}>
+                                <SvgComp rule='about__anm__pack__svg' path='svg' file='programming' icon={value}/>
+                            </div>
+                        ))}
+                        {programming && programming.map((value, i) => (
+                            <div className="about__anm__pack" key={i}>
+                                <SvgComp rule='about__anm__pack__svg' path='svg' file='programming' icon={value}/>
+                            </div>
+                        ))}
+                    </div>
+                    <br/>
+                    <div className="about__anm__box">
+                        {programming2 && programming2.map((value, i) => (
+                            <div className="about__anm__pack" key={i}>
+                                <SvgComp rule='about__anm__pack__svg' path='svg' file='programming' icon={value}/>
+                            </div>
+                        ))}
+                        {programming2 && programming2.map((value, i) => (
+                            <div className="about__anm__pack" key={i}>
+                                <SvgComp rule='about__anm__pack__svg' path='svg' file='programming' icon={value}/>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
 
-            {loading ? <CourseCardSkeletonComp/> :
-                <div className={'card-layout'}>
-                    {courses?.data?.length > 0 ? courses?.data?.map((value, index) => (
-                        <CourseCardComp key={index} title={value.title} instructor={value.instructor} image={value.image} editor={value.editor} price={value.price}>
-                            <div className={'card-wrapper-actions'}>
-                                <div className={'text-primary'}
-                                     onClick={() => handleSeeDetail(value.id)}>{t('detail')}</div>
-                            </div>
-                        </CourseCardComp>
-                    )) : <NoDataComp message={t('data_not_found')}/>}
-                </div>}
+            <div className={'padding-top-ideal-distance-to-header'} id={'info'}>
+                <h2 className={'section-title'}>Info</h2>
+                <div className={'flex-aic-jcc gap-m text-link'}>
+                    <div
+                        className={`cursor-pointer text-hover-underline ${typeRole === 'student' ? 'text-primary' : ''}`}
+                        onClick={() => setTypeRole('student')}>{t('student')}</div>
+                    <div>|</div>
+                    <div
+                        className={`cursor-pointer text-hover-underline ${typeRole === 'instructor' ? 'text-primary' : ''}`}
+                        onClick={() => setTypeRole('instructor')}>{t('instructor')}</div>
+                </div>
+                {typeRole === 'student' ?
+                    <div className="max-width-700 ps-center timeline mt-x">
+                        {[...Array(5)].map((_, i) => (
+                            <React.Fragment key={i}>
+                                <div className="timeline-item">
+                                    <div className="timeline-key active">{i + 1}</div>
+                                    <div className="timeline-content">
+                                        <h3>{t(`about_info_student_${i + 1}_title`)}</h3>
+                                        <p>{t(`about_info_student_${i + 1}_desc`)}</p>
+                                    </div>
+                                </div>
 
-            {!loading && <PaginationComp data={courses.meta?.links} onPageChange={page => setPage(page)}/>}
+                                <div className="timeline-divider"></div>
+                            </React.Fragment>
+                        ))}
+                    </div>
+                    :
+                    <div className="max-width-700 ps-center timeline mt-x">
+                        {[...Array(5)].map((_, i) => (
+                            <React.Fragment key={i}>
+                                <div className="timeline-item">
+                                    <div className="timeline-key active">{i + 1}</div>
+                                    <div className="timeline-content">
+                                        <h3>{t(`about_info_instructor_${i + 1}_title`)}</h3>
+                                        <p>{t(`about_info_instructor_${i + 1}_desc`)}</p>
+                                    </div>
+                                </div>
+
+                                <div className="timeline-divider"></div>
+                            </React.Fragment>
+                        ))}
+                    </div>
+                }
+
+                <HashLink className={'button bg-primary ps-center margin-top-ideal-distance-to-header'}
+                          smooth to={'/#top'}>
+                    {t('explore_now')}
+                </HashLink>
+            </div>
+
+            <div className={'padding-top-ideal-distance-to-header'}>
+                <h2 className={'section-title'}>Frequently Asked Questions</h2>
+                <div className={'flex-aic-jcc gap-m text-link'}>
+                    <div
+                        className={`cursor-pointer text-hover-underline ${typeRole === 'student' ? 'text-primary' : ''}`}
+                        onClick={() => setTypeRole('student')}>{t('student')}</div>
+                    <div>|</div>
+                    <div
+                        className={`cursor-pointer text-hover-underline ${typeRole === 'instructor' ? 'text-primary' : ''}`}
+                        onClick={() => setTypeRole('instructor')}>{t('instructor')}</div>
+                </div>
+                {typeRole === 'student' ?
+                    <div className={'card-wrapper max-width-700 mt-x ps-center'}>
+                        {[...Array(7)].map((_, i) => (
+                            <React.Fragment key={i}>
+                                <div className="accordion-item">
+                                    <input type="checkbox" id={`accordion-item${i}`} className="accordion-item-check"/>
+                                    <label htmlFor={`accordion-item${i}`} className="accordion-item-label">
+                                        <div className={'flex-aic-jcb gap-m'}>
+                                            <p>{t(`about_faq_student_${i}_question`)}</p>
+                                            <span>▼</span>
+                                        </div>
+                                        <div
+                                            className="accordion-item-label-subtitle">{t(`about_faq_student_${i}_subtitle`)}</div>
+                                    </label>
+                                    <div className="accordion-content">
+                                        <p>{t(`about_faq_student_${i}_content`)}</p>
+                                    </div>
+                                </div>
+                            </React.Fragment>
+                        ))
+
+                        }
+                    </div> :
+                    <div className={'card-wrapper max-width-700 mt-x ps-center'}>
+                        {[...Array(7)].map((_, i) => (
+                            <React.Fragment key={i}>
+                                <div className="accordion-item">
+                                    <input type="checkbox" id={`accordion-${i}`} className="accordion-item-check"/>
+                                    <label htmlFor={`accordion-${i}`} className="accordion-item-label">
+                                        <div className={'flex-aic-jcb gap-m'}>
+                                            <p>{t(`about_faq_instructor_${i}_question`)}</p>
+                                            <span>▼</span>
+                                        </div>
+                                        <div
+                                            className="accordion-item-label-subtitle">{t(`about_faq_instructor_${i}_subtitle`)}</div>
+                                    </label>
+                                    <div className="accordion-content">
+                                        <p>{t(`about_faq_instructor_${i}_content`)}</p>
+                                    </div>
+                                </div>
+                            </React.Fragment>
+                        ))}
+                    </div>
+                }
+            </div>
         </>
     )
 }
