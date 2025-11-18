@@ -3,6 +3,7 @@ import SetThemeComp from "./SetThemeComp.jsx";
 import GetMenuComp from "./GetMenuComp.jsx";
 import useAuthStore from "../zustand/store.js";
 import {refreshToken} from "../services/service.js";
+import {HashLink} from "react-router-hash-link";
 
 const Header = memo(() => {
     const user = useAuthStore(state => state.user);

@@ -118,8 +118,13 @@ return [
             'port' => env('DB_PORT_SECOND', 27017),
             'username' => env('DB_USERNAME_SECOND', 'root'),
             'password' => env('DB_PASSWORD_SECOND', 'password'),
-            'dsn'      => env('DB_DSN_PROD_SECOND',null),
             'database' => env('DB_DATABASE_SECOND', 'iamra_course'),
+            'options' => [
+                'database' => env('DB_AUTH_DATABASE', 'admin'),
+                'ssl' => true, // penting untuk MongoDB Atlas
+                'retryWrites' => true,
+                'w' => 'majority',
+            ],
         ],
     ],
 
