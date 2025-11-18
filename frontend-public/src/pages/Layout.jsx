@@ -29,24 +29,6 @@ export default function Layout() {
     return (
         <>
             <Header />
-            <nav>
-                <HashLink className={'hover-progress'} to="/#top">
-                    {t('courses')}
-                </HashLink>
-                {user ?
-                    <a href={user?.role === 'student' ?
-                        import.meta.env.VITE_APP_FRONTEND_STUDENT_URL :
-                        user?.role === 'instructor' ?
-                            import.meta.env.VITE_APP_FRONTEND_INSTRUCTOR_URL :
-                            import.meta.env.VITE_APP_FRONTEND_USER_URL + '/member/additional-info#top'}
-                       className={'hover-progress'}>{t(user.role)}</a> :
-                    <a href={import.meta.env.VITE_APP_FRONTEND_USER_URL + '/authentication#top'}
-                       className={'hover-progress'}>Login</a>
-                }
-                <HashLink className={'hover-progress'} to="/about#top">
-                    {t('about')}
-                </HashLink>
-            </nav>
             <main className={`has-sidebar ${isMinifySidebar ? 'active' : ''}`}>
                 <Suspense fallback={<div className={'flex-aic-jcc w-full-dvw h-full-dvh'}>
                     <div className={'loading-spinner'}></div>

@@ -10,8 +10,10 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import {loginSchema, registerSchema} from "../yup/validationSchema.js";
 import ErrorInputMessageComp from "../components/ErrorInputMessageComp.jsx";
 import ReCAPTCHA from "react-google-recaptcha";
+import useMediaQuery from "../hooks/useMediaQuery.js";
 
 export default function Authentication() {
+    const isMobile = useMediaQuery('(width: 800px)')
     const [lang, setLang] = useState('en')
     const {t, i18n} = useTranslation()
     const [formMode, setFormMode] = useState('login');
@@ -59,8 +61,29 @@ export default function Authentication() {
     }
 
     return (
-        <main className={`bg-[url('/bg-auth.jpg')] place-content-center bg-no-repeat bg-center bg-cover grid-cols-1 md:grid-cols-2`}>
-            <div className={'bg-white/1 backdrop-blur-md border border-white/30 md:grid hidden items-end pl-l pr-l box-border ps-center radius-l bg-[rgba(0, 0, 0, 0.5)] w-[90%] h-[90dvh] text-white'}>
+        <main style={{
+            background: "url('/bg-auth.jpg')",
+            placeContent: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr'
+        }}>
+            <div style={{
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                display: isMobile ? "none" : "grid",
+                alignItems: "flex-end",
+                paddingLeft: "2rem",
+                paddingRight: "2rem",
+                textAlign: "center",
+                borderRadius: "0.5rem",
+                width: "90%",
+                height: "90dvh",
+                color: "white",
+                boxSizing: "border-box",
+            }}>
                 <div className={'mb-x'}>
                     <br/>
                     <blockquote className={'font-size-4x font-medium'}>{t('authentication_great1')}</blockquote>
@@ -87,13 +110,21 @@ export default function Authentication() {
                     </div>
                 </div>
             </div>
-            <div className={'card-wrapper ps-center w-[95%] md:w-[75%] max-h-[80dvh] overflow-auto bg-white justify-center py-[50px] box-border'}>
+            <div
+                className={'card-wrapper ps-center overflow-auto bg-white justify-center box-border'}
+                style={{
+                    width: isMobile ? "95%" : "75",
+                    maxHeight: "80dvh",
+                    padding: "5dvh 0"
+                }}>
                 <div className={'flex-aic-jcc gap-m mb-m font-light font-size-2x'}>
-                    <div className={`cursor-pointer text-hover-underline ${formMode === 'login' ? 'underline font-medium' : ''}`}
-                         onClick={() => setFormMode('login')}>Login
+                    <div
+                        className={`cursor-pointer text-hover-underline ${formMode === 'login' ? 'underline font-medium' : ''}`}
+                        onClick={() => setFormMode('login')}>Login
                     </div>
-                    <div className={`cursor-pointer text-hover-underline ${formMode === 'register' ? 'underline font-medium' : ''}`}
-                         onClick={() => setFormMode('register')}>Register
+                    <div
+                        className={`cursor-pointer text-hover-underline ${formMode === 'register' ? 'underline font-medium' : ''}`}
+                        onClick={() => setFormMode('register')}>Register
                     </div>
                 </div>
 
@@ -105,7 +136,7 @@ export default function Authentication() {
                     <ToastComp type={'danger'} msg={errorsFromBackend?.message} handleOnClose={closeMessage}/>}
 
                 <ReCAPTCHA
-                    sitekey="6Lfgq8UrAAAAALjYDRFCoio4xFmaebYKqtCQBM6h"
+                    sitekey={import.meta.env.VITE_API_KEY_RECAPTCHA}
                     onChange={token => setCaptcha(token)}
                 />
 
@@ -115,7 +146,8 @@ export default function Authentication() {
                                loading={loading} t={t} showPassword={showPassword} setShowPassword={setShowPassword}
                                register={registerLogin} handleSubmit={handleSubmitLogin} errorsYup={errorsLogin}
                     /> :
-                    <RegisterForm errorsFromBackend={errorsFromBackend} handleRegister={handleRegister} captcha={captcha}
+                    <RegisterForm errorsFromBackend={errorsFromBackend} handleRegister={handleRegister}
+                                  captcha={captcha}
                                   afterSuccess={afterSuccess} setFormMode={setFormMode}
                                   loading={loading} t={t} showPassword={showPassword} setShowPassword={setShowPassword}
                                   register={registerRegister} handleSubmit={handleSubmitRegister}
