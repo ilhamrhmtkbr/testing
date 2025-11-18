@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import './Homepage.css';
 import SvgComp from "../components/SvgComp.jsx";
-import {useState} from "react";
+import {useState, Fragment} from "react";
 import {HashLink} from "react-router-hash-link";
 import Typewriter from "../components/Typewriter.jsx";
 
@@ -95,7 +95,7 @@ export default function Homepage() {
                 {typeRole === 'student' ?
                     <div className="max-width-700 ps-center timeline mt-x">
                         {[...Array(5)].map((_, i) => (
-                            <React.Fragment key={i}>
+                            <Fragment key={i}>
                                 <div className="timeline-item">
                                     <div className="timeline-key active">{i + 1}</div>
                                     <div className="timeline-content">
@@ -105,13 +105,13 @@ export default function Homepage() {
                                 </div>
 
                                 <div className="timeline-divider"></div>
-                            </React.Fragment>
+                            </Fragment>
                         ))}
                     </div>
                     :
                     <div className="max-width-700 ps-center timeline mt-x">
                         {[...Array(5)].map((_, i) => (
-                            <React.Fragment key={i}>
+                            <Fragment key={i}>
                                 <div className="timeline-item">
                                     <div className="timeline-key active">{i + 1}</div>
                                     <div className="timeline-content">
@@ -121,7 +121,7 @@ export default function Homepage() {
                                 </div>
 
                                 <div className="timeline-divider"></div>
-                            </React.Fragment>
+                            </Fragment>
                         ))}
                     </div>
                 }
@@ -146,7 +146,7 @@ export default function Homepage() {
                 {typeRole === 'student' ?
                     <div className={'card-wrapper max-width-700 mt-x ps-center'}>
                         {[...Array(7)].map((_, i) => (
-                            <React.Fragment key={i}>
+                            <Fragment key={i}>
                                 <div className="accordion-item">
                                     <input type="checkbox" id={`accordion-item${i}`} className="accordion-item-check"/>
                                     <label htmlFor={`accordion-item${i}`} className="accordion-item-label">
@@ -161,14 +161,14 @@ export default function Homepage() {
                                         <p>{t(`about_faq_student_${i}_content`)}</p>
                                     </div>
                                 </div>
-                            </React.Fragment>
+                            </Fragment>
                         ))
 
                         }
                     </div> :
                     <div className={'card-wrapper max-width-700 mt-x ps-center'}>
                         {[...Array(7)].map((_, i) => (
-                            <React.Fragment key={i}>
+                            <Fragment key={i}>
                                 <div className="accordion-item">
                                     <input type="checkbox" id={`accordion-${i}`} className="accordion-item-check"/>
                                     <label htmlFor={`accordion-${i}`} className="accordion-item-label">
@@ -183,7 +183,7 @@ export default function Homepage() {
                                         <p>{t(`about_faq_instructor_${i}_content`)}</p>
                                     </div>
                                 </div>
-                            </React.Fragment>
+                            </Fragment>
                         ))}
                     </div>
                 }
