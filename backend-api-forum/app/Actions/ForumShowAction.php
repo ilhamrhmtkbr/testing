@@ -80,7 +80,8 @@ class ForumShowAction
                 $messages
             );
         } catch (\Exception $e) {
-            return ResponseApiHelper::send('Internal server error', Response::HTTP_INTERNAL_SERVER_ERROR);
+            Log::info($e->getMessage());
+            return ResponseApiHelper::send($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
