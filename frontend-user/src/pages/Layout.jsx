@@ -38,7 +38,10 @@ export default function Layout() {
                 <GetMenuComp/>
 
                 <div className={'navigation'}>
-                    <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL} className={'hover-progress max-w-[111px] truncate'}>
+                    <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL}
+                       className={'hover-progress truncate'}
+                       style={{maxWidth: 111}}
+                    >
                         {t('courses')}
                     </a>
                 </div>

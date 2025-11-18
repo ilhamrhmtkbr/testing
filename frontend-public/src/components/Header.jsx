@@ -4,9 +4,11 @@ import GetMenuComp from "./GetMenuComp.jsx";
 import useAuthStore from "../zustand/store.js";
 import {refreshToken} from "../services/service.js";
 import {HashLink} from "react-router-hash-link";
+import {useTranslation} from "react-i18next";
 
 const Header = memo(() => {
     const user = useAuthStore(state => state.user);
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (!user) {
@@ -36,9 +38,9 @@ const Header = memo(() => {
                         user?.role === 'instructor' ?
                             import.meta.env.VITE_APP_FRONTEND_INSTRUCTOR_URL :
                             import.meta.env.VITE_APP_FRONTEND_USER_URL + '/member/additional-info#top'}
-                       className={'hover-progress max-w-[111px] truncate'}>{user.full_name}</a> :
+                       className={'hover-progress truncate'} style={{maxWidth: 111}}>{user.full_name}</a> :
                     <a href={import.meta.env.VITE_APP_FRONTEND_USER_URL + '/authentication#top'}
-                       className={'hover-progress max-w-[111px] truncate'}>Login</a>
+                       className={'hover-progress truncate'} style={{maxWidth: 111}}>Login</a>
                 }
             </div>
         </header>

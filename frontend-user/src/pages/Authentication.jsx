@@ -13,7 +13,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import useMediaQuery from "../hooks/useMediaQuery.js";
 
 export default function Authentication() {
-    const isMobile = useMediaQuery('(width: 800px)')
+    const isMobile = useMediaQuery('(max-width: 800px)')
     const [lang, setLang] = useState('en')
     const {t, i18n} = useTranslation()
     const [formMode, setFormMode] = useState('login');
@@ -111,11 +111,13 @@ export default function Authentication() {
                 </div>
             </div>
             <div
-                className={'card-wrapper ps-center overflow-auto bg-white justify-center box-border'}
+                className={'card-wrapper ps-center bg-white justify-center box-border'}
                 style={{
+                    background: 'var(--bg-color)',
                     width: isMobile ? "95%" : "75",
                     maxHeight: "80dvh",
-                    padding: "5dvh 0"
+                    padding: "5dvh 1rem",
+                    overflow: 'auto'
                 }}>
                 <div className={'flex-aic-jcc gap-m mb-m font-light font-size-2x'}>
                     <div

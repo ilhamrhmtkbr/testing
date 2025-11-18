@@ -10,7 +10,7 @@ import usePublic from "../hooks/usePublic.js";
 import useMediaQuery from "../hooks/useMediaQuery.js";
 
 export default function Courses() {
-    const isMobile = useMediaQuery('(width < 800px)')
+    const isMobile = useMediaQuery('(max-width: 800px)')
     const {t} = useTranslation();
     const {
         courses,

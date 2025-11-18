@@ -57,7 +57,7 @@ Object.entries(languages).forEach(([name, lang]) => hljs.registerLanguage(name, 
 
 const CodeBlockComp = ({language, code}) => {
     const highlightedCode = hljs.highlight(code, {language}).value;
-    const isMobile = useMediaQuery('(width < 800px)')
+    const isMobile = useMediaQuery('(max-width: 800px)')
 
     return (
         <div className={'radius-m'}

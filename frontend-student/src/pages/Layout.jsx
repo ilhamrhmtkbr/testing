@@ -35,7 +35,7 @@ const Layout = () => {
 
                 <div className={'navigation'}>
                     <a href={import.meta.env.VITE_APP_FRONTEND_USER_URL + '/member/additional-info#top'}
-                       className={'hover-progress max-w-[111px] truncate'}>{user?.full_name}</a>
+                       className={'hover-progress truncate'} style={{maxWidth: 111}}>{user?.full_name}</a>
                 </div>
             </header>
             <nav>

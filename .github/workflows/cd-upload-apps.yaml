@@ -79,8 +79,7 @@ jobs:
           APP_KEY=${{ steps.secrets.outputs.app_key }}
           DB_HOST=${{ secrets.RDS_HOST }}
           DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-          DB_HOST_SECOND=${{ secrets.DB_HOST_SECOND }}
-          DB_PASSWORD_SECOND=${{ secrets.DB_PASSWORD_SECOND }}
+          DB_MONGODB_URI=${{ secrets.DB_MONGODB_URI }}
           LOG_SLACK_WEBHOOK_URL=${{ secrets.LOG_SLACK_WEBHOOK_URL }}
           DB_DSN_PROD_SECOND=${{ secrets.DB_DSN_PROD_SECOND }}
           MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}

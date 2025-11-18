@@ -9,7 +9,7 @@ import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
 
 export default function Layout() {
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
 
     const [isMinifySidebar, setMinifySidebar] = useState(false);
     const location = useLocation();
