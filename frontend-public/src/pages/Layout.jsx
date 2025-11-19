@@ -45,14 +45,14 @@ export default function Layout() {
                             <p>Menu</p>
                         </div>
                         <div className="sidebar-menu-element">
-                            <HashLink className={`sidebar-menu-item ${location.pathname === '/' ? 'active' : ''}`}
-                                      data-title={t('courses')} to="/#top">
+                            <HashLink className={`sidebar-menu-item ${location.pathname === '/courses' ? 'active' : ''}`}
+                                      data-title={t('courses')} to="/courses#top">
                                 <SvgComp rule={'sidebar-menu-button-svg'} file={'sprite'} icon={'courses'}/>
                                 <p>{t('courses')}</p>
                             </HashLink>
-                            <HashLink className={`sidebar-menu-item ${location.pathname === '/about' ? 'active' : ''}`}
-                                      data-title={t('about')} to="/about#top">
-                                <SvgComp rule={'sidebar-menu-button-svg'} file={'sprite'} icon={'about'}/>
+                            <HashLink className={`sidebar-menu-item ${location.pathname === '/' ? 'active' : ''}`}
+                                      data-title={t('about')} to="/#top">
+                                <SvgComp rule={'sidebar-menu-button-svg'} file={'sprite'} icon={'homepage'}/>
                                 <p>{t('about')}</p>
                             </HashLink>
                             <HashLink

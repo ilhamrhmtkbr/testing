@@ -123,7 +123,8 @@ export default function CourseDetail() {
                             className={'max-width-500 border-style-default radius-m object-fit-cover'}
                             style={{
                                 minHeight: 275,
-                                minWidth: 275
+                                minWidth: 275,
+                                maxHeight: 275
                             }}
                             src={import.meta.env.VITE_APP_IMAGE_COURSE_URL + courseDetail?.course?.image}
                             alt={courseDetail?.course?.title}
@@ -132,12 +133,11 @@ export default function CourseDetail() {
                         {loadingRequest ?
                             <div className={'loading-spinner'}></div> :
                             <div onClick={() => handleLike(courseDetail?.course?.id)}
-                                 className={'flex-aic-jcc cursor-pointer'}
-                                 style={{width: 17}}>
-                                <SvgComp rule={`svg-m fill-blue-hover ${courseDetail?.isLikes ? 'fill-blue' : ''}`}
+                                 className={'flex-aic-jcc cursor-pointer w-max-content gap-s radius-s border-style-default p-s'}>
+                                <SvgComp rule={`svg-l fill-blue-hover ${courseDetail?.isLikes ? 'fill-blue' : ''}`}
                                          file={'sprite'}
                                          icon={'like'}/>
-                                <p className={'text-center'}>{courseDetail?.likes}</p>
+                                <p className={'text-center font-bold'}>{courseDetail?.likes}</p>
                             </div>}
 
                         <div>

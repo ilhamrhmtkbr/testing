@@ -33,12 +33,8 @@ const Header = memo(() => {
 
             <SetThemeComp/>
 
-            {loc.pathname !== '/' ?
-                <GetMenuComp/> :
-                <HashLink className={'hover-progress'} to="/courses#top">
-                    {t('courses')}
-                </HashLink>
-            }
+            {loc.pathname !== '/' &&
+                <GetMenuComp/>}
 
             <div className={'navigation'}>
                 <HashLink className={'hover-progress'} to="/courses#top">
@@ -50,15 +46,15 @@ const Header = memo(() => {
                         user?.role === 'instructor' ?
                             import.meta.env.VITE_APP_FRONTEND_INSTRUCTOR_URL :
                             import.meta.env.VITE_APP_FRONTEND_USER_URL + '/member/additional-info#top'}
-                       className={'hover-progress truncate'} style={{maxWidth: 111}}>{user.username}</a> :
+                       className={'hover-progress text-truncate'} style={{maxWidth: 111}}>{user.username}</a> :
                     <a href={import.meta.env.VITE_APP_FRONTEND_USER_URL + '/authentication#top'}
-                       className={'hover-progress truncate'} style={{maxWidth: 111}}>Login</a>
+                       className={'hover-progress text-truncate'} style={{maxWidth: 111}}>Login</a>
                 }
             </div>
         </header>
         <nav>
             <HashLink className={'flex-aic-jcc gap-s'} to="/courses#top">
-                <SvgComp rule={'svg-m'} file={'sprite'} icon={'courses'} />
+                <SvgComp rule={'svg-m fill-text fill-blue-hover'} file={'sprite'} icon={'courses'} />
                 <span>{t('courses')}</span>
             </HashLink>
             {user ?
@@ -68,18 +64,18 @@ const Header = memo(() => {
                         import.meta.env.VITE_APP_FRONTEND_INSTRUCTOR_URL :
                         import.meta.env.VITE_APP_FRONTEND_USER_URL + '/member/additional-info#top'}
                    className={'flex-aic-jcc gap-s'}>
-                    <SvgComp rule={'svg-m'} file={'sprite'} icon={'profile'} />
+                    <SvgComp rule={'svg-m fill-text fill-blue-hover'} file={'sprite'} icon={'profile'} />
                     <span>{t(user.role)}</span>
                 </a> :
                 <a href={import.meta.env.VITE_APP_FRONTEND_USER_URL + '/authentication#top'}
                    className={'flex-aic-jcc gap-s'}>
-                    <SvgComp rule={'svg-m'} file={'sprite'} icon={'profile'} />
+                    <SvgComp rule={'svg-m fill-text fill-blue-hover'} file={'sprite'} icon={'profile'} />
                     <span>Login</span>
                 </a>
             }
             <HashLink className={'flex-aic-jcc gap-s'} to="/#top">
-                <SvgComp rule={'svg-m'} file={'sprite'} icon={'homepage'} />
-                <span>{t('home')}</span>
+                <SvgComp rule={'svg-m fill-text fill-blue-hover'} file={'sprite'} icon={'homepage'} />
+                <span className={'capitalize'}>{t('home')}</span>
             </HashLink>
         </nav>
     </>

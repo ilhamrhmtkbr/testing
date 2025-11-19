@@ -18,7 +18,7 @@ const CourseCardComp = memo(({children, title, desc, image}) => {
                      display: 'grid',
                      gridTemplateRows: '1fr max-content max-content'
                  }}>
-                <p className={'font-medium font-size-l'}>{title}</p>
+                <p className={'font-bold font-size-l'}>{title}</p>
                 <p className={'font-light'}>{desc.length > 111 ? desc.slice(0, 111) + '…' : desc}</p>
                 {children}
             </div>
