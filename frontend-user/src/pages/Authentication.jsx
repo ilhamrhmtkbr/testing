@@ -116,7 +116,7 @@ export default function Authentication() {
                     background: 'var(--bg-color)',
                     width: isMobile ? "95%" : "75",
                     maxHeight: "80dvh",
-                    padding: "5dvh 1rem",
+                    padding: "10dvh 1rem",
                     overflow: 'auto'
                 }}>
                 <div className={'flex-aic-jcc gap-m mb-m font-light font-size-2x'}>
