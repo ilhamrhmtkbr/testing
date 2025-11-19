@@ -45,7 +45,6 @@ export default function Reviews() {
                 <ToastComp msg={success || errors.message} type={success ? 'success' : 'danger'}
                            handleOnClose={handleAfterClose}/>}
 
-            <h2 className={'section-title-with-marker'}>{t('my_reviews')}</h2>
             {loading ? <div className={'loading-spinner'}></div> :
                 reviews?.total > 0 ?
                     <>

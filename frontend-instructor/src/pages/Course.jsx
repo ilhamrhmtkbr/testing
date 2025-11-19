@@ -93,8 +93,6 @@ export default function Course() {
                 <ToastComp msg={success || errorsFromBackend?.message} type={success ? 'success' : 'danger'}
                            handleOnClose={() => handleAfterClose(success)}/>}
 
-            <h2 className={'section-title-with-marker'}>Detail</h2>
-
             <div className={'flex-aic-jcs gap-m'}>
                 <HashLink to={'#edit'} smooth className={'text-primary'}>{t('edit')}</HashLink>
                 <div>|</div>

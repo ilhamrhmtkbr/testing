@@ -55,8 +55,6 @@ const TransactionDetail = () => {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('detail')}</h2>
-
             <BackComp/>
 
             {transaction &&

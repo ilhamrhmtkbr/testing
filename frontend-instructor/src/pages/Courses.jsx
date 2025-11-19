@@ -84,8 +84,6 @@ export default function Courses() {
                 <ToastComp msg={success || errorsFromBackend?.message} type={success ? 'success' : 'danger'}
                            handleOnClose={() => handleAfterClose(success)}/>}
 
-            <h2 className={'section-title-with-marker'}>Courses</h2>
-
             <HashLink to={'#insert'} smooth className={'button btn-primary'}>{t('add')}</HashLink>
 
             <div className={'h-full-dvh'}>

@@ -38,8 +38,6 @@ export default function Carts() {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('my_carts')}</h2>
-
             <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL} target={'_blank'}
                 className={'button btn-primary'}>{t('add') + ' ' + t('course')}</a>
 

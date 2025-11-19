@@ -25,8 +25,6 @@ export default function TransactionStore() {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('coupon')}</h2>
-
             {(success || errors) &&
                 <ToastComp msg={success || errors} type={success ? 'success' : 'danger'}
                            handleOnClose={handleClose}/>}

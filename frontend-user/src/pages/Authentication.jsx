@@ -114,9 +114,9 @@ export default function Authentication() {
                 className={'card-wrapper ps-center bg-white justify-center box-border'}
                 style={{
                     background: 'var(--bg-color)',
-                    width: isMobile ? "95%" : "75",
+                    width: isMobile ? "95%" : "80%",
                     maxHeight: "80dvh",
-                    padding: "10dvh 1rem",
+                    padding: "7dvh 1rem",
                     overflow: 'auto'
                 }}>
                 <div className={'flex-aic-jcc gap-m mb-m font-light font-size-2x'}>

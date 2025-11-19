@@ -139,8 +139,7 @@ const App = () => {
     return (
         <>
             <nav className="chat-nav">
-                <a className="chat-nav-link text-2xl"
-                   style={{textDecoration: 'none'}}
+                <a className="chat-nav-link"
                    href={user?.role === 'student' ?
                        import.meta.env.VITE_APP_FRONTEND_STUDENT_URL :
                        import.meta.env.VITE_APP_FRONTEND_INSTRUCTOR_URL

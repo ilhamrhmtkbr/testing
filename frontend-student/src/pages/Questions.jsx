@@ -41,8 +41,6 @@ export default function Questions() {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('my_questions')}</h2>
-
             {(success || errors) &&
                 <ToastComp msg={success || errors.message} type={success ? 'success' : 'danger'}
                            handleOnClose={handleAfterClose}/>}

@@ -42,7 +42,6 @@ export default function Courses() {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('my_courses')}</h2>
             <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL} target={'_blank'} className={'button btn-primary'}>
                 {t('buy')} {t('courses')}
             </a>

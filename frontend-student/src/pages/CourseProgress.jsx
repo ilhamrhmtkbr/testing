@@ -38,7 +38,6 @@ export default function CourseProgress() {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('progress')}</h2>
             <div style={{width:200, height:200}}>
                 {state?.completedSections === state?.totalSections ?
                     <ChartComp data={[

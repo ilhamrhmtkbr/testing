@@ -27,7 +27,6 @@ export default function Certificates() {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('my_certificates')}</h2>
             {(success || errors) &&
                 <ToastComp msg={success || errors.message} type={success ? 'success' : 'danger'}
                            handleOnClose={handleClose}/>}

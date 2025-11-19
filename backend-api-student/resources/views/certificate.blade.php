@@ -87,8 +87,8 @@
                 <p>ilhamrhmtkbr@gmail.com</p>
             </td>
             <td class="info__founder" style="text-align: center;">
-                <img width="25px" height="25px" src="{{ public_path('iamra-logo.png') }}" alt="Logo"
-                    style="max-width: 25px; max-height: 25px">
+                <img width="45px" height="45px" src="{{ public_path('iamra-logo.png') }}" alt="Logo"
+                    style="max-width: 45px; max-height: 45px">
             </td>
             <td class="qr-code" style="text-align: right;">
                 <img width="111" height="111" src="data:image/png;base64,{{ $qr_code }}" alt="QR Code">

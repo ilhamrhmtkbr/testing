@@ -83,7 +83,6 @@ export default function Review() {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('detail')}</h2>
             {(success || errorsFromBackend?.message) &&
                 <ToastComp msg={success || errorsFromBackend?.message} type={success ? 'success' : 'danger'}
                            handleOnClose={handleAfterClose}/>}

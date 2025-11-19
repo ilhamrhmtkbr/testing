@@ -75,8 +75,6 @@ export default function Answers() {
                 <ToastComp msg={success || errorsFromBackend?.message} type={success ? 'success' : 'danger'}
                            handleOnClose={() => handleAfterClose(success)}/>}
 
-            <h2 className={'section-title-with-marker'}>{t('my_answers')}</h2>
-
             {loading ? <div className={'loading-spinner'}></div> :
                 answers?.total > 0 ?
                     <>

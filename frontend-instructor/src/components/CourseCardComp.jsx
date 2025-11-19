@@ -10,7 +10,7 @@ const CourseCardComp = memo(({children, title, desc, image}) => {
             <img src={import.meta.env.VITE_APP_IMAGE_COURSE_URL + image}
                  className={'radius-s object-fit-cover w-full'}
                  style={{
-                     height: '-webkit-fit-content'
+                     height: '100%'
                  }}
                  alt={title}/>
             <div className={'box-border p-m'}

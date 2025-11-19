@@ -36,7 +36,6 @@ export default function Certificate() {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>Certificate Detail</h2>
             {loading ? <div className={'loading-spinner'}></div> : certificate &&
                 <>
                     <div className={'flex-ais-jcs gap-m'}>

@@ -71,7 +71,6 @@ export default function Socials() {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('socials')}</h2>
             <HashLink className={'button btn-primary'} onClick={clearForm} to={'#form'}>{t('add')}</HashLink>
 
             {(success || errorsFromBackend?.message) &&

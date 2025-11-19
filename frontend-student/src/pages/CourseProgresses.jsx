@@ -27,8 +27,6 @@ export default function CourseProgresses() {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('my_progress')}</h2>
-
             {(success || errors) &&
                 <ToastComp msg={success || errors.message} type={success ? 'success' : 'danger'}
                            handleOnClose={handleAfterClose}/>}

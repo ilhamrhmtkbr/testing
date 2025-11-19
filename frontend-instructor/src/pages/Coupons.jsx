@@ -81,7 +81,6 @@ const Coupons = () => {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('my_coupons')}</h2>
             {(errorsFromBackend?.message || success) &&
                 <ToastComp type={success ? 'success' : 'danger'}
                            msg={errorsFromBackend?.message || success}

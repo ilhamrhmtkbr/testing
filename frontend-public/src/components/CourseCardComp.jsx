@@ -11,14 +11,14 @@ const CourseCardComp = memo(({children, title, image, price, editor, instructor}
             <img src={import.meta.env.VITE_APP_IMAGE_COURSE_URL + image}
                  className={'radius-s object-fit-cover w-full'}
                  style={{
-                     height: '-webkit-fit-content'
+                     height: '100%'
                  }}
                  alt={title}/>
             <div className={'box-border p-m'}
-                style={{
-                    display: 'grid',
-                    gridTemplateRows: '1fr repeat(2, max-content)'
-                }}>
+                 style={{
+                     display: 'grid',
+                     gridTemplateRows: '1fr max-content max-content'
+                 }}>
                 <p className={'font-bold font-size-l'}>{title}</p>
                 <p className={'text-link font-size-s font-medium'}>{instructor}</p>
                 <p className={'text-warning font-bold'}>★★★★★</p>

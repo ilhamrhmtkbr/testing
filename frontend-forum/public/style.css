@@ -71,6 +71,8 @@ html {
     justify-content: center;
     cursor: pointer;
     color: whitesmoke;
+    font-size: 31px;
+    text-decoration: none;
 }
 
 .chat-nav-link:hover,

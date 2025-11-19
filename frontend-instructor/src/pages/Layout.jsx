@@ -35,17 +35,22 @@ const Layout = () => {
 
                 <div className={'navigation'}>
                     <a href={import.meta.env.VITE_APP_FRONTEND_USER_URL + '/member/additional-info#top'}
-                       className={'hover-progress text-truncate'} style={{maxWidth: 111}}>{user?.full_name}</a>
+                       className={'hover-progress text-truncate'} style={{maxWidth: 111}}>{user?.username}</a>
                 </div>
             </header>
             <nav>
-                <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL} className={'hover-progress'}>
-                    {t('homepage')}
+                <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL} className={'flex-aic-jcc gap-s'}>
+                    <SvgComp rule={'svg-m'} file={'sprite'} icon={'homepage'} />
+                    <span>{t('homepage')}</span>
                 </a>
                 <a href={import.meta.env.VITE_APP_FRONTEND_USER_URL + '/member/additional-info#top'}
-                   className={'hover-progress'}>{t('setting')}</a>
-                <a href={import.meta.env.VITE_APP_FRONTEND_FORUM_URL} className={'hover-progress'}>
-                    {t('forum')}
+                   className={'flex-aic-jcc gap-s'}>
+                    <SvgComp rule={'svg-m'} file={'sprite'} icon={'setting'} />
+                    <span>{t('setting')}</span>
+                </a>
+                <a href={import.meta.env.VITE_APP_FRONTEND_FORUM_URL} className={'flex-aic-jcc gap-s'}>
+                    <SvgComp rule={'svg-m'} file={'sprite'} icon={'forum'} />
+                    <span>{t('forum')}</span>
                 </a>
             </nav>
             <main className={`has-sidebar ${isMinifySidebar ? 'active' : ''}`}>

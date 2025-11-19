@@ -21,8 +21,6 @@ export default function Earnings() {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('my_earnings')}</h2>
-
             <HashLink to={'/earnings/account#top'}
                       className={'button bg-primary'}>{t('inst_earnings_button')}</HashLink>
 

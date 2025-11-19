@@ -102,11 +102,7 @@ const InputImageComp = memo((props) => {
         <div className={'max-width-500'}>
             {/* Tampilkan gambar yang sudah di-crop atau gambar lama */}
             {(croppedImage || props.oldImage) &&
-                <img className={'max-width-500 border-style-default radius-m object-fit-cover'}
-                     style={{
-                         minHeight: 111,
-                         minWidth: 111
-                     }}
+                <img className={'picture-default'}
                      src={croppedImage || props.oldImage}
                      alt="Preview"/>}
 
@@ -132,7 +128,7 @@ const InputImageComp = memo((props) => {
                             {props.oldImage &&
                                 <div className="card-wrapper replace-shadow-with-border">
                                     <h3 className="text-center">Old Image</h3>
-                                    <img className={'object-fit-cover w-full max-width-600'}
+                                    <img className={'picture-default'}
                                          src={props.oldImage}
                                          alt="Old"/>
                                 </div>

@@ -20,8 +20,6 @@ export default function Reviews() {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('my_reviews')}</h2>
-
             {loading ? <div className={'loading-spinner'}></div> :
                 courseReviews?.meta?.total > 0 ?
                     <>

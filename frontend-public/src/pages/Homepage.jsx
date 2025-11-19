@@ -6,10 +6,12 @@ import {HashLink} from "react-router-hash-link";
 import Typewriter from "../components/Typewriter.jsx";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
+import useMediaQuery from "../hooks/useMediaQuery.js";
 
 export default function Homepage() {
     const {t} = useTranslation();
     const [isBannerHide, setBannerHide] = useState(false);
+    const isMobile = useMediaQuery('(max-width: 800px)')
 
     const [typeRole, setTypeRole] = useState('student');
 
@@ -17,7 +19,7 @@ export default function Homepage() {
     const programming2 = ['expressjs', 'mongodb', 'firebase', 'vuejs', 'ajax', 'git', 'cpp', 'python', 'sql-server', 'docker']
 
     return <>
-        <Header />
+        <Header/>
         <main>
             <section>
                 {!isBannerHide &&
@@ -32,14 +34,19 @@ export default function Homepage() {
                         </div>
                     </div>}
 
-                <div className={'grid-start'}>
+                <div className={'grid-start'}
+                     style={{
+                         gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr"
+                     }}>
                     <img src={'./bg-about.jpg'}
                          className={'object-fit-cover radius-l'}
                          alt={'ilhamrhmtkbr'}
                          style={{minHeight: 325, maxHeight: 325, width: '100%'}}
                     />
                     <div className={'grid-start'}>
-                        <div>
+                        <div style={{
+                            alignSelf: isMobile ? "start" : "end"
+                        }}>
                             <h1 className={'font-medium font-size-x flex-aic-jcs gap-s'}>
                                 <span>{t('welcome')}, </span>
                                 <Typewriter data={[t('instructor'), t('student'), t('visitor')]}/>
@@ -131,7 +138,7 @@ export default function Homepage() {
                     }
 
                     <HashLink className={'button bg-primary ps-center margin-top-ideal-distance-to-header'}
-                              smooth to={'/#top'}>
+                              smooth to={'/courses#top'}>
                         {t('explore_now')}
                     </HashLink>
                 </div>
@@ -152,7 +159,8 @@ export default function Homepage() {
                             {[...Array(7)].map((_, i) => (
                                 <Fragment key={i}>
                                     <div className="accordion-item">
-                                        <input type="checkbox" id={`accordion-item${i + 1}`} className="accordion-item-check"/>
+                                        <input type="checkbox" id={`accordion-item${i + 1}`}
+                                               className="accordion-item-check"/>
                                         <label htmlFor={`accordion-item${i + 1}`} className="accordion-item-label">
                                             <div className={'flex-aic-jcb gap-m'}>
                                                 <p>{t(`about_faq_student_${i + 1}_question`)}</p>
@@ -174,7 +182,8 @@ export default function Homepage() {
                             {[...Array(7)].map((_, i) => (
                                 <Fragment key={i}>
                                     <div className="accordion-item">
-                                        <input type="checkbox" id={`accordion-${i + 1}`} className="accordion-item-check"/>
+                                        <input type="checkbox" id={`accordion-${i + 1}`}
+                                               className="accordion-item-check"/>
                                         <label htmlFor={`accordion-${i + 1}`} className="accordion-item-label">
                                             <div className={'flex-aic-jcb gap-m'}>
                                                 <p>{t(`about_faq_instructor_${i + 1}_question`)}</p>
@@ -194,6 +203,6 @@ export default function Homepage() {
                 </div>
             </section>
         </main>
-        <Footer />
+        <Footer/>
     </>
 }

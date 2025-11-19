@@ -39,25 +39,29 @@ export default function Layout() {
 
                 <div className={'navigation'}>
                     <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL}
-                       className={'hover-progress truncate'}
-                       style={{maxWidth: 111}}
+                       className={'hover-progress'}
                     >
                         {t('courses')}
                     </a>
                 </div>
             </header>
             <nav>
-                <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL} className={'hover-progress'}>
-                    {t('courses')}
+                <a href={import.meta.env.VITE_APP_FRONTEND_PUBLIC_URL} className={'flex-aic-jcc gap-s'}>
+                    <SvgComp rule={'svg-m'} file={'sprite'} icon={'homepage'} />
+                    <span>{t('homepage')}</span>
                 </a>
                 {user?.role !== 'user' &&
                     <a href={user.role === 'student' ?
                         import.meta.env.VITE_APP_FRONTEND_STUDENT_URL :
                         import.meta.env.VITE_APP_FRONTEND_INSTRUCTOR_URL}
-                       className={'hover-progress'}>{t(user.role)}</a>
+                       className={'flex-aic-jcc gap-s'}>
+                        <SvgComp rule={'svg-m'} file={'sprite'} icon={'profile'} />
+                        <span>{t(user.role)}</span>
+                    </a>
                 }
-                <a href={import.meta.env.VITE_APP_FRONTEND_FORUM_URL} className={'hover-progress capitalize'}>
-                    {t('forum')}
+                <a href={import.meta.env.VITE_APP_FRONTEND_FORUM_URL} className={'flex-aic-jcc gap-s'}>
+                    <SvgComp rule={'svg-m'} file={'sprite'} icon={'forum'} />
+                    <span>{t('forum')}</span>
                 </a>
             </nav>
 

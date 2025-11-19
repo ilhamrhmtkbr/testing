@@ -134,7 +134,7 @@ export default function CourseDetail() {
                             <div onClick={() => handleLike(courseDetail?.course?.id)}
                                  className={'flex-aic-jcc cursor-pointer'}
                                  style={{width: 17}}>
-                                <SvgComp rule={`svg-m svg-fill-blue ${courseDetail?.isLikes ? 'fill-blue' : ''}`}
+                                <SvgComp rule={`svg-m fill-blue-hover ${courseDetail?.isLikes ? 'fill-blue' : ''}`}
                                          file={'sprite'}
                                          icon={'like'}/>
                                 <p className={'text-center'}>{courseDetail?.likes}</p>

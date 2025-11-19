@@ -62,10 +62,10 @@ export default function Courses() {
                             <option value="Python"/>
                         </datalist>
                         <div className={'cursor-pointer'} onClick={handleSearch}>
-                            <SvgComp rule={'svg-m fill-text svg-fill-blue'} file={'sprite'} icon={'search'}/>
+                            <SvgComp rule={'svg-m fill-text fill-blue-hover'} file={'sprite'} icon={'search'}/>
                         </div>
                     </div>
-                    <div className={'gap-m grid grid-cols-3'}>
+                    <div style={{display:'grid', gridTemplateColumns: 'repeat(3, 1fr)'}} className={'gap-m'}>
                         <select className={'max-width-300'} value={level} onChange={e => {
                             setPage(1);
                             setLevel(e.target.value)

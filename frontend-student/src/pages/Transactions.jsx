@@ -30,8 +30,6 @@ export default function Transactions() {
 
     return (
         <>
-            <h2 className={'section-title-with-marker'}>{t('my_transactions')}</h2>
-
             {loading ? <div className={'loading-spinner'}></div> :
                 <>
                     <FilterByComp filters={['settlement', 'deny', 'pending', 'cancel', 'expire', 'failure', 'all']}
